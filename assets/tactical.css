@@ -1,0 +1,46 @@
+/* Four Pillars Combatives | Tactical visual system | preview candidate */
+:root{--bg:#080b0c;--bg2:#101516;--surface:#151b1c;--surface2:#1b2323;--border:#394140;--ink:#f0f1ec;--muted:#b1bab6;--steel:#dedfda;--max:1200px}
+body{background:#090c0d}
+.topline{height:5px;background:linear-gradient(90deg,#71151f 0 19%,#e53640 19% 43%,#6f7771 43% 62%,#242a29 62% 100%)}
+.site-header{background:rgba(9,14,15,.97);border-bottom:1px solid #404b48;box-shadow:0 8px 35px rgba(0,0,0,.22)}
+.header-inner{gap:14px}
+.site-header .brand{min-width:180px}
+.site-header .nav-links a:not(.nav-cta){white-space:nowrap}
+.nav-links a[aria-current='page']{color:#fff!important;box-shadow:0 2px #e53640}
+.nav-links a:hover{color:#fff}
+.brand-label small{letter-spacing:.17em}
+.eyebrow,.overline,.card-num,.index-tag,.tag,.pillar-num,.footer-title,.tactical-mission-tag{font-family:'Roboto Condensed','Arial Narrow',Arial,sans-serif;letter-spacing:.12em}
+.hero,.growth-hero{background:radial-gradient(circle at 76% 37%,rgba(109,37,44,.29),transparent 36%),linear-gradient(125deg,rgba(16,25,24,.92),rgba(9,14,15,.95) 64%),repeating-linear-gradient(90deg,transparent 0 78px,rgba(185,197,183,.045) 79px 80px)!important}
+.hero:before{content:'';position:absolute;inset:0;pointer-events:none;opacity:.44;background:repeating-linear-gradient(0deg,transparent 0 65px,rgba(137,155,143,.05) 66px 67px),repeating-linear-gradient(90deg,transparent 0 65px,rgba(137,155,143,.05) 66px 67px)}
+.hero .hero-wrap{position:relative}
+.tactical-mission-tag{position:absolute;top:21px;left:0;font-size:.72rem;color:#b9c1b5;font-weight:800;border-left:3px solid #e53640;padding-left:11px}
+.hero .hero-art{border:1px solid rgba(134,151,141,.22);background:radial-gradient(circle at center,rgba(55,64,59,.37),rgba(13,17,17,.18) 65%,transparent);}
+.hero .index-tag{background:#222a27;border:1px solid #505b52;color:#dbddd5;padding:7px 12px}
+.hero-foot{flex-wrap:wrap;gap:10px}.hero-foot i{background:#e53640}
+.intro-invite,.growth-cta-band{background:linear-gradient(105deg,#1b2320,#20191e 70%,#101516)!important;border-color:#505c52}
+.pillar-band{background:#1b2120}
+.pillar-grid>div{border-color:#39443d}
+.section-head{padding-left:20px;border-left:3px solid #e53640}
+.growth-service-card,.growth-info,.growth-price,.price-card,.event-choice,.faq,.growth-panel{background:#181f20;border-color:#414b47}
+.growth-service-card{position:relative;overflow:hidden}
+.growth-service-card:after{content:'';pointer-events:none;position:absolute;top:0;right:0;width:48px;height:48px;background:linear-gradient(135deg,transparent 0 47%,#56635a 49% 51%,transparent 53%)}
+.growth-service-card.growth-featured{border-color:#af525b;background:linear-gradient(130deg,#2e1d23,#182020 70%)}
+.growth-quote-panel{background:linear-gradient(125deg,#232729,#2a1b21)}
+.btn,.nav-cta,.growth-quicklinks a{border-radius:0;clip-path:polygon(0 0,calc(100% - 9px) 0,100% 9px,100% 100%,0 100%)}
+.btn{box-shadow:inset 3px 0 rgba(255,255,255,.13)}
+.btn-outline{background:rgba(25,35,33,.8);border-color:#7a8b80}
+.btn-outline:hover{background:#29332d}
+.site-footer{background:#0f1515;border-top:3px solid #586359}
+.footer-title{color:#dddcd5}
+.footer-links a{transition:color .15s}
+.footer-links a:hover{color:#f3f3f0}
+.facebook-header-link img,.facebook-footer-link img{display:block;object-fit:contain}
+.facebook-footer-link{display:inline-flex!important;gap:10px!important;align-items:center;padding:5px 0!important;width:fit-content;color:#e9edec!important;font-weight:750!important}
+.facebook-footer-link:hover{color:#fff!important}
+.home-pricing,.shade-section{background:#101516}
+.price-card.featured{border-color:#a64a53}
+.growth-quicklinks a{background:#1f2927}
+@media (max-width:1280px){.nav-links a[aria-current='page']{box-shadow:none}.site-header .brand{min-width:0}}
+@media (min-width:1281px){.nav-links{gap:clamp(7px,.75vw,13px)}.nav-links a{font-size:.68rem!important;letter-spacing:.005em!important}.site-header .brand{min-width:165px}.brand-label{font-size:1.14rem}.brand-label small{font-size:.81rem}.brand-emblem{height:56px;width:56px}.nav-cta{min-width:99px;padding:10px 10px}}
+@media (max-width:890px){.tactical-mission-tag{top:14px}.hero-wrap{padding-top:74px}.hero .hero-art{border-color:transparent}.site-header{border-bottom-color:#4c5650}}
+@media (max-width:600px){.hero{background:linear-gradient(140deg,#141b1a,#0b1010)!important}.tactical-mission-tag{font-size:.65rem;top:11px}.section-head{padding-left:13px}.facebook-footer-link{padding:8px 0!important}}
