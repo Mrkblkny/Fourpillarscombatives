@@ -1,0 +1,42 @@
+FOUR PILLARS COMBATIVES — GROWTH WEBSITE UPDATE
+November 3, 2026
+
+WHAT CHANGES
+- Homepage emphasizes 5 core services and inquiries: Group Classes, Women’s Self-Defense, Private Lessons, Seminars and Personal Training.
+- Adds 3 dedicated service pages: womens-self-defense.html, private-lessons.html, personal-training.html.
+- Expands seminars.html into an organizer-focused page with workshop themes, event formats, and quote requests.
+- Updates navigation, Programs, Instructor and Contact pages and service-specific inquiry selections.
+- Keeps the Facebook icon in the header ONLY, on each page; no floating Facebook icon and no secondary Facebook promotion.
+- Preserves existing prices, curriculum sections, schedule and the 60-minute lesson package structure.
+- Adds local search descriptions, matching canonical addresses and sitemap URLs, and old-page redirects.
+- Does not knowingly change Google Analytics or verification settings. It does NOT create or replace your existing tracking code.
+
+UPLOAD TO EXISTING GITHUB REPOSITORY
+1. Download and unzip the update ZIP. There is NO extra enclosing folder.
+2. Upload/replace all .html files, sitemap.xml and _redirects in the ROOT of your existing repository.
+3. In the existing assets folder upload/replace site.js, facebook-header.css, facebook.svg; ADD marketing.css to the same folder.
+4. Do NOT delete existing files. Keep assets/styles.css, fpc-logo.webp, fpc-logo-small.webp, favicon files, robots.txt, _headers, and any Google/TrustedSite verification files.
+5. Do not rename the 3 new pages; use the exact names in the ZIP.
+6. Let Cloudflare deploy the updated GitHub commit. Test the live site on phone and desktop.
+
+CONTACT FORM ACTIVATION & TESTING
+- Contact form currently posts to the third-party FormSubmit service for info@fourpillarscombatives.com.
+- If not previously activated: submit a test inquiry, open the activation email FormSubmit sends to your business inbox, approve once, and submit a second test inquiry.
+- Check inbox and spam folder and verify delivery BEFORE relying on the form for student leads.
+- Service, name and email are required; organization/group name, date, location and other details are optional.
+- Form submits an inquiry, not a confirmed booking or payment.
+
+PHOTO & REVIEW NEXT STEPS (NOT FAKED)
+- This package uses your existing authentic FPC logo; no stock photos or invented testimonials were added.
+- Once you have your own training photos, instructor headshot and reviews published with permission, the site can be updated in the relevant service pages.
+- Do not publish images of students without their permission.
+
+POST-DEPLOYMENT CHECKLIST
+- Every header: one Facebook SVG link, no floating button.
+- Main pages: /, /programs, /lessons, /womens-self-defense, /private-lessons, /personal-training, /seminars, /training, /about, /contact.
+- Each service page: inquiry button preselects the right option in the contact form.
+- Try: /womens-self-defense-1 redirects to /womens-self-defense, /private-training to /private-lessons, /instructor to /about.
+- Calendar remains informational and scheduled availability is still subject to confirmation.
+- Check site caching and Cloudflare deployment if a new page returns 404.
+
+This archive contains UPDATE files only, not all legacy assets. Upload into your EXISTING repository. Site is not deployed automatically and form delivery cannot be verified offline.
