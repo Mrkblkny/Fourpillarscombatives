@@ -1,0 +1,15 @@
+# Redirects for known pages from the previous Four Pillars Combatives website.
+# These URLs were indexed by search engines; keep their existing links working.
+/instructor /about 301
+/why-train-with-us /training 301
+/private-training /lessons 301
+/womens-self-defense-1 /programs 301
+/mma /programs 301
+/eskrima /programs 301
+/blog /training 301
+/sponsors / 301
+# Additional common older addresses.
+/classes /lessons 301
+/group-classes /lessons 301
+/contact-us /contact 301
+/about-us /about 301
