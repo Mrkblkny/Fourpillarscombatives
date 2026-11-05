@@ -1,0 +1,169 @@
+// Link to the separate online-training portal from the desktop and mobile navigation.
+// Keep this before the menu listeners so clicking the new link also closes the mobile menu.
+(() => {
+  const nav = document.querySelector('.nav-links');
+  if (!nav) return;
+  const url = 'https://four-pillars-online-training.pages.dev/';
+  if (Array.from(nav.querySelectorAll('a')).some(a => a.href === url)) return;
+  const link = document.createElement('a');
+  link.href = url;
+  link.textContent = 'Online Training';
+  link.setAttribute('data-fpc-online-training', '');
+  const instructorLink = Array.from(nav.children).find(el => el.matches('a[href="/about"],a[href="about.html"]'));
+  nav.insertBefore(link, instructorLink || nav.querySelector('.nav-cta'));
+})();
+
+(()=>{const t=document.querySelector('.menu-toggle'),n=document.querySelector('.nav-links');if(!t||!n)return;t.addEventListener('click',()=>{const isOpen=n.classList.toggle('open');t.setAttribute('aria-expanded',String(isOpen));t.setAttribute('aria-label',isOpen?'Close menu':'Open menu');t.textContent=isOpen?'×':'☰';document.body.classList.toggle('menu-open',isOpen)});n.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{n.classList.remove('open');t.setAttribute('aria-expanded','false');t.setAttribute('aria-label','Open menu');t.textContent='☰';document.body.classList.remove('menu-open')}));document.addEventListener('keydown',e=>{if(e.key==='Escape'){n.classList.remove('open');t.setAttribute('aria-expanded','false');t.textContent='☰';document.body.classList.remove('menu-open')}})})();
+
+
+// Contact form: a single first-party AJAX submit handler handles Formspree responses.
+// A network failure means delivery is unconfirmed, not necessarily unsuccessful.
+// HTML POST action remains a fallback when JavaScript is disabled.
+(() => {
+  const form = document.getElementById('inquiry-form');
+  if (!form) return;
+  const serviceField = document.getElementById('inq-service');
+  const messageField = document.getElementById('inq-message');
+  const status = document.getElementById('form-status');
+  const emailButton = document.getElementById('email-inquiry-fallback');
+  const params = new URLSearchParams(window.location.search);
+  const selected = params.get('service');
+  if (selected && serviceField && Array.from(serviceField.options).some(o => o.value === selected)) {
+    serviceField.value = selected;
+  }
+  const topic = params.get('topic');
+  if (topic && topic.length < 120 && messageField) {
+    messageField.value = `I'm interested in ${topic}.`;
+  }
+
+  // Only this handler submits the inquiry via JavaScript. Do not also initialize @formspree/ajax.
+  const submitButton = form.querySelector('button[type="submit"]');
+  let isSending = false;
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (isSending || !form.reportValidity()) return;
+    isSending = true;
+    const oldLabel = submitButton ? submitButton.innerHTML : '';
+    if (submitButton) { submitButton.disabled = true; submitButton.textContent = 'Sending inquiry…'; }
+    showStatus('Sending your inquiry. Please do not press Send again.');
+    try {
+      const response = await fetch('https://formspree.io/f/mljjagkr', {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { Accept: 'application/json' }
+      });
+      // The HTTP status is authoritative. Never treat an optional JSON parse failure as failed delivery.
+      if (response.ok) {
+        showStatus('Your inquiry was submitted successfully. Thank you! We will contact you soon.');
+        form.reset();
+      } else if (response.status >= 400 && response.status < 500) {
+        showStatus('Formspree could not accept this submission (error ' + response.status + '). Please check your information or use the email option below.', true);
+      } else {
+        showStatus('We could not confirm your submission (server error ' + response.status + '). It may already have arrived. Please check before trying again.', true);
+      }
+    } catch (error) {
+      // A request may reach Formspree even when the confirmation is blocked or lost.
+      showStatus('We could not verify delivery because the confirmation did not reach your browser. Your inquiry MAY have been received. Please check before submitting again, or use the email option below.', true);
+    } finally {
+      isSending = false;
+      if (submitButton) { submitButton.disabled = false; submitButton.innerHTML = oldLabel; }
+    }
+  });
+
+  const val = name => String(form.elements.namedItem(name)?.value || '').trim();
+  function emailText() {
+    return [
+      'Hello Four Pillars Combatives,', '',
+      'I would like information about: ' + val('service'), '',
+      'MY CONTACT DETAILS',
+      'Name: ' + val('name'),
+      'Email: ' + val('email'),
+      'Phone: ' + (val('phone') || 'Not provided'), '',
+      'Organization / group: ' + (val('organization') || 'Not provided'),
+      'TRAINING DETAILS',
+      'Number of participants: ' + (val('group') || 'Not specified'),
+      'Preferred date: ' + (val('date') || 'Not specified'),
+      'Preferred days/times: ' + (val('times') || 'Flexible / not specified'),
+      'Training / event location: ' + (val('location') || 'Not specified'), '',
+      'QUESTIONS OR GOALS',
+      val('message') || 'Please contact me with information and availability.', '',
+      'Thank you!'
+    ].join('\n');
+  }
+  function showStatus(message, isError = false) {
+    if (!status) return;
+    status.textContent = message;
+    status.hidden = false;
+    status.setAttribute('data-error', String(isError));
+    status.setAttribute('role', isError ? 'alert' : 'status');
+  }
+  emailButton?.addEventListener('click', () => {
+    if (!form.reportValidity()) return;
+    const subject = 'Four Pillars Combatives | ' + val('service') + ' Inquiry';
+    const href = 'mailto:info@fourpillarscombatives.com?subject=' +
+      encodeURIComponent(subject) + '&body=' + encodeURIComponent(emailText());
+    showStatus('Opening your email app. Tap Send there to finish submitting your inquiry.');
+    window.location.href = href;
+  });
+
+  document.getElementById('copy-inquiry')?.addEventListener('click', async () => {
+    if (!form.reportValidity()) return;
+    const content = 'To: info@fourpillarscombatives.com\nSubject: Four Pillars Combatives | ' +
+      val('service') + ' Inquiry\n\n' + emailText();
+    try {
+      await navigator.clipboard.writeText(content);
+      showStatus('Inquiry copied. Paste it into an email to info@fourpillarscombatives.com and send.');
+    } catch {
+      showStatus('Unable to copy automatically. Please use the email button or call 601-213-7419.', true);
+    }
+  });
+})();
+
+
+// Month view of recurring Monday and Wednesday classes; this is not a live availability calendar.
+(() => {
+  const grid=document.getElementById('fpc-calendar');
+  const label=document.getElementById('calendar-month');
+  if (!grid || !label) return;
+  const today=new Date();
+  let yr=today.getFullYear(),mo=today.getMonth();
+  const weekdays=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const fmt=new Intl.DateTimeFormat('en-US',{month:'long',year:'numeric'});
+  function draw(){
+    const first=new Date(yr,mo,1), last=new Date(yr,mo+1,0);
+    label.textContent=fmt.format(first);
+    grid.replaceChildren();
+    for(const name of weekdays){const el=document.createElement('span');el.className='weekday-name';el.textContent=name;grid.appendChild(el)}
+    for(let i=0;i<first.getDay();i++){const el=document.createElement('span');el.className='calendar-empty';el.setAttribute('aria-hidden','true');grid.appendChild(el)}
+    for(let n=1;n<=last.getDate();n++){
+      const d=new Date(yr,mo,n),dayNum=d.getDay(),isClassDay=dayNum===1||dayNum===3;
+      const el=document.createElement('div');el.className='calendar-day'+(isClassDay?' class-day':'');
+      if(yr===today.getFullYear()&&mo===today.getMonth()&&n===today.getDate())el.classList.add('today');
+      const time=document.createElement('time');time.dateTime=[yr,String(mo+1).padStart(2,'0'),String(n).padStart(2,'0')].join('-');time.textContent=n;el.appendChild(time);
+      if(isClassDay){
+        const a=document.createElement('a');
+        const dateLabel=new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',year:'numeric'}).format(d);
+        const dayName=dayNum===1?'Monday':'Wednesday';
+        const q=new URLSearchParams({service:'Group Classes',topic:'the '+dayName+' class on '+dateLabel});
+        a.href='/contact?'+q.toString()+'#inquire';a.textContent='5:30–6:50';a.setAttribute('aria-label','Ask about '+dayName+' class on '+dateLabel+', 5:30 to 6:50 PM');el.appendChild(a);
+      }
+      grid.appendChild(el);
+    }
+  }
+  document.getElementById('calendar-prev')?.addEventListener('click',()=>{mo--;if(mo<0){mo=11;yr--}draw()});
+  document.getElementById('calendar-next')?.addEventListener('click',()=>{mo++;if(mo>11){mo=0;yr++}draw()});
+  draw();
+})();
+
+
+// TrustedSite: floating trustmark. The badge is shown after TrustedSite
+// validates the website and the site earns its Certified Secure status.
+(() => {
+  const trustedSiteUrl = 'https://cdn.ywxi.net/js/1.js';
+  if (document.querySelector('script[src="' + trustedSiteUrl + '"]')) return;
+  const trustmarkScript = document.createElement('script');
+  trustmarkScript.src = trustedSiteUrl;
+  trustmarkScript.async = true;
+  document.body.appendChild(trustmarkScript);
+})();
+
