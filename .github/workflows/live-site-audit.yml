@@ -1,0 +1,16 @@
+name: Audit live FPC pages and Online Training public access
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tests/live-site-audit.mjs'
+      - '.github/workflows/live-site-audit.yml'
+  workflow_dispatch:
+jobs:
+  live-site:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check live links, beta branding, pricing and public inventory privacy
+        run: node tests/live-site-audit.mjs
