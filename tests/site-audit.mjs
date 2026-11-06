@@ -52,11 +52,11 @@ for(const name of pages) {
 const js=read('assets/site.js');
 assert.match(js,/const url = '\/online-training\/'/, 'Navigation must use same-domain training path');
 assert.ok(!js.includes('four-pillars-online-training.pages.dev'), 'Old Pages URL present in navigation');
-assert.match(read('index.html'), /href="\\/online-training\\/"/);
+assert.ok(read('index.html').includes('href="/online-training/"'), 'Homepage training link must use the same domain');
 const contact=read('contact.html');
 assert.match(contact,/<form[^>]+action="https:\/\/formspree\.io\/f\/mljjagkr"[^>]*id="inquiry-form"/i);
 assert.match(js,/fetch\('https:\/\/formspree\.io\/f\/mljjagkr'/);
-assert.ok(!js.includes('@formspree/ajax'), 'Two competing Formspree handlers not allowed');
+assert.ok(!/<script[^>]+@formspree\\/ajax/.test(contact), 'Two competing Formspree handlers not allowed');
 const services=[...contact.matchAll(/<option[^>]*value="([^"]+)"[^>]*>/g)].map(m=>m[1]);
 for (const name of pages) {
   const html=read(name+'.html');
