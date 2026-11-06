@@ -158,3 +158,15 @@
 @media(max-width:1100px) and (min-width:891px){.header-inner{gap:12px}.nav-links{gap:9px}.nav-cta{min-width:128px;padding-inline:10px}.facebook-header-link{flex-basis:36px;width:36px;height:36px}}
 @media(max-width:890px){.facebook-header-link{order:2;flex-basis:42px;width:42px;height:42px;margin-left:auto}.menu-toggle{order:3;flex-shrink:0}.nav-links{order:4}}
 @media(max-width:600px){.header-inner{gap:10px}.brand{flex:1 1 auto;min-width:0;gap:8px}.brand-emblem{width:48px;height:48px}.brand-label{font-size:1.1rem;white-space:nowrap}.brand-label small{font-size:.76rem}.facebook-header-link{flex-basis:40px;width:40px;height:40px;margin-left:0}.menu-toggle{width:44px;height:44px}}
+
+/* Online Training launch discovery: persistent nav + announcement on all interior pages. */
+.nav-links a.nav-online{color:#fff;border-bottom:2px solid var(--red);padding-bottom:4px}
+.nav-links a.nav-online:hover{color:#fff}
+.online-site-ribbon{background:linear-gradient(105deg,#1d1015,#2a151a 55%,#101417);border-bottom:1px solid #57313a;padding:11px 0}
+.online-site-ribbon>.shell{display:flex;align-items:center;justify-content:center;gap:22px;flex-wrap:wrap}
+.online-site-ribbon span{font-size:.82rem;line-height:1.55;color:#e0e4e6}
+.online-site-ribbon strong{letter-spacing:.06em;color:#fff}
+.online-site-ribbon a{font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;font-weight:800;color:#fff;text-decoration:underline;text-decoration-color:var(--red);text-underline-offset:5px;white-space:nowrap}
+.online-site-ribbon a:hover{color:#ff9da5}
+@media(max-width:1280px){.nav-links.open a.nav-online{color:#fff;border-bottom:1px solid #7f3b44;box-shadow:inset 3px 0 var(--red);padding-left:12px}}
+@media(max-width:600px){.online-site-ribbon>.shell{align-items:flex-start;justify-content:flex-start;gap:7px}.online-site-ribbon span,.online-site-ribbon a{font-size:.75rem}.online-site-ribbon a{white-space:normal}}
