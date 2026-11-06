@@ -1,10 +1,10 @@
-// Link to the separate online-training portal from the desktop and mobile navigation.
+// Link to the same-domain online-training portal from desktop and mobile navigation.
 // Keep this before the menu listeners so clicking the new link also closes the mobile menu.
 (() => {
   const nav = document.querySelector('.nav-links');
   if (!nav) return;
-  const url = 'https://four-pillars-online-training.pages.dev/';
-  if (Array.from(nav.querySelectorAll('a')).some(a => a.href === url)) return;
+  const url = '/online-training/';
+  if (Array.from(nav.querySelectorAll('a')).some(a => a.getAttribute('href') === url)) return;
   const link = document.createElement('a');
   link.href = url;
   link.textContent = 'Online Training';
