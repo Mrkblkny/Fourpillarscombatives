@@ -52,6 +52,21 @@ for(const name of pages) {
   }
 }
 
+
+const programs=read('programs.html');
+assert.match(programs,/Six ways to train/,'Program directory should include Online Training');
+assert.match(programs,/06 \/ ONLINE TRAINING · PUBLIC BETA/,'Online Training should be a sixth program');
+assert.match(programs,/Founding lifetime prices rise by tier/,'Program link must explain pricing progression');
+for(const name of pages.filter(x=>x!=='index')){
+  assert.match(read(name+'.html'),/PUBLIC BETA · TRAIN FROM ANYWHERE/,
+    name+': keep beta clear even when paid enrollment is live');
+}
+for(const name of ['index','training']){
+  const html=read(name+'.html');
+  assert.ok(!html.includes('<h3>WEAPONS FIGHTING</h3>'),name+': Section 3 must be named Weapons');
+  assert.ok(!html.includes('<h3>EMPTY-HAND FIGHTING</h3>'),name+': Section 2 must mention a weapons environment');
+}
+
 const js=read('assets/site.js');
 assert.match(js,/const url = '\/online-training\/'/, 'Navigation must use same-domain training path');
 assert.ok(!js.includes('four-pillars-online-training.pages.dev'), 'Old Pages URL present in navigation');
