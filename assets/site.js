@@ -17,18 +17,18 @@
         const copy=banner.querySelector('span');
         const cta=banner.querySelector('a');
         if(copy)copy.textContent=isOpen
-          ?'ONLINE TRAINING ENROLLMENT IS OPEN. Founding lifetime memberships start at '+price+'.'
-          :'TRAIN FROM ANYWHERE. Online Training registration is free; paid founding memberships are coming soon.';
+          ?'PUBLIC BETA — ONLINE TRAINING ENROLLMENT OPEN. Founding lifetime memberships are currently '+price+' one time; prices increase with later tiers.'
+          :'PUBLIC BETA — TRAIN FROM ANYWHERE. Free registration is open; founding membership prices increase at each new tier.';
         if(cta)cta.textContent=isOpen?'View Membership & Enroll ↗':'Explore Online Training ↗';
       }
       if(membership)membership.textContent=isOpen
-        ?'Founding Lifetime Memberships Open · '+price+' one time'
-        :'Free registration available now · Founding Lifetime Memberships from $199.99 when paid enrollment opens';
+        ?'Public Beta · Founding Lifetime Enrollment Open · '+price+' one time · Price rises with later tiers'
+        :'Public Beta · Free registration available now · Founding Lifetime Memberships start at $199.99, with prices rising at later tiers';
       if(badge)badge.textContent=isOpen
-        ?'Online Training Enrollment Open / Four Pillars Combatives'
+        ?'Public Beta · Online Training Enrollment Open / Four Pillars Combatives'
         :'Public Beta / Four Pillars Combatives Online';
       if(note)note.textContent=isOpen
-        ?'The first 50 founding memberships are '+price+' for lifetime core-library access. More lessons will be added during beta.'
+        ?'Current founding price: '+price+' one time. The price rises with each new tier. Training remains in beta while lessons are added.'
         :'Create a free account now. Paid lifetime access opens after final checkout setup; video lessons and PDF resources will be added throughout beta.';
       if(link)link.textContent=isOpen?'View Online Training & Enroll ↗':'Explore Online Training & Register Free ↗';
     })
