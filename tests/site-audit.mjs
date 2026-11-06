@@ -20,6 +20,9 @@ for (const name of pages) {
   assert.match(html,/(?:href="https:\/\/fourpillarscombatives\.com[^"]*"[^>]*rel="canonical"|rel="canonical"[^>]*href="https:\/\/fourpillarscombatives\.com[^"]*")/i,file+': missing canonical');
   assert.match(html, /<h1\b/i,file+': missing main heading');
   assert.match(html,/facebook-header-link/,file+': missing header Facebook icon');
+  assert.match(html,/class="nav-online" href="\/online-training\/"/,file+': online training must be visible in navigation');
+  assert.match(html,/Online Training — Free Registration/,file+': online training must be available in footer');
+  if(name!=='index')assert.match(html,/online-site-ribbon/,file+': online training announcement must be present');
   assert.match(html,/https:\/\/www\.facebook\.com\/FourPillarsCombatives\//,file+': missing Facebook link');
   assert.match(html,/src="assets\/site\.js(?:\?[^"]*)?"/i,file+': missing site JavaScript');
   const ids=[...html.matchAll(/\bid=["']([^"']+)["']/g)].map(m=>m[1]);
@@ -53,6 +56,8 @@ const js=read('assets/site.js');
 assert.match(js,/const url = '\/online-training\/'/, 'Navigation must use same-domain training path');
 assert.ok(!js.includes('four-pillars-online-training.pages.dev'), 'Old Pages URL present in navigation');
 assert.ok(read('index.html').includes('href="/online-training/"'), 'Homepage training link must use the same domain');
+assert.match(read('index.html'),/Founding Lifetime Memberships from \$199\.99/, 'Homepage must disclose new founding price');
+assert.match(read('sitemap.xml'),/fourpillarscombatives\.com\/online-training\//,'Sitemap must include online training');
 const contact=read('contact.html');
 assert.match(contact,/<form[^>]+action="https:\/\/formspree\.io\/f\/mljjagkr"[^>]*id="inquiry-form"/i);
 assert.match(js,/fetch\('https:\/\/formspree\.io\/f\/mljjagkr'/);
