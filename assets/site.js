@@ -1,3 +1,40 @@
+// Read only the public training status. Keep marketing honest before and after
+// launch without hard-coding whether sales are open on every website page.
+(() => {
+  const banners=[...document.querySelectorAll('.online-site-ribbon')];
+  const badge=document.querySelector('.fpc-online-copy .eyebrow');
+  const membership=document.querySelector('.fpc-online-membership');
+  const note=document.querySelector('.fpc-online-note');
+  const link=document.querySelector('.fpc-online-copy .btn');
+  if(!banners.length && !membership) return;
+  fetch('/online-training/api/config',{cache:'no-store'})
+    .then(response=>response.ok?response.json():null)
+    .then(data=>{
+      if(!data || typeof data.enrollmentOpen!=='boolean')return;
+      const isOpen=data.enrollmentOpen;
+      const price=typeof data.offer?.price==='string'?data.offer.price:'$199.99';
+      for(const banner of banners){
+        const copy=banner.querySelector('span');
+        const cta=banner.querySelector('a');
+        if(copy)copy.textContent=isOpen
+          ?'ONLINE TRAINING ENROLLMENT IS OPEN. Founding lifetime memberships start at '+price+'.'
+          :'TRAIN FROM ANYWHERE. Online Training registration is free; paid founding memberships are coming soon.';
+        if(cta)cta.textContent=isOpen?'View Membership & Enroll ↗':'Explore Online Training ↗';
+      }
+      if(membership)membership.textContent=isOpen
+        ?'Founding Lifetime Memberships Open · '+price+' one time'
+        :'Free registration available now · Founding Lifetime Memberships from $199.99 when paid enrollment opens';
+      if(badge)badge.textContent=isOpen
+        ?'Online Training Enrollment Open / Four Pillars Combatives'
+        :'Public Beta / Four Pillars Combatives Online';
+      if(note)note.textContent=isOpen
+        ?'The first 50 founding memberships are '+price+' for lifetime core-library access. More lessons will be added during beta.'
+        :'Create a free account now. Paid lifetime access opens after final checkout setup; video lessons and PDF resources will be added throughout beta.';
+      if(link)link.textContent=isOpen?'View Online Training & Enroll ↗':'Explore Online Training & Register Free ↗';
+    })
+    .catch(()=>{ /* Stay with static safe pre-launch copy if unavailable. */ });
+})();
+
 // Link to the same-domain online-training portal from desktop and mobile navigation.
 // Keep this before the menu listeners so clicking the new link also closes the mobile menu.
 (() => {
