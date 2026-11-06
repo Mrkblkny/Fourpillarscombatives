@@ -17,7 +17,22 @@ for(const path of pages){
   assert.ok(text.includes('href="/online-training/"'),path+': Online Training link missing');
   assert.ok(text.includes('Online Training — Free Registration'),path+': footer link missing');
   assert.ok(text.includes('facebook-header-link'),path+': Facebook header link missing');
-  if(path!=='/')assert.ok(text.includes('online-site-ribbon'),path+': Online Training announcement missing');
+  if(path!=='/'){
+    assert.ok(text.includes('online-site-ribbon'),path+': Online Training announcement missing');
+    assert.ok(text.includes('PUBLIC BETA · TRAIN FROM ANYWHERE'),
+      path+': marketing must remain beta after checkout opens');
+  }
+  if(path==='/programs'){
+    assert.ok(text.includes('Six ways to train'), 'Programs page must list six choices');
+    assert.ok(text.includes('06 / ONLINE TRAINING · PUBLIC BETA'),
+      'Programs page must include the Online Training course');
+  }
+  if(path==='/' || path==='/training'){
+    assert.ok(!text.includes('<h3>WEAPONS FIGHTING</h3>'),
+      path+': Section 3 uses the shorter Weapons title');
+    assert.ok(!text.includes('<h3>EMPTY-HAND FIGHTING</h3>'),
+      path+': Section 2 must reference a weapons environment');
+  }
   if(path==='/'){
     assert.match(text,/Public Beta \/ Four Pillars Combatives Online/, 'Homepage must say Public Beta');
     assert.match(text,/Empty-Hand Fighting in a Weapons Environment/);
