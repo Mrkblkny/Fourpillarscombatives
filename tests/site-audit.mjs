@@ -73,9 +73,23 @@ assert.ok(!js.includes('four-pillars-online-training.pages.dev'), 'Old Pages URL
 assert.ok(read('index.html').includes('href="/online-training/"'), 'Homepage training link must use the same domain');
 assert.match(read('index.html'), /href="\/online-training\/admin\/">Online Training Admin Login<\/a>/, 'Homepage footer must expose the admin login');
 assert.match(js, /Online Training Admin Login/, 'Other pages must receive the footer admin link');
-assert.match(js, /className = 'nav-admin-login'/, 'Main mobile navigation must include Admin Login');
-assert.match(js, /link\.href = '\/online-training\/admin\/'/, 'Mobile Admin Login must point to the protected portal');
-assert.match(read('assets/styles.css'), /\.nav-links\.open \.nav-admin-login\{display:block\}/, 'Mobile Admin Login must be visible when menu opens');
+assert.ok(!js.includes("className = 'nav-admin-login'"), 'Admin Login must not be injected into the mobile navigation');
+assert.ok(!read('assets/styles.css').includes('.nav-links.open .nav-admin-login'),
+  'Admin Login must not appear in the mobile navigation');
+for(const name of pages){
+  const html=read(name+'.html');
+  const header=(html.split('<header')[1]||'').split('</header>')[0];
+  assert.ok(!header.includes('/online-training/admin/'),name+': admin link belongs in footer only');
+}
+const homepage=read('index.html');
+assert.ok(homepage.includes('id="online-member-community"'), 'Homepage must describe community features');
+for(const term of ['Discussion forums and member feed','Interest groups','Member profiles and photos',
+  'Opt-in private messages','Training challenges','Events and seminars',
+  'Instructor video feedback requests','Community moderation','Exclusive VIP discussion']){
+  assert.ok(homepage.includes(term), 'Homepage missing community feature '+term);
+}
+for(const tier of ['PUBLIC · EVERYONE','REGISTERED · FREE','STANDARD · PAID','VIP · PAID'])
+  assert.ok(homepage.includes(tier), 'Homepage missing entitlement tier '+tier);
 assert.match(read('index.html'),/Founding Lifetime Membership pricing begins at \$199\.99/, 'Homepage must disclose new founding price');
 assert.match(read('sitemap.xml'),/fourpillarscombatives\.com\/online-training\//,'Sitemap must include online training');
 const contact=read('contact.html');
