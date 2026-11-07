@@ -35,3 +35,18 @@
 @media(max-width:1180px){.growth-four{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:890px){.growth-three{grid-template-columns:1fr 1fr}.growth-split{grid-template-columns:1fr}.growth-cta-inner{flex-direction:column;align-items:flex-start}.growth-cta-buttons{width:100%;flex:0 0 auto;flex-direction:row}.growth-price-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.growth-three,.growth-four,.growth-price-grid{grid-template-columns:1fr}.growth-service-card{min-height:225px}.growth-info{padding:23px 20px}.growth-cta-buttons{flex-direction:column}.growth-cta-buttons .btn{width:100%}.growth-quote-panel,.growth-panel{padding:26px 20px}.growth-cta-band{padding:48px 0}.growth-quicklinks a{width:100%}.growth-hero h1{font-size:clamp(3.2rem,12vw,4.8rem)}}
+
+/* FPC native Online Training community preview: fully static, no paid dependencies. */
+.home-online-community{background:radial-gradient(ellipse at 84% 20%,rgba(163,37,53,.12),transparent 46%),#10151b;border-top:1px solid #30383e}
+.online-community-feature-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin:26px 0 32px}
+.online-community-feature-grid article{padding:20px 18px;background:#171e24;border:1px solid #394047;border-top:2px solid #ae3544}
+.online-community-feature-grid strong{font-size:.97rem;color:#fff;line-height:1.4}
+.online-community-feature-grid p{font-size:.85rem;color:#cad3da;line-height:1.65;margin:8px 0 0}
+.online-community-access{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:25px 0}
+.online-community-access article{border:1px solid #40464d;background:#111921;padding:22px 18px}
+.online-community-access article span{font-size:.66rem;font-weight:800;letter-spacing:.11em;color:#f38c95;text-transform:uppercase}
+.online-community-access h3{font-size:1.25rem;line-height:1.15;color:#fff;margin:10px 0}
+.online-community-access p{font-size:.82rem;color:#c4cdd4;line-height:1.58;margin:0}
+.online-community-note{max-width:950px;color:#cfd7dd;font-size:.89rem;line-height:1.7;margin:0 0 22px}
+@media(max-width:1100px){.online-community-feature-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.online-community-access{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){.online-community-feature-grid,.online-community-access{grid-template-columns:1fr}.online-community-feature-grid article,.online-community-access article{padding:17px}.home-online-community .btn{width:100%;text-align:center}}
