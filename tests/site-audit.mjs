@@ -98,6 +98,16 @@ assert.match(curriculumHtml,/preventing an attacker from accessing weapons/,
   'Curriculum must include the approved weapons awareness description');
 assert.match(curriculumHtml,/Emergency Medical &amp; Trauma Care/i,
   'Curriculum must include Section 5');
+const seminarsHtml=read('seminars.html');
+assert.ok(!/Train the four sections/i.test(seminarsHtml),
+  'Seminars must not describe the current five-section curriculum as four sections');
+assert.match(seminarsHtml,/five-section Four Pillars Combatives self-defense curriculum/,
+  'Seminars should accurately describe their relationship to the five-section curriculum');
+const aboutHtml=read('about.html');
+assert.ok(!aboutHtml.includes('instructor since 1996'),
+  'Do not confuse training since 1996 with teaching since 1996 in SEO metadata');
+assert.match(aboutHtml,/trained in martial arts since 1996/,
+  'About SEO metadata must accurately reflect experience');
 assert.match(homepage,/FIVE SECTIONS/,
   'Homepage must advertise five sections');
 assert.match(homepage,/Recognize danger\. Avoid unnecessary confrontation\. Defend yourself when necessary\. Provide emergency care when needed\. Get Home Safe\./,
