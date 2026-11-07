@@ -61,6 +61,17 @@
   nav.insertBefore(link, instructorLink || nav.querySelector('.nav-cta'));
 })();
 
+// Mobile navigation includes a direct Admin Login, without crowding desktop links.
+(() => {
+  const nav = document.querySelector('.nav-links');
+  if (!nav || nav.querySelector('.nav-admin-login')) return;
+  const link = document.createElement('a');
+  link.className = 'nav-admin-login';
+  link.href = '/online-training/admin/';
+  link.textContent = 'Admin Login';
+  nav.insertBefore(link, nav.querySelector('a[href="/contact"]') || nav.querySelector('.nav-cta'));
+})();
+
 (()=>{const t=document.querySelector('.menu-toggle'),n=document.querySelector('.nav-links');if(!t||!n)return;t.addEventListener('click',()=>{const isOpen=n.classList.toggle('open');t.setAttribute('aria-expanded',String(isOpen));t.setAttribute('aria-label',isOpen?'Close menu':'Open menu');t.textContent=isOpen?'×':'☰';document.body.classList.toggle('menu-open',isOpen)});n.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{n.classList.remove('open');t.setAttribute('aria-expanded','false');t.setAttribute('aria-label','Open menu');t.textContent='☰';document.body.classList.remove('menu-open')}));document.addEventListener('keydown',e=>{if(e.key==='Escape'){n.classList.remove('open');t.setAttribute('aria-expanded','false');t.textContent='☰';document.body.classList.remove('menu-open')}})})();
 
 
