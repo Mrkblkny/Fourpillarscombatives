@@ -95,6 +95,18 @@ assert.match(read('programs.html'),/a permanent verified VIP Founding Member bad
   'Programs should explain the permanent verified VIP badge');
 for(const tier of ['PUBLIC · EVERYONE','REGISTERED · FREE','STANDARD · PAID','VIP · PAID'])
   assert.ok(homepage.includes(tier), 'Homepage missing entitlement tier '+tier);
+assert.match(homepage,/the community features currently enabled for Founding members/,
+  'Main website must not promise every feature when the administrator controls per-tier access');
+assert.ok(!homepage.includes('and all standard community features.'),
+  'Avoid promises that conflict with the administrator-controlled member access matrix');
+assert.match(js,/vipOpen=Boolean\(data\.vip\?\.enrollmentOpen\)/,
+  'Public pricing ticker must consider VIP as well as Founding availability');
+assert.match(js,/const choices=\[/,
+  'Public beta page should list whichever paid enrollment options are currently open');
+assert.ok(!js.includes('Paid lifetime access opens after final checkout setup'),
+  'Do not show obsolete checkout-setup promises after enrollment is live');
+assert.match(js,/if\(e\.key==='Escape'\).*?t\.setAttribute\('aria-label','Open menu'\)/,
+  'Closing mobile menu with Escape must reset its accessible button label');
 assert.match(read('index.html'),/Founding Lifetime Membership pricing begins at \$199\.99/, 'Homepage must disclose new founding price');
 assert.match(read('sitemap.xml'),/fourpillarscombatives\.com\/online-training\//,'Sitemap must include online training');
 const contact=read('contact.html');
