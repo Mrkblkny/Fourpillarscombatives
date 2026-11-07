@@ -1,0 +1,16 @@
+# Upload ONLY public website files. Do not publish source, tests, or operating docs.
+.github/
+.git/
+cloudflare/
+tests/
+node_modules/
+README.md
+ONLINE-TRAINING-ROUTING.md
+UPLOAD-INSTRUCTIONS.txt
+wrangler.toml
+wrangler.json
+wrangler.jsonc
+.assetsignore
+_redirects
+*.md
+*.txt
