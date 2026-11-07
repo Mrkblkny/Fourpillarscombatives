@@ -54,9 +54,11 @@ assert.ok(portal.includes('Price increases with each founding tier.'));
 assert.ok(!portal.includes('id="founderProgressTrack"'));
 const {text:configText}=await get('/online-training/api/config');
 const data=JSON.parse(configText);
-assert.ok(data.founding && Object.keys(data.founding).length===1
-  && Object.hasOwn(data.founding,'tier'),
-  'Public API must expose only the tier, not seats remaining or allocated');
+assert.ok(data.founding && Object.keys(data.founding).sort().join(',')==='tier,tierProgressPercent',
+  'Public API must expose only current tier and percent, not purchase counts or inventory');
+assert.ok(data.vip && !Object.hasOwn(data.vip,'purchases'), 'VIP public API must not expose purchases');
+assert.ok(!Object.hasOwn(data.founding,'verifiedPurchases'), 'Founding purchase totals must remain private');
 assert.equal(typeof data.enrollmentOpen,'boolean');
-assert.equal(data.offer.price,'$199.99');
+assert.ok(data.offer.price===null || /^\$\d+\.99$/.test(data.offer.price),
+  'Public offer must have current one-time tier price or be sold out');
 console.log('PASS: '+pages.length+' live website pages, sitemap, public beta pricing UI, protected founder inventory.');
