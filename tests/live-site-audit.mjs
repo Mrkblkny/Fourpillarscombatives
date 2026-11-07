@@ -36,7 +36,12 @@ for(const path of pages){
   if(path==='/'){
     assert.match(text,/Public Beta \/ Four Pillars Combatives Online/, 'Homepage must say Public Beta');
     assert.match(text,/Empty-Hand Fighting in a Weapons Environment/);
-    assert.match(text,/Founding Lifetime Memberships from \$199\.99/);
+    assert.ok(text.includes('id="online-member-community"'),
+      'Live homepage is missing the newly published community overview');
+    assert.ok(text.includes('PUBLIC · EVERYONE') && text.includes('REGISTERED · FREE') &&
+      text.includes('STANDARD · PAID') && text.includes('VIP · PAID'),
+      'Live homepage must describe every access tier');
+    assert.match(text,/Founding Lifetime Membership pricing begins at \$199\.99/);
   }
   console.log('OK',path);
 }
