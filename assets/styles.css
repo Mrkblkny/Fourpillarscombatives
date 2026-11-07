@@ -170,3 +170,7 @@
 .online-site-ribbon a:hover{color:#ff9da5}
 @media(max-width:1280px){.nav-links.open a.nav-online{color:#fff;border-bottom:1px solid #7f3b44;box-shadow:inset 3px 0 var(--red);padding-left:12px}}
 @media(max-width:600px){.online-site-ribbon>.shell{align-items:flex-start;justify-content:flex-start;gap:7px}.online-site-ribbon span,.online-site-ribbon a{font-size:.75rem}.online-site-ribbon a{white-space:normal}}
+
+/* Admin sign-in is discoverable in the phone menu; desktop header stays uncluttered. */
+.nav-links .nav-admin-login{display:none}
+@media(max-width:890px){.nav-links.open .nav-admin-login{display:block}}
