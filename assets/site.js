@@ -22,26 +22,34 @@
     .then(response=>response.ok?response.json():null)
     .then(data=>{
       if(!data || typeof data.enrollmentOpen!=='boolean')return;
-      const isOpen=data.enrollmentOpen;
-      const price=typeof data.offer?.price==='string'?data.offer.price:'$199.99';
+      const isOpen=Boolean(data.enrollmentOpen);
+      const vipOpen=Boolean(data.vip?.enrollmentOpen);
+      const foundingPrice=typeof data.offer?.price==='string'?data.offer.price:null;
+      const vipPrice=typeof data.vip?.price==='string'?data.vip.price:null;
+      const choices=[
+        isOpen?'Founding '+(foundingPrice||'membership')+' one time':null,
+        vipOpen?'VIP '+(vipPrice||'membership')+' one time':null
+      ].filter(Boolean);
+      const enrollmentOpen=choices.length>0;
+      const offerText=choices.join(' · ');
       for(const banner of banners){
         const copy=banner.querySelector('span');
         const cta=banner.querySelector('a');
-        if(copy)copy.textContent=isOpen
-          ?'PUBLIC BETA — ONLINE TRAINING ENROLLMENT OPEN. Founding lifetime memberships are currently '+price+' one time; prices increase with later tiers.'
-          :'PUBLIC BETA — TRAIN FROM ANYWHERE. Free registration is open; founding membership prices increase at each new tier.';
-        if(cta)cta.textContent=isOpen?'View Membership & Enroll ↗':'Explore Online Training ↗';
+        if(copy)copy.textContent=enrollmentOpen
+          ?'PUBLIC BETA — ONLINE TRAINING ENROLLMENT OPEN. Free registration is available. '+offerText+'. Founding and VIP prices rise by tier.'
+          :'PUBLIC BETA — TRAIN FROM ANYWHERE. Free registration is open; see the portal for current Founding and VIP membership availability.';
+        if(cta)cta.textContent=enrollmentOpen?'View Membership & Enroll ↗':'Explore Online Training ↗';
       }
-      if(membership)membership.textContent=isOpen
-        ?'Public Beta · Founding Lifetime Enrollment Open · '+price+' one time · Price rises with later tiers'
-        :'Public Beta · Free registration available now · Founding Lifetime Memberships start at $199.99, with prices rising at later tiers';
-      if(badge)badge.textContent=isOpen
+      if(membership)membership.textContent=enrollmentOpen
+        ?'Public Beta · Free Registration · '+offerText+' · Prices rise by tier'
+        :'Public Beta · Free registration available now · Check current Founding and VIP enrollment in the portal';
+      if(badge)badge.textContent=enrollmentOpen
         ?'Public Beta · Online Training Enrollment Open / Four Pillars Combatives'
         :'Public Beta / Four Pillars Combatives Online';
-      if(note)note.textContent=isOpen
-        ?'Current founding price: '+price+' one time. The price rises with each new tier. Training remains in beta while lessons are added.'
-        :'Create a free account now. Paid lifetime access opens after final checkout setup; video lessons and PDF resources will be added throughout beta.';
-      if(link)link.textContent=isOpen?'View Online Training & Enroll ↗':'Explore Online Training & Register Free ↗';
+      if(note)note.textContent=enrollmentOpen
+        ?'Choose one paid membership—not both. '+offerText+'. Prices increase by tier. The training library remains in beta as lessons are added.'
+        :'Create a free student account now. Review Founding and VIP options and current enrollment status in the portal. New lessons and PDFs are added during beta.';
+      if(link)link.textContent=enrollmentOpen?'View Online Training & Enroll ↗':'Explore Online Training & Register Free ↗';
     })
     .catch(()=>{ /* Stay with static safe pre-launch copy if unavailable. */ });
 })();
@@ -61,7 +69,7 @@
   nav.insertBefore(link, instructorLink || nav.querySelector('.nav-cta'));
 })();
 
-(()=>{const t=document.querySelector('.menu-toggle'),n=document.querySelector('.nav-links');if(!t||!n)return;t.addEventListener('click',()=>{const isOpen=n.classList.toggle('open');t.setAttribute('aria-expanded',String(isOpen));t.setAttribute('aria-label',isOpen?'Close menu':'Open menu');t.textContent=isOpen?'×':'☰';document.body.classList.toggle('menu-open',isOpen)});n.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{n.classList.remove('open');t.setAttribute('aria-expanded','false');t.setAttribute('aria-label','Open menu');t.textContent='☰';document.body.classList.remove('menu-open')}));document.addEventListener('keydown',e=>{if(e.key==='Escape'){n.classList.remove('open');t.setAttribute('aria-expanded','false');t.textContent='☰';document.body.classList.remove('menu-open')}})})();
+(()=>{const t=document.querySelector('.menu-toggle'),n=document.querySelector('.nav-links');if(!t||!n)return;t.addEventListener('click',()=>{const isOpen=n.classList.toggle('open');t.setAttribute('aria-expanded',String(isOpen));t.setAttribute('aria-label',isOpen?'Close menu':'Open menu');t.textContent=isOpen?'×':'☰';document.body.classList.toggle('menu-open',isOpen)});n.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{n.classList.remove('open');t.setAttribute('aria-expanded','false');t.setAttribute('aria-label','Open menu');t.textContent='☰';document.body.classList.remove('menu-open')}));document.addEventListener('keydown',e=>{if(e.key==='Escape'){n.classList.remove('open');t.setAttribute('aria-expanded','false');t.setAttribute('aria-label','Open menu');t.textContent='☰';document.body.classList.remove('menu-open')}})})();
 
 
 // Contact form: a single first-party AJAX submit handler handles Formspree responses.
