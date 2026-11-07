@@ -63,7 +63,7 @@ for(const name of pages.filter(x=>x!=='index')){
 }
 for(const name of ['index','training']){
   const html=read(name+'.html');
-  assert.ok(!html.includes('<h3>WEAPONS FIGHTING</h3>'),name+': Section 3 must be named Weapons');
+  assert.ok(!html.includes('<h3>WEAPONS FIGHTING</h3>'),name+': Section 3 must be Weapons Fighting & Weapon Defense');
   assert.ok(!html.includes('<h3>EMPTY-HAND FIGHTING</h3>'),name+': Section 2 must mention a weapons environment');
   assert.match(html,/<h3>EMPTY-HAND FIGHTING IN A WEAPONS ENVIRONMENT<\/h3>/,
     name+': Section 2 must use the full approved title');
@@ -89,17 +89,19 @@ assert.match(firearmSection,/CAN YOU FIGHT WITHOUT IT—AND WITH IT AT CLOSE RAN
   'Firearm section must address both empty-hand fighting and close-range risk while armed');
 assert.match(homepage,/physical contact happens while you are armed at close range/,
   'Homepage must explain close-range safety and weapon risks as well as empty-hand skills');
-assert.match(homepage,/Train empty-handed against an empty-handed attacker/,
-  'Homepage must explain that Section 2 is unarmed against unarmed');
+assert.match(homepage,/offensive and defensive fighting skills at different combat ranges/,
+  'Homepage should describe empty-hand skills across combat ranges');
 const curriculumHtml=read('training.html');
-assert.match(curriculumHtml,/Empty-hand versus empty-hand:/,
-  'Curriculum must explicitly describe Section 2 as unarmed versus unarmed');
-assert.match(curriculumHtml,/<strong>Wrestling in a Weapons Environment:<\/strong>/,
-  'Section 2 should explicitly cover wrestling in a weapons environment');
-assert.match(homepage,/wrestling in a weapons environment/,
-  'Homepage Section 2 summary must include weapons-environment wrestling');
-assert.match(curriculumHtml,/If an attacker is already using a weapon, that situation is addressed in Section 3/,
-  'Curriculum must distinguish armed threats from Section 2');
+assert.match(curriculumHtml,/wrestling, clinch fighting, and ground fighting/,
+  'Curriculum must describe striking, wrestling and ground fighting');
+assert.match(curriculumHtml,/preventing an attacker from accessing weapons/,
+  'Curriculum must include the approved weapons awareness description');
+assert.match(curriculumHtml,/Emergency Medical &amp; Trauma Care/,
+  'Curriculum must include Section 5');
+assert.match(homepage,/FIVE SECTIONS/,
+  'Homepage must advertise five sections');
+assert.match(homepage,/Recognize danger\. Avoid unnecessary confrontation\. Defend yourself when necessary\. Provide emergency care when needed\. Get Home Safe\./,
+  'Homepage must include the approved philosophy');
 assert.match(homepage,/<li><span>02<\/span>Empty-Hand Fighting in a Weapons Environment<\/li>/,
   'Online Training preview on homepage must show Section 2 full title');
 assert.ok(homepage.includes('id="online-member-community"'), 'Homepage must describe community features');
