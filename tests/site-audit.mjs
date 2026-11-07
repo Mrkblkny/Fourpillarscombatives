@@ -73,6 +73,9 @@ assert.ok(!js.includes('four-pillars-online-training.pages.dev'), 'Old Pages URL
 assert.ok(read('index.html').includes('href="/online-training/"'), 'Homepage training link must use the same domain');
 assert.match(read('index.html'), /href="\/online-training\/admin\/">Online Training Admin Login<\/a>/, 'Homepage footer must expose the admin login');
 assert.match(js, /Online Training Admin Login/, 'Other pages must receive the footer admin link');
+assert.match(js, /className = 'nav-admin-login'/, 'Main mobile navigation must include Admin Login');
+assert.match(js, /link\.href = '\/online-training\/admin\/'/, 'Mobile Admin Login must point to the protected portal');
+assert.match(read('assets/styles.css'), /\.nav-links\.open \.nav-admin-login\{display:block\}/, 'Mobile Admin Login must be visible when menu opens');
 assert.match(read('index.html'),/Founding Lifetime Membership pricing begins at \$199\.99/, 'Homepage must disclose new founding price');
 assert.match(read('sitemap.xml'),/fourpillarscombatives\.com\/online-training\//,'Sitemap must include online training');
 const contact=read('contact.html');
