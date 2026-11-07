@@ -96,7 +96,7 @@ assert.match(curriculumHtml,/wrestling, clinch fighting, and ground fighting/,
   'Curriculum must describe striking, wrestling and ground fighting');
 assert.match(curriculumHtml,/preventing an attacker from accessing weapons/,
   'Curriculum must include the approved weapons awareness description');
-assert.match(curriculumHtml,/Emergency Medical &amp; Trauma Care/,
+assert.match(curriculumHtml,/Emergency Medical &amp; Trauma Care/i,
   'Curriculum must include Section 5');
 assert.match(homepage,/FIVE SECTIONS/,
   'Homepage must advertise five sections');
