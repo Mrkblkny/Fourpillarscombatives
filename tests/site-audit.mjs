@@ -65,6 +65,8 @@ for(const name of ['index','training']){
   const html=read(name+'.html');
   assert.ok(!html.includes('<h3>WEAPONS FIGHTING</h3>'),name+': Section 3 must be named Weapons');
   assert.ok(!html.includes('<h3>EMPTY-HAND FIGHTING</h3>'),name+': Section 2 must mention a weapons environment');
+  assert.match(html,/<h3>EMPTY-HAND FIGHTING IN A WEAPONS ENVIRONMENT<\/h3>/,
+    name+': Section 2 must use the full approved title');
 }
 
 const js=read('assets/site.js');
@@ -82,6 +84,8 @@ for(const name of pages){
   assert.ok(!header.includes('/online-training/admin/'),name+': admin link belongs in footer only');
 }
 const homepage=read('index.html');
+assert.match(homepage,/<li><span>02<\/span>Empty-Hand Fighting in a Weapons Environment<\/li>/,
+  'Online Training preview on homepage must show Section 2 full title');
 assert.ok(homepage.includes('id="online-member-community"'), 'Homepage must describe community features');
 for(const term of ['Discussion forums and member feed','Interest groups','Member profiles and photos',
   'Opt-in private messages','Training challenges','Events and seminars',
