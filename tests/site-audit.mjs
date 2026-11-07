@@ -84,6 +84,13 @@ for(const name of pages){
   assert.ok(!header.includes('/online-training/admin/'),name+': admin link belongs in footer only');
 }
 const homepage=read('index.html');
+assert.match(homepage,/Train empty-handed against an empty-handed attacker/,
+  'Homepage must explain that Section 2 is unarmed against unarmed');
+const curriculumHtml=read('training.html');
+assert.match(curriculumHtml,/Empty-hand versus empty-hand:/,
+  'Curriculum must explicitly describe Section 2 as unarmed versus unarmed');
+assert.match(curriculumHtml,/If an attacker is already using a weapon, that situation is addressed in Section 3/,
+  'Curriculum must distinguish armed threats from Section 2');
 assert.match(homepage,/<li><span>02<\/span>Empty-Hand Fighting in a Weapons Environment<\/li>/,
   'Online Training preview on homepage must show Section 2 full title');
 assert.ok(homepage.includes('id="online-member-community"'), 'Homepage must describe community features');
