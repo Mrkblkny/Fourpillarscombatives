@@ -54,9 +54,17 @@ for(const name of pages) {
 
 
 const programs=read('programs.html');
-assert.match(programs,/Six ways to train/,'Program directory should include Online Training');
+assert.match(programs,/Programs &amp; services · Pearl, Jackson Metro &amp; online/,'Program directory must distinguish offered programs and training formats');
 assert.match(programs,/06 \/ ONLINE TRAINING · PUBLIC BETA/,'Online Training should be a sixth program');
 assert.match(programs,/Founding lifetime prices rise by tier/,'Program link must explain pricing progression');
+assert.match(programs,/Women’s self-defense is a specialized program we offer/,
+  'Women’s self-defense must be described as an offered program, not a training format');
+assert.match(programs,/02 \/ WOMEN’S SELF-DEFENSE PROGRAM/,
+  'Women’s self-defense program card must be labeled correctly');
+assert.ok(!programs.includes('Six ways to train')&&!programs.includes('Explore six training options'),
+  'Program directory must not label all offered services as ways to train');
+assert.match(read('about.html'),/EXPLORE WHAT <span class="red">WE OFFER\.<\/span>/,
+  'Instructor page should describe services as offerings rather than training formats');
 for(const name of pages.filter(x=>x!=='index')){
   assert.match(read(name+'.html'),/PUBLIC BETA · TRAIN FROM ANYWHERE/,
     name+': keep beta clear even when paid enrollment is live');
@@ -84,6 +92,15 @@ for(const name of pages){
   assert.ok(!header.includes('/online-training/admin/'),name+': admin link belongs in footer only');
 }
 const homepage=read('index.html');
+assert.match(homepage,/Programs, services &amp; training formats/,
+  'Homepage must distinguish offerings from training formats');
+assert.match(homepage,/Women’s self-defense is available by request/,
+  'Homepage must explain how the women’s self-defense program is offered');
+assert.match(homepage,/02 \/ WOMEN’S SELF-DEFENSE PROGRAM/,
+  'Homepage must label women’s self-defense as a specialized program');
+assert.ok(!homepage.includes('<span class="eyebrow">Ways to train</span>'),
+  'Homepage must not classify women’s self-defense as a training format');
+
 const firearmSection=read('training.html').split('id="close-range-and-firearms"')[1]?.split('id="combat-sports-vs-self-defense"')[0]||'';
 assert.match(firearmSection,/CAN YOU FIGHT WITHOUT IT—AND WITH IT AT CLOSE RANGE\?/,
   'Firearm section must address both empty-hand fighting and close-range risk while armed');
@@ -126,7 +143,7 @@ assert.match(homepage,/Opt into the member directory/,
   'Homepage must describe optional directory and partner privacy');
 assert.match(read('programs.html'),/a permanent verified VIP Founding Member badge/,
   'Programs should explain the permanent verified VIP badge');
-assert.ok(homepage.indexOf('Ways to train')<homepage.indexOf('id="online-training"'),
+assert.ok(homepage.indexOf('Programs, services &amp; training formats')<homepage.indexOf('id="online-training"'),
   'In-person training choices should be presented before the online beta promotion');
 assert.ok(!homepage.includes('and all standard community features.'),
   'Avoid promising unrestricted access to administrator-controlled member features');
