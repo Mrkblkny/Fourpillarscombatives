@@ -71,7 +71,7 @@ const js=read('assets/site.js');
 assert.match(js,/const url = '\/online-training\/'/, 'Navigation must use same-domain training path');
 assert.ok(!js.includes('four-pillars-online-training.pages.dev'), 'Old Pages URL present in navigation');
 assert.ok(read('index.html').includes('href="/online-training/"'), 'Homepage training link must use the same domain');
-assert.match(read('index.html'),/Founding Lifetime Memberships from \$199\.99/, 'Homepage must disclose new founding price');
+assert.match(read('index.html'),/Founding Lifetime Membership pricing begins at \$199\.99/, 'Homepage must disclose new founding price');
 assert.match(read('sitemap.xml'),/fourpillarscombatives\.com\/online-training\//,'Sitemap must include online training');
 const contact=read('contact.html');
 assert.match(contact,/<form[^>]+action="https:\/\/formspree\.io\/f\/mljjagkr"[^>]*id="inquiry-form"/i);
