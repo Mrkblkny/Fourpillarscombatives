@@ -84,6 +84,11 @@ for(const name of pages){
   assert.ok(!header.includes('/online-training/admin/'),name+': admin link belongs in footer only');
 }
 const homepage=read('index.html');
+const firearmSection=read('training.html').split('id="close-range-and-firearms"')[1]?.split('id="combat-sports-vs-self-defense"')[0]||'';
+assert.match(firearmSection,/CAN YOU FIGHT WITHOUT IT—AND WITH IT AT CLOSE RANGE\?/,
+  'Firearm section must address both empty-hand fighting and close-range risk while armed');
+assert.match(homepage,/physical contact happens while you are armed at close range/,
+  'Homepage must explain close-range safety and weapon risks as well as empty-hand skills');
 assert.match(homepage,/Train empty-handed against an empty-handed attacker/,
   'Homepage must explain that Section 2 is unarmed against unarmed');
 const curriculumHtml=read('training.html');
