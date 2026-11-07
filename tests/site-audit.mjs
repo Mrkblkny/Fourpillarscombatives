@@ -85,9 +85,14 @@ const homepage=read('index.html');
 assert.ok(homepage.includes('id="online-member-community"'), 'Homepage must describe community features');
 for(const term of ['Discussion forums and member feed','Interest groups','Member profiles and photos',
   'Opt-in private messages','Training challenges','Events and seminars',
-  'Instructor video feedback requests','Community moderation','Exclusive VIP discussion']){
+  'Instructor video feedback requests','Community moderation','Exclusive VIP discussion',
+  'Opt-in training partner finder','permanent VIP Founding Member badge']){
   assert.ok(homepage.includes(term), 'Homepage missing community feature '+term);
 }
+assert.match(homepage,/optionally opt in to the training-partner finder/,
+  'Free members should see training-partner privacy benefits');
+assert.match(read('programs.html'),/a permanent verified VIP Founding Member badge/,
+  'Programs should explain the permanent verified VIP badge');
 for(const tier of ['PUBLIC · EVERYONE','REGISTERED · FREE','STANDARD · PAID','VIP · PAID'])
   assert.ok(homepage.includes(tier), 'Homepage missing entitlement tier '+tier);
 assert.match(read('index.html'),/Founding Lifetime Membership pricing begins at \$199\.99/, 'Homepage must disclose new founding price');
