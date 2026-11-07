@@ -1,0 +1,8 @@
+# Four Pillars Combatives: static website hosted on Cloudflare Workers Free.
+# Keep the production Worker name and root asset directory unchanged.
+name = "fourpillarscombatives"
+compatibility_date = "2026-11-06"
+previews = {}
+
+[assets]
+directory = "./"
