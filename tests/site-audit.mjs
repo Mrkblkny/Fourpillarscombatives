@@ -105,22 +105,21 @@ assert.match(homepage,/Recognize danger\. Avoid unnecessary confrontation\. Defe
 assert.match(homepage,/<li><span>02<\/span>Empty-Hand Fighting in a Weapons Environment<\/li>/,
   'Online Training preview on homepage must show Section 2 full title');
 assert.ok(homepage.includes('id="online-member-community"'), 'Homepage must describe community features');
-for(const term of ['Discussion forums and member feed','Interest groups','Member profiles and photos',
-  'Opt-in private messages','Training challenges','Events and seminars',
-  'Instructor video feedback requests','Community moderation','Exclusive VIP discussion',
-  'Opt-in training partner finder','permanent VIP Founding Member badge']){
-  assert.ok(homepage.includes(term), 'Homepage missing community feature '+term);
+for(const term of ['Community discussions','Training partners &amp; activities',
+  'Membership-based access','Free, admin-assigned Member, Founding, and VIP accounts',
+  'One paid membership is enough']){
+  assert.ok(homepage.includes(term), 'Homepage missing essential community explanation '+term);
 }
-assert.match(homepage,/optionally opt in to the training-partner finder/,
-  'Free members should see training-partner privacy benefits');
+assert.match(homepage,/Your account shows only the community features enabled for your membership/,
+  'Homepage must describe permission-controlled community navigation');
+assert.match(homepage,/Opt into the member directory/,
+  'Homepage must describe optional directory and partner privacy');
 assert.match(read('programs.html'),/a permanent verified VIP Founding Member badge/,
   'Programs should explain the permanent verified VIP badge');
-for(const tier of ['PUBLIC · EVERYONE','REGISTERED · FREE','STANDARD · PAID','VIP · PAID'])
-  assert.ok(homepage.includes(tier), 'Homepage missing entitlement tier '+tier);
-assert.match(homepage,/the community features currently enabled for Founding members/,
-  'Main website must not promise every feature when the administrator controls per-tier access');
+assert.ok(homepage.indexOf('Ways to train')<homepage.indexOf('id="online-training"'),
+  'In-person training choices should be presented before the online beta promotion');
 assert.ok(!homepage.includes('and all standard community features.'),
-  'Avoid promises that conflict with the administrator-controlled member access matrix');
+  'Avoid promising unrestricted access to administrator-controlled member features');
 assert.match(js,/vipOpen=Boolean\(data\.vip\?\.enrollmentOpen\)/,
   'Public pricing ticker must consider VIP as well as Founding availability');
 assert.match(js,/const choices=\[/,
