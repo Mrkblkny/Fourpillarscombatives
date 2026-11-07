@@ -94,6 +94,10 @@ assert.match(homepage,/Train empty-handed against an empty-handed attacker/,
 const curriculumHtml=read('training.html');
 assert.match(curriculumHtml,/Empty-hand versus empty-hand:/,
   'Curriculum must explicitly describe Section 2 as unarmed versus unarmed');
+assert.match(curriculumHtml,/<strong>Wrestling in a Weapons Environment:<\/strong>/,
+  'Section 2 should explicitly cover wrestling in a weapons environment');
+assert.match(homepage,/wrestling in a weapons environment/,
+  'Homepage Section 2 summary must include weapons-environment wrestling');
 assert.match(curriculumHtml,/If an attacker is already using a weapon, that situation is addressed in Section 3/,
   'Curriculum must distinguish armed threats from Section 2');
 assert.match(homepage,/<li><span>02<\/span>Empty-Hand Fighting in a Weapons Environment<\/li>/,
