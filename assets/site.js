@@ -1,3 +1,14 @@
+// Keep an unobtrusive admin sign-in link in the public footer on every page.
+// This is navigation only; all administrator APIs independently require authorization.
+(() => {
+  const links = document.querySelector('.site-footer .footer-links');
+  if (!links || links.querySelector('a[href="/online-training/admin/"]')) return;
+  const link = document.createElement('a');
+  link.href = '/online-training/admin/';
+  link.textContent = 'Online Training Admin Login';
+  links.appendChild(link);
+})();
+
 // Read only the public training status. Keep marketing honest before and after
 // launch without hard-coding whether sales are open on every website page.
 (() => {
