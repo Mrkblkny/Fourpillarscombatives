@@ -69,6 +69,16 @@ assert.match(siteJs,/Online Member Login & Dashboard/,
   'All main-site footers should provide a named Online Training login link');
 assert.match(siteJs,/link\.href='\/online-training\/'/,
   'Member login must target the existing protected portal');
+assert.match(home,/class="fpc-online-start" aria-label="How online training works"/,
+  'Homepage must explain joining, using video/PDF lessons, and authorized community access');
+assert.match(home,/Free account|free account/i,'Homepage must mention free registration');
+assert.match(home,/Community features depend on your membership permissions/,
+  'Homepage must explain feature permissions without promising universal access');
+assert.match(siteJs,/document\.addEventListener\('pointerdown'/,
+  'Mobile navigation should dismiss when someone taps outside the open menu');
+assert.match(siteJs,/nav\.classList\.remove\('open'\)/,
+  'Outside-click close must collapse the mobile menu');
+
 
 const programs=read('programs.html');
 assert.match(programs,/Programs &amp; services · Pearl, Jackson Metro &amp; online/,'Program directory must distinguish offered programs and training formats');
