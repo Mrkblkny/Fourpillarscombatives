@@ -17,8 +17,16 @@ for (const name of pages) {
   assert.match(html,/<html[^>]*lang="en"/i,file+': missing language');
   assert.match(html,/<title>[^<]+<\/title>/i,file+': missing title');
   assert.match(html,/name="description"/i,file+': missing SEO description');
+  const description=html.match(/<meta content="([^"]+)" name="description"\/>/i)?.[1];
+  assert.ok(description && description.length<=180,file+': overly long SEO description');
+  assert.ok(html.includes('<meta content="'+description+'" property="og:description"/>'),
+    file+': social description should match the SEO description');
+
   assert.match(html,/(?:href="https:\/\/fourpillarscombatives\.com[^"]*"[^>]*rel="canonical"|rel="canonical"[^>]*href="https:\/\/fourpillarscombatives\.com[^"]*")/i,file+': missing canonical');
   assert.match(html, /<h1\b/i,file+': missing main heading');
+  assert.match(html,/<a class="skip-link" href="#main">Skip to main content<\/a>/,
+    file+': missing keyboard skip navigation');
+  assert.match(html,/<main id="main">/i,file+': keyboard skip target missing');
   assert.match(html,/facebook-header-link/,file+': missing header Facebook icon');
   assert.match(html,/class="nav-online" href="\/online-training\/"/,file+': online training must be visible in navigation');
   assert.match(html,/Online Training — Free Registration/,file+': online training must be available in footer');

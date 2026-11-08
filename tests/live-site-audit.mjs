@@ -13,6 +13,7 @@ async function get(path){
 for(const path of pages){
   const {text}=await get(path);
   assert.match(text,/<title>[^<]+<\/title>/,path+': page title missing');
+  assert.ok(text.includes('class="skip-link" href="#main"'),path+': skip to content is missing');
   assert.ok(text.includes('class="nav-online"'),path+': Online Training navigation missing');
   assert.ok(text.includes('href="/online-training/"'),path+': Online Training link missing');
   assert.ok(text.includes('Online Training — Free Registration'),path+': footer link missing');
@@ -23,7 +24,8 @@ for(const path of pages){
       path+': marketing must remain beta after checkout opens');
   }
   if(path==='/programs'){
-    assert.ok(text.includes('Six ways to train'), 'Programs page must list six choices');
+    assert.ok(text.includes('Programs &amp; services · Pearl, Jackson Metro &amp; online'),
+      'Programs page must describe offered services accurately');
     assert.ok(text.includes('06 / ONLINE TRAINING · PUBLIC BETA'),
       'Programs page must include the Online Training course');
   }
@@ -38,9 +40,9 @@ for(const path of pages){
     assert.match(text,/Empty-Hand Fighting in a Weapons Environment/);
     assert.ok(text.includes('id="online-member-community"'),
       'Live homepage is missing the newly published community overview');
-    assert.ok(text.includes('PUBLIC · EVERYONE') && text.includes('REGISTERED · FREE') &&
-      text.includes('STANDARD · PAID') && text.includes('VIP · PAID'),
-      'Live homepage must describe every access tier');
+    assert.ok(text.includes('Free, admin-assigned Member, Founding, and VIP accounts') &&
+      text.includes('Your account shows only the community features enabled for your membership'),
+      'Live homepage must describe the current membership-based community access');
     assert.match(text,/Founding Lifetime Membership pricing begins at \$199\.99/);
   }
   console.log('OK',path);
