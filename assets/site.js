@@ -276,3 +276,16 @@
     if(event.key==='Escape')closeSubmenus();
   });
 })();
+
+
+// Visitor training assistant: one unobtrusive entry point on public site pages.
+// Never mount on the separate Online Training, Community or Admin applications.
+(() => {
+  if(location.pathname.startsWith('/online-training/'))return;
+  const css=document.createElement('link');
+  css.rel='stylesheet';css.href='/assets/assistant.css';
+  document.head.appendChild(css);
+  import('/assets/assistant.js')
+    .then(module=>module.mountVisitorAssistant())
+    .catch(()=>{ /* A loading error must never interfere with site navigation. */ });
+})();
