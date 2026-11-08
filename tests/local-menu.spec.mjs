@@ -13,30 +13,17 @@ for(const viewport of sizes){
     test('mobile menu opens after scrolling and permits Training dropdown',async({page})=>{
       const errors=[];
       page.on('pageerror',error=>errors.push(error.message));
-      await page.goto(base+'/',{waitUntil:'domcontentloaded'});
-      await page.evaluate(()=>window.scrollTo(0,Math.floor(document.body.scrollHeight*0.6)));
+      await page.goto(base+'/',{waitUntil:'load'});
+      await page.evaluate(()=>window.scrollTo({top:Math.floor(document.body.scrollHeight*0.6),behavior:'instant'}));
+      await page.waitForTimeout(200);
       await expect.poll(()=>page.evaluate(()=>scrollY)).toBeGreaterThan(250);
       const before=await page.evaluate(()=>scrollY);
       const toggle=page.locator('.menu-toggle');
       await expect(toggle).toBeVisible();
       const header=await page.locator('.site-header').boundingBox();
-      const debugBefore=await page.evaluate(()=>({
-        scrollY,header:document.querySelector('.site-header').getBoundingClientRect().toJSON(),
-        headerPosition:getComputedStyle(document.querySelector('.site-header')).position,
-        toggle:document.querySelector('.menu-toggle').getBoundingClientRect().toJSON(),
-        bodyOverflow:getComputedStyle(document.body).overflow,
-        rootOverflow:getComputedStyle(document.documentElement).overflow
-      }));
-      console.log('SCROLLED MENU BEFORE',viewport.width,JSON.stringify(debugBefore));
       expect(header.y).toBeGreaterThanOrEqual(-2);
+      expect(header.y).toBeLessThan(6);
       await toggle.click();
-      const debugAfter=await page.evaluate(()=>({
-        scrollY,header:document.querySelector('.site-header').getBoundingClientRect().toJSON(),
-        nav:document.querySelector('.nav-links').getBoundingClientRect().toJSON(),
-        navPosition:getComputedStyle(document.querySelector('.nav-links')).position,
-        navOpen:document.querySelector('.nav-links').classList.contains('open')
-      }));
-      console.log('SCROLLED MENU AFTER',viewport.width,JSON.stringify(debugAfter));
       await expect(page.locator('.nav-links')).toHaveClass(/open/);
       const after=await page.evaluate(()=>scrollY);
       expect(Math.abs(after-before)).toBeLessThan(5);
@@ -56,7 +43,7 @@ test.describe('Locally built website: motion-free assistant',()=>{
   test.use({viewport:{width:390,height:844},colorScheme:'dark'});
   test('assistant minimizes and remembers an unsent question',async({page})=>{
     await page.clock.install();
-    await page.goto(base+'/',{waitUntil:'domcontentloaded'});
+    await page.goto(base+'/',{waitUntil:'load'});
     const launcher=page.locator('#fpc-chat-launch');
     const panel=page.locator('#fpc-chat-panel');
     await expect(launcher).toBeVisible();
