@@ -197,3 +197,32 @@ test.describe('Reduced motion accessibility',()=>{
     await checkResponsive(page,'training reduced motion');
   });
 });
+
+
+test.describe('Visitor assistant auto-minimization',()=>{
+  test.use({viewport:viewports.mobile,colorScheme:'dark'});
+  test('Minimizes after idle time, keeps conversation and preserves unfinished drafts',async({page})=>{
+    await page.clock.install();
+    await page.goto(base+'/',{waitUntil:'domcontentloaded'});
+    const launcher=page.locator('#fpc-chat-launch');
+    const panel=page.locator('#fpc-chat-panel');
+    await expect(launcher).toBeVisible({timeout:30000});
+    await launcher.click();
+    await expect(panel).toBeVisible();
+    await page.clock.fastForward(61_000);
+    await expect(panel).toBeHidden();
+    await expect(launcher).toHaveAttribute('aria-expanded','false');
+    await launcher.click();
+    await expect(panel).toBeVisible();
+    await expect(page.locator('#fpc-chat-history')).toContainText('Welcome! Ask about classes');
+    const draft=page.locator('#fpc-chat-question');
+    await draft.fill('I would like to ask about');
+    await page.clock.fastForward(61_000);
+    await expect(panel).toBeVisible();
+    await expect(draft).toHaveValue('I would like to ask about');
+    await draft.fill('');
+    await page.clock.fastForward(61_000);
+    await expect(panel).toBeHidden();
+    await checkResponsive(page,'auto-minimized training assistant');
+  });
+});
