@@ -1,8 +1,26 @@
-# Four Pillars Combatives: static website hosted on Cloudflare Workers Free.
-# Keep the production Worker name and root asset directory unchanged.
+# Four Pillars Combatives: public site + optional visitor training assistant.
+# Keep the production Worker name and static asset directory unchanged.
 name = "fourpillarscombatives"
 compatibility_date = "2026-11-06"
+main = "worker/index.js"
 previews = {}
 
 [assets]
 directory = "./"
+binding = "ASSETS"
+# Run the Worker only for the assistant endpoint. Static pages stay asset-first.
+run_worker_first = ["/api/visitor-assistant"]
+
+[ai]
+binding = "AI"
+
+# An approximate rate limit protects the public assistant and AI usage.
+[[ratelimits]]
+name = "VISITOR_ASSISTANT_LIMITER"
+namespace_id = "1108"
+[ratelimits.simple]
+limit = 8
+period = 60
+
+# Generative AI is OFF until ASSISTANT_AI_ENABLED=true is set intentionally
+# in Cloudflare. Guided business answers work without AI usage charges.
