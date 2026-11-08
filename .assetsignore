@@ -2,6 +2,8 @@
 .github/
 .git/
 cloudflare/
+worker/
+docs/
 tests/
 node_modules/
 README.md
