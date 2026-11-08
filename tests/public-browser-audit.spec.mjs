@@ -105,7 +105,9 @@ test.describe('mobile public menus',()=>{
     await page.goto(base+'/online-training/',{waitUntil:'domcontentloaded'});
     await page.locator('#menuToggle').click();
     await expect(page.locator('#mobileNav')).toBeVisible();
-    await expect(page.locator('#mobileNav')).toContainText('Founding Membership');
+    await expect(page.locator('#mobileNav')).toContainText('Membership');
+    await expect(page.locator('#mobileNav')).not.toContainText('VIP Founding Membership');
+    await expect(page.locator('#headerClaim')).toHaveCount(0);
     await page.locator('#mobileNav a[href="#faq"]').click();
     await expect(page.locator('#mobileNav')).toBeHidden();
     await checkResponsive(page,'training menu');
