@@ -20,8 +20,23 @@ for(const viewport of sizes){
       const toggle=page.locator('.menu-toggle');
       await expect(toggle).toBeVisible();
       const header=await page.locator('.site-header').boundingBox();
+      const debugBefore=await page.evaluate(()=>({
+        scrollY,header:document.querySelector('.site-header').getBoundingClientRect().toJSON(),
+        headerPosition:getComputedStyle(document.querySelector('.site-header')).position,
+        toggle:document.querySelector('.menu-toggle').getBoundingClientRect().toJSON(),
+        bodyOverflow:getComputedStyle(document.body).overflow,
+        rootOverflow:getComputedStyle(document.documentElement).overflow
+      }));
+      console.log('SCROLLED MENU BEFORE',viewport.width,JSON.stringify(debugBefore));
       expect(header.y).toBeGreaterThanOrEqual(-2);
       await toggle.click();
+      const debugAfter=await page.evaluate(()=>({
+        scrollY,header:document.querySelector('.site-header').getBoundingClientRect().toJSON(),
+        nav:document.querySelector('.nav-links').getBoundingClientRect().toJSON(),
+        navPosition:getComputedStyle(document.querySelector('.nav-links')).position,
+        navOpen:document.querySelector('.nav-links').classList.contains('open')
+      }));
+      console.log('SCROLLED MENU AFTER',viewport.width,JSON.stringify(debugAfter));
       await expect(page.locator('.nav-links')).toHaveClass(/open/);
       const after=await page.evaluate(()=>scrollY);
       expect(Math.abs(after-before)).toBeLessThan(5);
