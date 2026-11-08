@@ -62,13 +62,15 @@ for(const name of pages) {
 
 
 const home=read('index.html');
-assert.match(home,/class="btn btn-outline fpc-member-login" href="\/online-training\/"/,
-  'Homepage must offer a clear sign-in path for existing Online Training members');
+assert.doesNotMatch(home,/fpc-member-login/,
+  'Homepage must not duplicate Member Login outside the navigation');
 const siteJs=read('assets/site.js');
-assert.match(siteJs,/Online Member Login & Dashboard/,
-  'All main-site footers should provide a named Online Training login link');
-assert.match(siteJs,/link\.href='\/online-training\/'/,
-  'Member login must target the existing protected portal');
+assert.match(siteJs,/member\.textContent = 'Member Login'/,
+  'Main navigation should use exactly one Member Login');
+assert.match(siteJs,/member\.href = '\/online-training\/\?login=1'/,
+  'Member Login should open the actual sign-in form');
+assert.ok(!siteJs.includes('Online Member Login & Dashboard'),
+  'The footer must not repeat Member Login');
 assert.match(home,/class="fpc-online-start" aria-label="How online training works"/,
   'Homepage must explain joining, using video/PDF lessons, and authorized community access');
 assert.match(home,/Free account|free account/i,'Homepage must mention free registration');
@@ -114,8 +116,8 @@ const js=read('assets/site.js');
 assert.match(js,/const url = '\/online-training\/'/, 'Navigation must use same-domain training path');
 assert.ok(!js.includes('four-pillars-online-training.pages.dev'), 'Old Pages URL present in navigation');
 assert.ok(read('index.html').includes('href="/online-training/"'), 'Homepage training link must use the same domain');
-assert.match(read('index.html'), /href="\/online-training\/admin\/">Online Training Admin Login<\/a>/, 'Homepage footer must expose the admin login');
-assert.match(js, /Online Training Admin Login/, 'Other pages must receive the footer admin link');
+assert.match(read('index.html'), /href="\/online-training\/admin\/">Admin Login<\/a>/, 'Homepage footer must have one Admin Login');
+assert.match(js, /link\.textContent = 'Admin Login'/, 'Other pages must use the same footer Admin Login label');
 assert.ok(!js.includes("className = 'nav-admin-login'"), 'Admin Login must not be injected into the mobile navigation');
 assert.ok(!read('assets/styles.css').includes('.nav-links.open .nav-admin-login'),
   'Admin Login must not appear in the mobile navigation');
