@@ -162,6 +162,10 @@ assert.match(aboutHtml,/trained in martial arts since 1996/,
   'About SEO metadata must accurately reflect experience');
 assert.match(homepage,/FIVE SECTIONS/,
   'Homepage must advertise five sections');
+assert.doesNotMatch(homepage,/Medical lessons coming soon during public beta/i,
+  'Do not describe the live medical curriculum as entirely coming soon');
+assert.match(homepage,/Additional medical lessons and handouts will be published as they are ready/,
+  'Medical curriculum must describe additions during public beta');
 assert.match(homepage,/Recognize danger\. Avoid unnecessary confrontation\. Defend yourself when necessary\. Provide emergency care when needed\. Get Home Safe\./,
   'Homepage must include the approved philosophy');
 assert.match(homepage,/<li><span>02<\/span>Empty-Hand Fighting in a Weapons Environment<\/li>/,
