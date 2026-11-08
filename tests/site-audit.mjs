@@ -61,6 +61,15 @@ for(const name of pages) {
 }
 
 
+const home=read('index.html');
+assert.match(home,/class="btn btn-outline fpc-member-login" href="\/online-training\/"/,
+  'Homepage must offer a clear sign-in path for existing Online Training members');
+const siteJs=read('assets/site.js');
+assert.match(siteJs,/Online Member Login & Dashboard/,
+  'All main-site footers should provide a named Online Training login link');
+assert.match(siteJs,/link\.href='\/online-training\/'/,
+  'Member login must target the existing protected portal');
+
 const programs=read('programs.html');
 assert.match(programs,/Programs &amp; services · Pearl, Jackson Metro &amp; online/,'Program directory must distinguish offered programs and training formats');
 assert.match(programs,/06 \/ ONLINE TRAINING · PUBLIC BETA/,'Online Training should be a sixth program');

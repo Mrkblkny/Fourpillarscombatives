@@ -59,6 +59,31 @@ const {text:portal}=await get('/online-training/');
 assert.ok(portal.includes('id="betaLaunchNotice"'));
 assert.ok(portal.includes('Price increases with each founding tier.'));
 assert.ok(!portal.includes('id="founderProgressTrack"'));
+// Read-only cross-app checks: the new member shell, Community Hub, and
+// admin UI must resolve. None of these checks signs in or changes records.
+const {text:trainingHtml}=await get('/online-training/');
+assert.match(trainingHtml,/class="member-community-nav-link" data-member-community-link href="\.\/community\/" hidden/,
+  'Member dashboard must include a permission-gated fifth Community Hub tab');
+assert.match(trainingHtml,/id="memberAccountPanel"/);
+assert.match(trainingHtml,/id="memberUpdatesPanel"/);
+const {text:communityHtml}=await get('/online-training/community/');
+assert.match(communityHtml,/Member Community \| Four Pillars Combatives/);
+assert.match(communityHtml,/href="\.\.\/">← Member Dashboard<\/a>/);
+assert.match(communityHtml,/name="robots" content="noindex,nofollow"/);
+const {text:adminHtml}=await get('/online-training/admin/');
+assert.match(adminHtml,/id="tab-preview"/);
+assert.match(adminHtml,/id="adminPreviewTier"/);
+assert.match(adminHtml,/id="memberUpdateForm"/);
+assert.match(adminHtml,/name="robots" content="noindex,nofollow"/);
+for(const path of ['/online-training/api/updates',
+  '/online-training/api/admin/lessons',
+  '/online-training/api/admin/updates',
+  '/online-training/api/admin/access']){
+  const response=await fetch(root+path,{cache:'no-store',signal:AbortSignal.timeout(15000)});
+  assert.equal(response.status,401,path+' must deny unsigned anonymous requests');
+}
+console.log('PASS: member five-tab navigation, Community Hub, Admin Preview, protected API endpoints.');
+
 const {text:configText}=await get('/online-training/api/config');
 const data=JSON.parse(configText);
 assert.ok(data.founding && Object.keys(data.founding).sort().join(',')==='tier,tierProgressPercent',
