@@ -76,6 +76,12 @@ assert.match(home,/Community features depend on your membership permissions/,
   'Homepage must explain feature permissions without promising universal access');
 assert.match(siteJs,/document\.addEventListener\('pointerdown'/,
   'Mobile navigation should dismiss when someone taps outside the open menu');
+assert.match(siteJs,/const closeSubmenus=\(\)=>\{/,
+  'Closing mobile navigation should reset any expanded Training menu');
+assert.match(siteJs,/nav\.querySelectorAll\('details\.nav-dropdown\[open\]'\)/,
+  'Expanded training submenus should be closed on navigation changes');
+assert.match(siteJs,/if\(!nav\.classList\.contains\('open'\)\)closeSubmenus\(\)/,
+  'Closing the hamburger menu should also collapse nested training options');
 assert.match(siteJs,/nav\.classList\.remove\('open'\)/,
   'Outside-click close must collapse the mobile menu');
 
