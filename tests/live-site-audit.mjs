@@ -66,14 +66,28 @@ assert.match(trainingHtml,/class="member-community-nav-link" data-member-communi
   'Member dashboard must include a permission-gated fifth Community Hub tab');
 assert.match(trainingHtml,/id="memberAccountPanel"/);
 assert.match(trainingHtml,/id="memberUpdatesPanel"/);
+assert.match(trainingHtml,/id="memberUnifiedProfile"/,'My Account must contain a shared profile panel');
+assert.match(trainingHtml,/id="memberProfileForm"/,'Profile editor must live in My Account');
+assert.match(trainingHtml,/id="memberHeroInitials"/,'Member home must have initials');
+assert.match(trainingHtml,/id="memberAccountInitials"/,'Account must have initials');
+assert.doesNotMatch(trainingHtml,/id="memberProfilePhotoPanel"|id="memberProfilePhotoUpload"|id="memberProfilePhotoFile"/,
+  'Profile photo upload controls must not return after initials-only rollout');
 const {text:communityHtml}=await get('/online-training/community/');
 assert.match(communityHtml,/Member Community \| Four Pillars Combatives/);
 assert.match(communityHtml,/href="\.\.\/">← Member Dashboard<\/a>/);
 assert.match(communityHtml,/name="robots" content="noindex,nofollow"/);
+assert.match(communityHtml,/href="\.\.\/\?tab=account" target="_top"/,
+  'Community must point to one Member Dashboard profile editor');
+assert.doesNotMatch(communityHtml,/id="profileForm"|id="avatarFile"|id="uploadAvatar"/,
+  'Community must not expose a second profile editor or photo upload');
 const {text:adminHtml}=await get('/online-training/admin/');
 assert.match(adminHtml,/id="tab-preview"/);
 assert.match(adminHtml,/id="adminPreviewTier"/);
 assert.match(adminHtml,/id="memberUpdateForm"/);
+assert.match(adminHtml,/id="memberGrantEditor"/,
+  'Admin dashboard must retain per-member access editor');
+assert.match(adminHtml,/id="memberFeatureMatrix"/,
+  'Admin dashboard must retain membership feature matrix');
 assert.match(adminHtml,/name="robots" content="noindex,nofollow"/);
 for(const path of ['/online-training/api/updates',
   '/online-training/api/admin/lessons',
