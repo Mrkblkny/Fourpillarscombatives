@@ -172,3 +172,15 @@
 @media(max-width:600px){.online-site-ribbon>.shell{align-items:flex-start;justify-content:flex-start;gap:7px}.online-site-ribbon span,.online-site-ribbon a{font-size:.75rem}.online-site-ribbon a{white-space:normal}}
 
 /* Admin Login remains in the footer, not in desktop or mobile menus. */
+
+
+/* Keyboard and screen-reader shortcut: hidden until the user tabs to it. */
+.skip-link{
+  position:absolute;top:12px;left:12px;z-index:99999;
+  display:inline-block;padding:12px 18px;border-radius:6px;
+  background:#f4e8df;color:#121215;font-weight:800;
+  box-shadow:0 4px 18px rgba(0,0,0,.5);
+  transform:translateY(-160%);transition:transform .12s ease;
+}
+.skip-link:focus,.skip-link:focus-visible{transform:translateY(0);outline:3px solid #d12c42;outline-offset:2px}
+@media(prefers-reduced-motion:reduce){.skip-link{transition:none}}
