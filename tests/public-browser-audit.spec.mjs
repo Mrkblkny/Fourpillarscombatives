@@ -9,7 +9,9 @@ const pages=['/','/about','/lessons','/programs','/training',
 const portalPages=['/online-training/','/online-training/community/',
   '/online-training/admin/'];
 const viewports={
+  smallMobile:{width:320,height:720},
   mobile:{width:390,height:844},
+  tablet:{width:768,height:1024},
   desktop:{width:1365,height:900}
 };
 
