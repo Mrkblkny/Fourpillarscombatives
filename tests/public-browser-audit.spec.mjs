@@ -157,3 +157,41 @@ test.describe('public assistant backend',()=>{
     expect(result.answer).toMatch(/Monday and Wednesday/);
   });
 });
+
+
+test.describe('Accessible marketing motion',()=>{
+  test.use({viewport:viewports.mobile,colorScheme:'dark'});
+  test('Scroll reveals do not block links or create mobile overflow',async({page})=>{
+    await page.goto(base+'/',{waitUntil:'domcontentloaded'});
+    const card=page.locator('.growth-service-card').first();
+    await card.scrollIntoViewIfNeeded();
+    await expect(card).toBeVisible();
+    await expect(card).not.toHaveClass(/fpc-motion-pending/,{timeout:4000});
+    await checkResponsive(page,'scroll reveal on phone');
+  });
+});
+test.describe('Reduced motion accessibility',()=>{
+  test.use({viewport:viewports.mobile,colorScheme:'dark',reducedMotion:'reduce'});
+  test('Main website disables animation while retaining visible content',async({page})=>{
+    await page.goto(base+'/',{waitUntil:'domcontentloaded'});
+    await expect(page.locator('.hero h1')).toBeVisible();
+    const details=await page.evaluate(()=>{
+      const target=document.querySelector('.hero .hero-wrap');
+      const style=getComputedStyle(target);
+      return {animation:style.animationName,reduced:matchMedia('(prefers-reduced-motion: reduce)').matches};
+    });
+    expect(details.reduced).toBe(true);
+    expect(details.animation).toBe('none');
+    const card=page.locator('.growth-service-card').first();
+    await card.scrollIntoViewIfNeeded();
+    await expect(card).toBeVisible();
+    await expect(card).not.toHaveClass(/fpc-motion-pending/);
+    await checkResponsive(page,'reduced motion');
+  });
+  test('Online Training disables public hero animation',async({page})=>{
+    await page.goto(base+'/online-training/',{waitUntil:'domcontentloaded'});
+    const animation=await page.locator('#publicView .hero-copy').evaluate(el=>getComputedStyle(el).animationName);
+    expect(animation).toBe('none');
+    await checkResponsive(page,'training reduced motion');
+  });
+});
