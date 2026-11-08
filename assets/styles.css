@@ -184,3 +184,19 @@
 }
 .skip-link:focus,.skip-link:focus-visible{transform:translateY(0);outline:3px solid #d12c42;outline-offset:2px}
 @media(prefers-reduced-motion:reduce){.skip-link{transition:none}}
+
+
+/* Visible, crawlable FAQs. The chat helper is supplemental, not a substitute
+   for indexable service information that Google and visitors can read. */
+.fpc-visitor-faq{background:#11151a;border-top:1px solid #30353b}
+.fpc-visitor-faq h2{font-size:clamp(2.6rem,4.9vw,4.5rem);margin:14px 0 18px}
+.fpc-visitor-faq>.shell>p{max-width:72ch;color:#c1c9cd;line-height:1.7;margin-bottom:25px}
+.fpc-visitor-faq-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.fpc-visitor-faq-grid details{padding:0 16px;border:1px solid #45505a;border-radius:9px;background:#1a2026;min-width:0}
+.fpc-visitor-faq-grid summary{font-weight:800;cursor:pointer;padding:18px 18px 18px 0;list-style:none;position:relative;line-height:1.45}
+.fpc-visitor-faq-grid summary::-webkit-details-marker{display:none}
+.fpc-visitor-faq-grid summary::after{content:"+";position:absolute;right:0;top:14px;font-size:22px;color:#fb929b}
+.fpc-visitor-faq-grid details[open] summary::after{content:"–"}
+.fpc-visitor-faq-grid details p{font-size:14px;line-height:1.7;color:#cbd1d6;padding:0 0 18px;margin:0}
+.fpc-visitor-faq-grid details a{color:#ffadb2;text-decoration:underline;text-underline-offset:3px}
+@media(max-width:730px){.fpc-visitor-faq-grid{grid-template-columns:1fr}}
