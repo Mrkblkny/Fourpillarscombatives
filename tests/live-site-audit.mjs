@@ -62,6 +62,17 @@ assert.ok(!portal.includes('id="founderProgressTrack"'));
 // Read-only cross-app checks: the new member shell, Community Hub, and
 // admin UI must resolve. None of these checks signs in or changes records.
 const {text:trainingHtml}=await get('/online-training/');
+// Verify the latest public menu, not the earlier two-login marketing header.
+const trainingHeader=trainingHtml.split('<header class="site-header">')[1]?.split('</header>')[0]||'';
+const trainingMobile=trainingHtml.split('<nav id="mobileNav"')[1]?.split('</nav>')[0]||'';
+assert.match(trainingHeader,/id="accountButton"[^>]*>Member Login<\/button>/,
+  'Training header must offer one Member Login');
+assert.ok(!trainingHeader.includes('id="headerClaim"'),
+  'The redundant free signup header button must not return');
+assert.ok(trainingMobile.includes('href="#membership">Membership</a>')&&
+  trainingMobile.includes('id="mobileLogin"')&&
+  !trainingMobile.includes('VIP Founding Membership'),
+  'Mobile training navigation must use the current simplified menu');
 assert.match(trainingHtml,/class="member-community-nav-link" data-member-community-link href="\.\/community\/" hidden/,
   'Member dashboard must include a permission-gated fifth Community Hub tab');
 assert.match(trainingHtml,/id="memberAccountPanel"/);
