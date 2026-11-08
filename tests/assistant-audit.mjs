@@ -84,6 +84,15 @@ assert.ok((html.match(/<details><summary>/g)||[]).length>=8);
 assert.match(script,/mountVisitorAssistant/);
 assert.match(ui,/aria-expanded/);
 assert.match(ui,/setAttribute\('role','log'\)/);
+assert.match(ui,/IDLE_MINIMIZE_MS=60_000/,'Idle minimization must be enabled');
+assert.match(ui,/if\(busy\|\|input\.value\.trim\(\)\)/,
+  'Idle timeout must not dismiss a pending question or unsent draft');
+assert.match(ui,/clearTimeout\(idleTimer\)/);
+assert.match(ui,/scheduleIdleMinimize\(\)/);
+assert.match(ui,/Minimize training assistant/);
+assert.match(css,/height:min\(500px/);
+assert.match(css,/height:min\(460px/);
+
 assert.match(css,/max-width:600px/);
 assert.match(wrangler,/main = "worker\/index\.js"/);
 assert.match(wrangler,/run_worker_first = \["\/api\/visitor-assistant"\]/);
