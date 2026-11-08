@@ -85,8 +85,12 @@ assert.match(script,/mountVisitorAssistant/);
 assert.match(ui,/aria-expanded/);
 assert.match(ui,/setAttribute\('role','log'\)/);
 assert.match(ui,/IDLE_MINIMIZE_MS=60_000/,'Idle minimization must be enabled');
-assert.match(ui,/if\(busy\|\|input\.value\.trim\(\)\)/,
-  'Idle timeout must not dismiss a pending question or unsent draft');
+assert.match(ui,/if\(busy\)/,
+  'Idle timeout must not dismiss a pending question');
+assert.match(ui,/input\.value='';/,
+  'Submitting a question should clear only the submitted draft');
+assert.match(ui,/Preserve unsent text/,
+  'Minimizing must not erase a visitor draft');
 assert.match(ui,/clearTimeout\(idleTimer\)/);
 assert.match(ui,/scheduleIdleMinimize\(\)/);
 assert.match(ui,/Minimize training assistant/);
