@@ -213,6 +213,10 @@
     animation:fpc-entrance 560ms cubic-bezier(.22,1,.36,1) both;
   }
   .hero .hero-art{animation-delay:100ms}
+  .fpc-motion-target{
+    transition:opacity 480ms ease,transform 480ms cubic-bezier(.22,1,.36,1);
+    transition-delay:var(--fpc-motion-delay,0ms);
+  }
   .fpc-motion-pending{
     opacity:0;
     transform:translate3d(0,16px,0);
