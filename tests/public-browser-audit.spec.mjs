@@ -210,12 +210,17 @@ test.describe('Visitor assistant auto-minimization',()=>{
     await launcher.click();
     await expect(panel).toBeVisible();
     const loadedCode=await page.evaluate(async()=>{
-      const response=await fetch('/assets/assistant.js',{cache:'force-cache'});
+      const response=await fetch('/assets/assistant.js?v=20261108-compact',{cache:'no-store'});
       const code=await response.text();
-      return {status:response.status,hasIdleTimer:code.includes('IDLE_MINIMIZE_MS=60_000')};
+      return {
+        status:response.status,
+        hasIdleTimer:code.includes('IDLE_MINIMIZE_MS=60_000'),
+        hasCompactLauncher:code.includes('COMPACT_LAUNCH_MS=15_000')
+      };
     });
     expect(loadedCode.status).toBe(200);
     expect(loadedCode.hasIdleTimer).toBe(true);
+    expect(loadedCode.hasCompactLauncher).toBe(true);
     await page.clock.runFor(61_000);
     await expect(panel).toBeHidden();
     await expect(launcher).toHaveAttribute('aria-expanded','false');
