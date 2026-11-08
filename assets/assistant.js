@@ -63,21 +63,38 @@ export function mountVisitorAssistant(){
   // Keep any unsent draft and the entire conversation when minimized.
   // Never interrupt a pending request or somebody actively entering a question.
   const IDLE_MINIMIZE_MS=60_000;
+  const COMPACT_LAUNCH_MS=15_000;
   let busy=false;
   let idleTimer=null;
-  function setOpen(open){
+  let compactTimer=null;
+  function updateLauncher(compact){
+    launcher.classList.toggle('is-compact',compact);
+    launcher.textContent=compact?'?':panel.hidden?'Ask about training':'Close guide';
+    launcher.title=compact?'Ask about training':'';
+  }
+  function scheduleCompactLauncher(){
+    clearTimeout(compactTimer);
+    if(!panel.hidden)return;
+    compactTimer=setTimeout(()=>{
+      if(panel.hidden)updateLauncher(true);
+    },COMPACT_LAUNCH_MS);
+  }
+  function setOpen(open,{compactOnClose=false}={}){
     clearTimeout(idleTimer);
+    clearTimeout(compactTimer);
     idleTimer=null;
+    compactTimer=null;
     panel.hidden=!open;
     launcher.setAttribute('aria-expanded',String(open));
     launcher.setAttribute('aria-label',
       open?'Minimize Four Pillars training assistant':'Open Four Pillars training assistant');
-    launcher.textContent=open?'Close guide':'Ask about training';
+    updateLauncher(!open && compactOnClose);
     if(open){
       input.focus();
       scheduleIdleMinimize();
-    }else if(panel.contains(document.activeElement)){
-      launcher.focus();
+    }else{
+      if(panel.contains(document.activeElement))launcher.focus();
+      if(!compactOnClose)scheduleCompactLauncher();
     }
   }
   function scheduleIdleMinimize(){
@@ -86,15 +103,18 @@ export function mountVisitorAssistant(){
     if(panel.hidden)return;
     idleTimer=setTimeout(()=>{
       if(panel.hidden)return;
-      if(busy||input.value.trim()){
+      // Inactivity is based on activity events, not whether a draft exists.
+      // Preserve unsent text, but don't let an abandoned draft cover the page.
+      if(busy){
         scheduleIdleMinimize();
         return;
       }
-      setOpen(false);
+      setOpen(false,{compactOnClose:true});
     },IDLE_MINIMIZE_MS);
   }
-  launcher.addEventListener('click',()=>setOpen(panel.hidden));
-  close.addEventListener('click',()=>setOpen(false));
+  launcher.addEventListener('click',()=>setOpen(panel.hidden,{compactOnClose:true}));
+  close.addEventListener('click',()=>setOpen(false,{compactOnClose:true}));
+  scheduleCompactLauncher();
   for(const eventName of ['input','keydown','pointerdown','scroll']){
     panel.addEventListener(eventName,scheduleIdleMinimize,{
       passive:eventName==='scroll'||eventName==='pointerdown'
