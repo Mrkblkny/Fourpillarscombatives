@@ -113,3 +113,29 @@ test.describe('mobile public menus',()=>{
     await checkResponsive(page,'training menu');
   });
 });
+
+
+// The assistant is supplementary. It must not cover the page with an
+// uncloseable modal, overflow narrow phones or send payment/member actions.
+for(const [name,viewport] of [['phone',viewports.mobile],['desktop',viewports.desktop]]){
+  test.describe(name+' public visitor training assistant',()=>{
+    test.use({viewport,colorScheme:'dark'});
+    test('opens, answers from approved public info and closes by Escape',async({page})=>{
+      await page.goto(base+'/',{waitUntil:'domcontentloaded'});
+      const launcher=page.locator('#fpc-chat-launch');
+      await expect(launcher).toBeVisible({timeout:30000});
+      await expect(launcher).toHaveAttribute('aria-expanded','false');
+      await launcher.click();
+      await expect(page.locator('#fpc-chat-panel')).toBeVisible();
+      await expect(launcher).toHaveAttribute('aria-expanded','true');
+      await page.locator('.fpc-chat-suggestion',{hasText:'When are group classes?'}).click();
+      await expect(page.locator('#fpc-chat-history')).toContainText('Monday and Wednesday',{timeout:16000});
+      await expect(page.locator('#fpc-chat-history a[href="/lessons"]')).toBeVisible();
+      await checkResponsive(page,name+' assistant');
+      await page.keyboard.press('Escape');
+      await expect(page.locator('#fpc-chat-panel')).toBeHidden();
+      await expect(launcher).toHaveAttribute('aria-expanded','false');
+      await expect(page.locator('#visitor-faq details')).toHaveCount(8);
+    });
+  });
+}
