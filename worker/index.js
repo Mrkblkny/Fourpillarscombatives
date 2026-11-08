@@ -4,8 +4,7 @@ const response=(payload,status=200)=>new Response(JSON.stringify(payload),{
   status,headers:{
     'Content-Type':'application/json; charset=utf-8',
     'Cache-Control':'no-store',
-    'X-Content-Type-Options':'nosniff',
-    'Access-Control-Allow-Origin':'none'
+    'X-Content-Type-Options':'nosniff'
   }
 });
 const MODEL='@cf/meta/llama-3.3-70b-instruct-fp8-fast';
