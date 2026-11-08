@@ -94,6 +94,15 @@ assert.match(css,/height:min\(500px/);
 assert.match(css,/height:min\(460px/);
 
 assert.match(css,/max-width:600px/);
+assert.match(ui,/const IDLE_MINIMIZE_MS=60_000/);
+assert.match(ui,/const COMPACT_LAUNCH_MS=15_000/);
+assert.match(ui,/setOpen\(false,\{compactOnClose:true\}\)/);
+assert.match(ui,/scheduleCompactLauncher\(\)/);
+assert.match(ui,/preserve unsent text|Preserve unsent text/);
+assert.doesNotMatch(ui,/busy\|\|input\.value\.trim\(\)/);
+assert.match(css,/\.fpc-chat-launch\.is-compact/);
+assert.match(css,/min-width:46px/);
+assert.match(ui,/launcher\.setAttribute\('aria-label'/);
 assert.match(wrangler,/main = "worker\/index\.js"/);
 assert.match(wrangler,/run_worker_first = \["\/api\/visitor-assistant"\]/);
 assert.match(wrangler,/VISITOR_ASSISTANT_LIMITER/);
