@@ -22,3 +22,7 @@ jobs:
         run: node tests/site-audit.mjs
       - name: Test visitor assistant, AI guardrails, and public FAQs
         run: node tests/assistant-audit.mjs
+      - name: Validate Cloudflare Worker bindings and bundled assets (no deployment)
+        env:
+          WRANGLER_SEND_METRICS: "false"
+        run: npx --yes wrangler@4.158.0 deploy --dry-run --outdir /tmp/fpc-worker-dryrun
