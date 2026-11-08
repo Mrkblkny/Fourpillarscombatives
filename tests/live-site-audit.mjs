@@ -44,6 +44,8 @@ for(const path of pages){
       text.includes('Your account shows only the community features enabled for your membership'),
       'Live homepage must describe the current membership-based community access');
     assert.match(text,/Founding and VIP prices increase by tier; check current options/);
+    assert.match(text,/Additional medical lessons and handouts will be published as they are ready/,
+      'Live homepage must have current public-beta medical curriculum copy');
   }
   console.log('OK',path);
 }
