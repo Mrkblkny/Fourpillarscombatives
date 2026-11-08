@@ -84,7 +84,7 @@ assert.ok((html.match(/<details><summary>/g)||[]).length>=8);
 assert.match(script,/mountVisitorAssistant/);
 assert.match(ui,/aria-expanded/);
 assert.match(ui,/setAttribute\('role','log'\)/);
-assert.match(ui,/IDLE_MINIMIZE_MS=60_000/,'Idle minimization must be enabled');
+assert.match(ui,/IDLE_MINIMIZE_MS=40_000/,'Idle minimization must be enabled');
 assert.match(ui,/if\(busy\)/,
   'Idle timeout must not dismiss a pending question');
 assert.match(ui,/input\.value='';/,
@@ -94,12 +94,12 @@ assert.match(ui,/Preserve unsent text/,
 assert.match(ui,/clearTimeout\(idleTimer\)/);
 assert.match(ui,/scheduleIdleMinimize\(\)/);
 assert.match(ui,/Minimize training assistant/);
-assert.match(css,/height:min\(500px/);
-assert.match(css,/height:min\(460px/);
+assert.match(css,/height:min\(420px/);
+assert.match(css,/height:min\(380px/);
 
 assert.match(css,/max-width:600px/);
-assert.match(ui,/const IDLE_MINIMIZE_MS=60_000/);
-assert.match(ui,/const COMPACT_LAUNCH_MS=15_000/);
+assert.match(ui,/const IDLE_MINIMIZE_MS=40_000/);
+assert.match(ui,/const COMPACT_LAUNCH_MS=10_000/);
 assert.match(ui,/setOpen\(false,\{compactOnClose:true\}\)/);
 assert.match(ui,/scheduleCompactLauncher\(\)/);
 assert.match(ui,/preserve unsent text|Preserve unsent text/);
