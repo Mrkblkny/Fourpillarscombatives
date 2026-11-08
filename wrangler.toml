@@ -14,6 +14,12 @@ run_worker_first = ["/api/visitor-assistant"]
 [ai]
 binding = "AI"
 
+# Stores only anonymous question categories such as "classes" and "women".
+# No question text, emails, IP addresses or account data are stored.
+[[analytics_engine_datasets]]
+binding = "VISITOR_ASSISTANT_INSIGHTS"
+dataset = "fpc_visitor_questions"
+
 # An approximate rate limit protects the public assistant and AI usage.
 [[ratelimits]]
 name = "VISITOR_ASSISTANT_LIMITER"
