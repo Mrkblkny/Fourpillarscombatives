@@ -59,11 +59,11 @@ export function mountVisitorAssistant(){
   const note=by('p','fpc-chat-privacy','Public business questions only. Please do not enter private or sensitive information. For booking, use our contact form.');
   panel.append(header,history,suggestions,form,note);
   root.append(launcher,panel);document.body.append(root);
-  // Automatically collapse a large open panel after one minute of inactivity.
+  // Automatically collapse the panel after 40 seconds of inactivity.
   // Keep any unsent draft and the entire conversation when minimized.
   // Never interrupt a pending request or somebody actively entering a question.
-  const IDLE_MINIMIZE_MS=60_000;
-  const COMPACT_LAUNCH_MS=15_000;
+  const IDLE_MINIMIZE_MS=40_000;
+  const COMPACT_LAUNCH_MS=10_000;
   let busy=false;
   let idleTimer=null;
   let compactTimer=null;
