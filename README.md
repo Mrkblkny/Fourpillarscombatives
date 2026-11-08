@@ -28,7 +28,7 @@ Fees for noncash payments and applicable taxes are additional. Group memberships
 ## Contact form and delivery verification
 
 The live contact page uses **Formspree**, posting inquiries to the configured
-\`https://formspree.io/f/mljjagkr\` endpoint. The form also offers direct
+`https://formspree.io/f/mljjagkr` endpoint. The form also offers direct
 telephone and email alternatives. The site previously used a different form
 provider; older FormSubmit activation instructions do not apply.
 
@@ -43,6 +43,6 @@ Do not publish secret Formspree keys, private Supabase keys, or Stripe keys.
 
 ## Uploading website files
 
-To apply a ZIP patch, unzip it first and upload **the files themselves** to the matching locations in your GitHub repo (root files to root, `assets/site.js` inside `assets/`). Choose **Commit changes**, then check Cloudflare Pages deployment status. Back up the current files first.
+To apply a ZIP patch, unzip it first and upload **the files themselves** to the matching locations in your GitHub repo (root files to root, `assets/site.js` inside `assets/`). Choose **Commit changes**, then check Cloudflare Workers deployment status. Back up the current files first.
 
 The change package dated Nov 3, 2026 intentionally **does not modify `index.html`, Google Analytics, any GA measurement IDs, or analytics settings**.
