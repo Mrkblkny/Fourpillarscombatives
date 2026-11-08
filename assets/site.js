@@ -5,7 +5,7 @@
   if (!links || links.querySelector('a[href="/online-training/admin/"]')) return;
   const link = document.createElement('a');
   link.href = '/online-training/admin/';
-  link.textContent = 'Online Training Admin Login';
+  link.textContent = 'Admin Login';
   links.appendChild(link);
 })();
 
@@ -54,19 +54,31 @@
     .catch(()=>{ /* Stay with static safe pre-launch copy if unavailable. */ });
 })();
 
-// Link to the same-domain online-training portal from desktop and mobile navigation.
-// Keep this before the menu listeners so clicking the new link also closes the mobile menu.
+// Keep Online Training discovery separate from the ONE member sign-in link.
+// All Free, Member, Founding and VIP accounts use this same secure portal.
+// Admin Login appears ONLY in the footer, never in the navigation.
 (() => {
   const nav = document.querySelector('.nav-links');
   if (!nav) return;
   const url = '/online-training/';
-  if (Array.from(nav.querySelectorAll('a')).some(a => a.getAttribute('href') === url)) return;
-  const link = document.createElement('a');
-  link.href = url;
-  link.textContent = 'Online Training';
-  link.setAttribute('data-fpc-online-training', '');
-  const instructorLink = Array.from(nav.children).find(el => el.matches('a[href="/about"],a[href="about.html"]'));
-  nav.insertBefore(link, instructorLink || nav.querySelector('.nav-cta'));
+  let training = Array.from(nav.querySelectorAll('a')).find(a => a.getAttribute('href') === url);
+  if (!training) {
+    training = document.createElement('a');
+    training.href = url;
+    training.textContent = 'Online Training';
+    training.setAttribute('data-fpc-online-training', '');
+    const instructorLink = Array.from(nav.children).find(el =>
+      el.matches('a[href="/about"],a[href="about.html"]'));
+    nav.insertBefore(training, instructorLink || nav.querySelector('.nav-cta'));
+  }
+  if (!nav.querySelector('a[data-fpc-member-login]')) {
+    const member = document.createElement('a');
+    member.href = '/online-training/?login=1';
+    member.textContent = 'Member Login';
+    member.className = 'nav-member-login';
+    member.setAttribute('data-fpc-member-login', '');
+    training.after(member);
+  }
 })();
 
 (()=>{const t=document.querySelector('.menu-toggle'),n=document.querySelector('.nav-links');if(!t||!n)return;t.addEventListener('click',()=>{const isOpen=n.classList.toggle('open');t.setAttribute('aria-expanded',String(isOpen));t.setAttribute('aria-label',isOpen?'Close menu':'Open menu');t.textContent=isOpen?'×':'☰';document.body.classList.toggle('menu-open',isOpen)});n.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{n.classList.remove('open');t.setAttribute('aria-expanded','false');t.setAttribute('aria-label','Open menu');t.textContent='☰';document.body.classList.remove('menu-open')}));document.addEventListener('keydown',e=>{if(e.key==='Escape'){n.classList.remove('open');t.setAttribute('aria-expanded','false');t.setAttribute('aria-label','Open menu');t.textContent='☰';document.body.classList.remove('menu-open')}})})();
@@ -224,19 +236,7 @@
 })();
 
 
-// Keep a distinct member log-in path discoverable throughout the main website.
-// It uses the existing student portal; no account data is exposed here.
-(() => {
-  const links=document.querySelector('.site-footer .footer-links');
-  if(!links || links.querySelector('[data-fpc-member-login]'))return;
-  const link=document.createElement('a');
-  link.href='/online-training/';
-  link.textContent='Online Member Login & Dashboard';
-  link.setAttribute('data-fpc-member-login','');
-  const admin=links.querySelector('a[href="/online-training/admin/"]');
-  if(admin)links.insertBefore(link,admin);
-  else links.append(link);
-})();
+;
 
 
 // On phones, dismiss the navigation when someone taps outside it.
