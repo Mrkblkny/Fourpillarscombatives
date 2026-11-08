@@ -255,3 +255,24 @@
     document.body.classList.remove('menu-open');
   });
 })();
+
+
+// Keep the mobile navigation predictable when returning to a page or selecting a
+// different section. A previously opened Training submenu must not persist.
+(() => {
+  const toggle=document.querySelector('.menu-toggle');
+  const nav=document.querySelector('.nav-links');
+  if(!toggle||!nav)return;
+  const closeSubmenus=()=>{
+    nav.querySelectorAll('details.nav-dropdown[open]').forEach(menu=>{menu.open=false;});
+  };
+  toggle.addEventListener('click',()=>{
+    if(!nav.classList.contains('open'))closeSubmenus();
+  });
+  nav.addEventListener('click',event=>{
+    if(event.target.closest('a'))closeSubmenus();
+  });
+  document.addEventListener('keydown',event=>{
+    if(event.key==='Escape')closeSubmenus();
+  });
+})();
