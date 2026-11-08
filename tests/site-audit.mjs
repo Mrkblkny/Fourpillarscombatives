@@ -192,8 +192,21 @@ assert.match(js,/const choices=\[/,
   'Public beta page should list whichever paid enrollment options are currently open');
 assert.ok(!js.includes('Paid lifetime access opens after final checkout setup'),
   'Do not show obsolete checkout-setup promises after enrollment is live');
-assert.match(js,/if\(e\.key==='Escape'\).*?t\.setAttribute\('aria-label','Open menu'\)/,
-  'Closing mobile menu with Escape must reset its accessible button label');
+assert.match(js,/event\.key==='Escape'&&nav\.classList\.contains\('open'\)/,
+  'Escape should close the mobile navigation at every scroll position');
+assert.match(js,/toggle\.setAttribute\('aria-label',open\?'Close menu':'Open menu'\)/,
+  'Mobile menu must update its accessible button label when opening or closing');
+assert.doesNotMatch(js,/document\.body\.classList\.toggle\('menu-open'/,
+  'Opening navigation must never lock body overflow and break sticky navigation');
+const css=read('assets/styles.css');
+assert.match(css,/body\.menu-open\{overflow:visible\}/,
+  'Body overflow must remain stable when the mobile menu opens');
+assert.doesNotMatch(js,/IntersectionObserver/,
+  'Scroll-reveal animations must remain removed');
+assert.doesNotMatch(css,/@keyframes fpc-entrance/,
+  'Main site motion effects must remain removed');
+assert.match(css,/animation:none!important/,
+  'Static interface should disable animations');
 assert.match(read('index.html'),/Founding and VIP prices increase by tier; check current options/, 'Homepage should not show an outdated starting price when current tier is higher');
 assert.match(read('sitemap.xml'),/fourpillarscombatives\.com\/online-training\//,'Sitemap must include online training');
 const contact=read('contact.html');
