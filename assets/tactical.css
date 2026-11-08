@@ -75,3 +75,12 @@ body{background:#090c0d}
  .site-header .nav-links .nav-cta{margin-top:20px;padding:14px 12px;text-align:center;border-bottom:0}
 }
 @media(max-width:890px){.site-header .nav-links{top:78px;max-height:calc(100vh - 78px)}}
+
+/* Mobile navigation must never widen the viewport after opening/closing.
+   overflow-x:clip prevents stray off-screen decoration from creating a
+   horizontal document scroll without creating a new scrolling container. */
+@media(max-width:890px){
+  html,body{max-width:100%;overflow-x:clip}
+  .site-header,.site-header .header-inner,.site-header .nav-links{max-width:100%}
+  .site-header .nav-links{overflow-x:clip}
+}
