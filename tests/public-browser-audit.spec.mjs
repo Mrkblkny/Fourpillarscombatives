@@ -173,6 +173,7 @@ test.describe('Accessible marketing motion',()=>{
 test.describe('Reduced motion accessibility',()=>{
   test.use({viewport:viewports.mobile,colorScheme:'dark',reducedMotion:'reduce'});
   test('Main website disables animation while retaining visible content',async({page})=>{
+    await page.emulateMedia({reducedMotion:'reduce'});
     await page.goto(base+'/',{waitUntil:'domcontentloaded'});
     await expect(page.locator('.hero h1')).toBeVisible();
     const details=await page.evaluate(()=>{
@@ -189,6 +190,7 @@ test.describe('Reduced motion accessibility',()=>{
     await checkResponsive(page,'reduced motion');
   });
   test('Online Training disables public hero animation',async({page})=>{
+    await page.emulateMedia({reducedMotion:'reduce'});
     await page.goto(base+'/online-training/',{waitUntil:'domcontentloaded'});
     const animation=await page.locator('#publicView .hero-copy').evaluate(el=>getComputedStyle(el).animationName);
     expect(animation).toBe('none');
