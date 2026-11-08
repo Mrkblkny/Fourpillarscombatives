@@ -81,7 +81,30 @@
   }
 })();
 
-(()=>{const t=document.querySelector('.menu-toggle'),n=document.querySelector('.nav-links');if(!t||!n)return;t.addEventListener('click',()=>{const isOpen=n.classList.toggle('open');t.setAttribute('aria-expanded',String(isOpen));t.setAttribute('aria-label',isOpen?'Close menu':'Open menu');t.textContent=isOpen?'×':'☰';document.body.classList.toggle('menu-open',isOpen)});n.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{n.classList.remove('open');t.setAttribute('aria-expanded','false');t.setAttribute('aria-label','Open menu');t.textContent='☰';document.body.classList.remove('menu-open')}));document.addEventListener('keydown',e=>{if(e.key==='Escape'){n.classList.remove('open');t.setAttribute('aria-expanded','false');t.setAttribute('aria-label','Open menu');t.textContent='☰';document.body.classList.remove('menu-open')}})})();
+// Keep mobile navigation usable at any scroll position. Do not lock the body
+// when opening a menu: changing body overflow can break sticky headers on phones.
+(() => {
+  const toggle=document.querySelector('.menu-toggle');
+  const nav=document.querySelector('.nav-links');
+  if(!toggle||!nav)return;
+  const setMenuOpen=open=>{
+    nav.classList.toggle('open',open);
+    toggle.setAttribute('aria-expanded',String(open));
+    toggle.setAttribute('aria-label',open?'Close menu':'Open menu');
+    toggle.textContent=open?'×':'☰';
+    if(!open)nav.querySelectorAll('details.nav-dropdown[open]').forEach(group=>{group.open=false;});
+  };
+  toggle.addEventListener('click',()=>setMenuOpen(!nav.classList.contains('open')));
+  nav.addEventListener('click',event=>{
+    if(event.target.closest('a'))setMenuOpen(false);
+  });
+  document.addEventListener('keydown',event=>{
+    if(event.key==='Escape'&&nav.classList.contains('open')){setMenuOpen(false);toggle.focus();}
+  });
+  window.addEventListener('resize',()=>{
+    if(window.innerWidth>1380&&nav.classList.contains('open'))setMenuOpen(false);
+  });
+})();
 
 
 // Contact form: a single first-party AJAX submit handler handles Formspree responses.
@@ -252,7 +275,7 @@
     toggle.setAttribute('aria-expanded','false');
     toggle.setAttribute('aria-label','Open menu');
     toggle.textContent='☰';
-    document.body.classList.remove('menu-open');
+    
   });
 })();
 
@@ -290,40 +313,3 @@
     .catch(()=>{ /* A loading error must never interfere with site navigation. */ });
 })();
 
-
-// Progressive motion: never conceal content unless IntersectionObserver is ready.
-// Avoid motion for reduced-motion preferences, data-saving visitors and background tabs.
-(() => {
-  const prefersReduced=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-  if(prefersReduced||navigator.connection?.saveData||!('IntersectionObserver' in window))return;
-  const targets=document.querySelectorAll([
-    '.section-head','.growth-service-card','.service-card','.growth-info',
-    '.home-member-card','.price-card','.training-steps .step',
-    '.fpc-visitor-faq-grid details','.growth-credibility','.intro-invite-inner',
-    '.online-community-feature-grid > *'
-  ].join(','));
-  if(!targets.length)return;
-  const observer=new IntersectionObserver((entries,instance)=>{
-    for(const entry of entries){
-      if(!entry.isIntersecting)continue;
-      entry.target.classList.remove('fpc-motion-pending');
-      instance.unobserve(entry.target);
-    }
-  },{threshold:0.06,rootMargin:'0px 0px -24px 0px'});
-  for(const [index,node] of [...targets].entries()){
-    const bounds=node.getBoundingClientRect();
-    // Above-the-fold content remains immediately visible and interactive.
-    if(bounds.top<window.innerHeight-25||bounds.height===0)continue;
-    node.style.setProperty('--fpc-motion-delay',Math.min(index%4,3)*55+'ms');
-    node.classList.add('fpc-motion-target','fpc-motion-pending');
-    observer.observe(node);
-    node.addEventListener('focusin',()=>{
-      node.classList.remove('fpc-motion-pending');
-      observer.unobserve(node);
-    },{once:true});
-  }
-  // If this page is cached and later restored, never leave anything hidden.
-  window.addEventListener('pagehide',()=>{observer.disconnect();
-    document.querySelectorAll('.fpc-motion-pending').forEach(el=>el.classList.remove('fpc-motion-pending'));
-  },{once:true});
-})();
