@@ -13,5 +13,12 @@ jobs:
         uses: actions/checkout@v4
       - name: Check JavaScript syntax
         run: node --check assets/site.js
+      - name: Check visitor assistant and backend syntax
+        run: |
+          node --check assets/assistant.js
+          node --check assets/assistant-knowledge.js
+          node --check worker/index.js
       - name: Audit all pages and links
         run: node tests/site-audit.mjs
+      - name: Test visitor assistant, AI guardrails, and public FAQs
+        run: node tests/assistant-audit.mjs
