@@ -223,3 +223,17 @@
   document.body.appendChild(trustmarkScript);
 })();
 
+
+// Keep a distinct member log-in path discoverable throughout the main website.
+// It uses the existing student portal; no account data is exposed here.
+(() => {
+  const links=document.querySelector('.site-footer .footer-links');
+  if(!links || links.querySelector('[data-fpc-member-login]'))return;
+  const link=document.createElement('a');
+  link.href='/online-training/';
+  link.textContent='Online Member Login & Dashboard';
+  link.setAttribute('data-fpc-member-login','');
+  const admin=links.querySelector('a[href="/online-training/admin/"]');
+  if(admin)links.insertBefore(link,admin);
+  else links.append(link);
+})();
