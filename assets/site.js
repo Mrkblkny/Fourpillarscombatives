@@ -237,3 +237,21 @@
   if(admin)links.insertBefore(link,admin);
   else links.append(link);
 })();
+
+
+// On phones, dismiss the navigation when someone taps outside it.
+// Escape and in-menu link clicks are already handled by the main menu listener.
+(() => {
+  const toggle=document.querySelector('.menu-toggle');
+  const nav=document.querySelector('.nav-links');
+  if(!toggle||!nav)return;
+  document.addEventListener('pointerdown',event=>{
+    if(!nav.classList.contains('open')||nav.contains(event.target)||toggle.contains(event.target))return;
+    nav.classList.remove('open');
+    nav.querySelectorAll('details.nav-dropdown[open]').forEach(group=>{group.open=false;});
+    toggle.setAttribute('aria-expanded','false');
+    toggle.setAttribute('aria-label','Open menu');
+    toggle.textContent='☰';
+    document.body.classList.remove('menu-open');
+  });
+})();
