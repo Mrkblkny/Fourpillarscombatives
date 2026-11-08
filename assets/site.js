@@ -289,3 +289,41 @@
     .then(module=>module.mountVisitorAssistant())
     .catch(()=>{ /* A loading error must never interfere with site navigation. */ });
 })();
+
+
+// Progressive motion: never conceal content unless IntersectionObserver is ready.
+// Avoid motion for reduced-motion preferences, data-saving visitors and background tabs.
+(() => {
+  const prefersReduced=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  if(prefersReduced||navigator.connection?.saveData||!('IntersectionObserver' in window))return;
+  const targets=document.querySelectorAll([
+    '.section-head','.growth-service-card','.service-card','.growth-info',
+    '.home-member-card','.price-card','.training-steps .step',
+    '.fpc-visitor-faq-grid details','.growth-credibility','.intro-invite-inner',
+    '.online-community-feature-grid > *'
+  ].join(','));
+  if(!targets.length)return;
+  const observer=new IntersectionObserver((entries,instance)=>{
+    for(const entry of entries){
+      if(!entry.isIntersecting)continue;
+      entry.target.classList.remove('fpc-motion-pending');
+      instance.unobserve(entry.target);
+    }
+  },{threshold:0.06,rootMargin:'0px 0px -24px 0px'});
+  for(const [index,node] of [...targets].entries()){
+    const bounds=node.getBoundingClientRect();
+    // Above-the-fold content remains immediately visible and interactive.
+    if(bounds.top<window.innerHeight-25||bounds.height===0)continue;
+    node.style.setProperty('--fpc-motion-delay',Math.min(index%4,3)*55+'ms');
+    node.classList.add('fpc-motion-pending');
+    observer.observe(node);
+    node.addEventListener('focusin',()=>{
+      node.classList.remove('fpc-motion-pending');
+      observer.unobserve(node);
+    },{once:true});
+  }
+  // If this page is cached and later restored, never leave anything hidden.
+  window.addEventListener('pagehide',()=>{observer.disconnect();
+    document.querySelectorAll('.fpc-motion-pending').forEach(el=>el.classList.remove('fpc-motion-pending'));
+  },{once:true});
+})();
