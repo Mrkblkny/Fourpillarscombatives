@@ -41,8 +41,9 @@ export function mountVisitorAssistant(){
   const header=by('header','fpc-chat-head');
   const heading=by('div','fpc-chat-heading');
   heading.append(by('strong','','Four Pillars Training Guide'),by('span','','Answers about our services'));
-  const close=by('button','fpc-chat-close','×');close.type='button';
-  close.setAttribute('aria-label','Close training assistant');header.append(heading,close);
+  const close=by('button','fpc-chat-close','−');close.type='button';
+  close.setAttribute('aria-label','Minimize training assistant');close.title='Minimize';
+  header.append(heading,close);
   const history=by('div','fpc-chat-history');history.id='fpc-chat-history';
   history.setAttribute('role','log');history.setAttribute('aria-live','polite');
   history.setAttribute('aria-relevant','additions');
@@ -58,17 +59,50 @@ export function mountVisitorAssistant(){
   const note=by('p','fpc-chat-privacy','Public business questions only. Please do not enter private or sensitive information. For booking, use our contact form.');
   panel.append(header,history,suggestions,form,note);
   root.append(launcher,panel);document.body.append(root);
-  const setOpen=open=>{
-    panel.hidden=!open;launcher.setAttribute('aria-expanded',String(open));
+  // Automatically collapse a large open panel after one minute of inactivity.
+  // Keep any unsent draft and the entire conversation when minimized.
+  // Never interrupt a pending request or somebody actively entering a question.
+  const IDLE_MINIMIZE_MS=60_000;
+  let busy=false;
+  let idleTimer=null;
+  function setOpen(open){
+    clearTimeout(idleTimer);
+    idleTimer=null;
+    panel.hidden=!open;
+    launcher.setAttribute('aria-expanded',String(open));
+    launcher.setAttribute('aria-label',
+      open?'Minimize Four Pillars training assistant':'Open Four Pillars training assistant');
     launcher.textContent=open?'Close guide':'Ask about training';
-    if(open)input.focus();else launcher.focus();
-  };
+    if(open){
+      input.focus();
+      scheduleIdleMinimize();
+    }else if(panel.contains(document.activeElement)){
+      launcher.focus();
+    }
+  }
+  function scheduleIdleMinimize(){
+    clearTimeout(idleTimer);
+    idleTimer=null;
+    if(panel.hidden)return;
+    idleTimer=setTimeout(()=>{
+      if(panel.hidden)return;
+      if(busy||input.value.trim()){
+        scheduleIdleMinimize();
+        return;
+      }
+      setOpen(false);
+    },IDLE_MINIMIZE_MS);
+  }
   launcher.addEventListener('click',()=>setOpen(panel.hidden));
   close.addEventListener('click',()=>setOpen(false));
+  for(const eventName of ['input','keydown','pointerdown','scroll']){
+    panel.addEventListener(eventName,scheduleIdleMinimize,{
+      passive:eventName==='scroll'||eventName==='pointerdown'
+    });
+  }
   document.addEventListener('keydown',event=>{
     if(event.key==='Escape'&&!panel.hidden){setOpen(false);}
   });
-  let busy=false;
   async function ask(question){
     if(busy)return;
     const clean=String(question||'').trim().slice(0,240);
@@ -99,7 +133,11 @@ export function mountVisitorAssistant(){
     typing.remove();
     messageInto(history,payload.answer,'assistant',payload.links);
     if(payload.mode==='ai')messageInto(history,'AI-generated information: please confirm availability and current pricing with the instructor.');
-    busy=false;submit.disabled=false;input.disabled=false;input.focus();
+    busy=false;submit.disabled=false;input.disabled=false;
+    if(!panel.hidden){
+      input.focus();
+      scheduleIdleMinimize();
+    }
   }
   form.addEventListener('submit',event=>{event.preventDefault();void ask(input.value);});
   input.addEventListener('keydown',event=>{
