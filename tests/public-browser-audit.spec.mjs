@@ -83,6 +83,24 @@ test.describe('mobile public menus',()=>{
     await expect(toggle).toHaveAttribute('aria-expanded','false');
     await checkResponsive(page,'main menu');
   });
+  test('one Member Login in main menu opens real sign-in, Admin Login stays in footer',async({page})=>{
+    await page.goto(base+'/',{waitUntil:'domcontentloaded'});
+    const menu=page.locator('#navigation');
+    await expect(menu.locator('[data-fpc-member-login]')).toHaveCount(1);
+    await expect(menu.locator('a[href="/online-training/admin/"]')).toHaveCount(0);
+    await expect(page.locator('footer a[href="/online-training/admin/"]')).toHaveCount(1);
+    await expect(page.locator('footer a[data-fpc-member-login]')).toHaveCount(0);
+    await page.locator('.menu-toggle').click();
+    const member=menu.locator('[data-fpc-member-login]');
+    await expect(member).toHaveText('Member Login');
+    await expect(member).toHaveAttribute('href','/online-training/?login=1');
+    await member.click();
+    await expect(page).toHaveURL(/\/online-training\/\?login=1/);
+    await expect(page.locator('#accountView')).toBeVisible({timeout:30000});
+    await expect(page.locator('#authForm')).toBeVisible();
+    await expect(page.locator('#mobileLogin')).toHaveText('Member Login');
+    await checkResponsive(page,'direct Member Login');
+  });
   test('online training hamburger exposes membership links and closes on selection',async({page})=>{
     await page.goto(base+'/online-training/',{waitUntil:'domcontentloaded'});
     await page.locator('#menuToggle').click();
