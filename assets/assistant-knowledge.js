@@ -114,7 +114,7 @@ export function relatedTopics(question,limit=3){
     const topicTokens=new Set(terms(topic.title+' '+topic.keywords.join(' ')));
     for(const token of tokens)if(topicTokens.has(token))score+=2;
     return {topic,score};
-  }).filter(item=>item.score>0).sort((a,b)=>b.score-a.score);
+  }).filter(item=>item.score>=5).sort((a,b)=>b.score-a.score);
   return scored.slice(0,limit).map(item=>item.topic);
 }
 export function guidedAnswer(question){
