@@ -3,6 +3,13 @@
 .fpc-visitor-assistant *{box-sizing:border-box}
 .fpc-chat-launch{border:1px solid #f58b92;border-radius:999px;background:#a51f31;color:#fff;padding:12px 18px;box-shadow:0 5px 24px #0009;font-weight:800;min-height:46px;max-width:100%;cursor:pointer}
 .fpc-chat-launch:hover{background:#c32d42}
+.fpc-chat-launch.is-compact{
+ width:46px;min-width:46px;height:46px;padding:0;
+ display:grid;place-items:center;border-radius:50%;
+ font-size:22px;line-height:1;font-weight:900;
+}
+.fpc-chat-launch.is-compact:hover{background:#c32d42}
+.fpc-chat-launch:focus-visible{outline:3px solid #ffc6cb;outline-offset:3px}
 .fpc-chat-panel{position:absolute;right:0;bottom:calc(100% + 12px);display:flex;flex-direction:column;width:min(385px,calc(100vw - 24px));height:min(500px,calc(100dvh - 100px));min-height:220px;background:#12181e;border:1px solid #60444d;border-radius:14px;overflow:hidden;box-shadow:0 20px 54px #000c}
 .fpc-chat-panel[hidden]{display:none}
 .fpc-chat-head{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#20171d;border-bottom:1px solid #63414b;padding:15px}
