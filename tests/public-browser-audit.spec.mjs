@@ -139,3 +139,21 @@ for(const [name,viewport] of [['phone',viewports.mobile],['desktop',viewports.de
     });
   });
 }
+
+test.describe('public assistant backend',()=>{
+  test.use({viewport:viewports.desktop});
+  test('live same-origin API returns a reviewed answer without requiring a login',async({page})=>{
+    await page.goto(base+'/',{waitUntil:'domcontentloaded'});
+    const result=await page.evaluate(async()=>{
+      const reply=await fetch('/api/visitor-assistant',{
+        method:'POST',headers:{'content-type':'application/json'},
+        body:JSON.stringify({question:'When are group classes?'})
+      });
+      const payload=await reply.json().catch(()=>({}));
+      return {status:reply.status,answer:payload.answer,topic:payload.topic};
+    });
+    expect(result.status).toBe(200);
+    expect(result.topic).toBe('classes');
+    expect(result.answer).toMatch(/Monday and Wednesday/);
+  });
+});
