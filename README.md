@@ -6,36 +6,40 @@ Email: info@fourpillarscombatives.com · Phone: 601-213-7419
 
 ## Pages and hosting
 
-This repository contains a static website hosted through GitHub and Cloudflare Pages. The homepage is `index.html`; additional pages include `training.html`, `programs.html`, `lessons.html`, `seminars.html`, `about.html`, and `contact.html`. Shared front-end assets are in `assets/`.
+This repository contains a static website hosted on Cloudflare Workers (Static Assets) and maintained through GitHub. The homepage is `index.html`; additional pages include `training.html`, `programs.html`, `lessons.html`, `seminars.html`, `about.html`, and `contact.html`. Shared front-end assets are in `assets/`.
 
-Cloudflare Pages redirects a page such as `/contact.html` to the final URL `/contact`. Canonical tags and the sitemap use those final extensionless URLs.
+The live Cloudflare setup supports extensionless routes, such as `/contact`, for pages in this repository. Canonical tags and the sitemap use those final extensionless URLs.
 
 ## Current training information
 
 - **Group classes:** Monday and Wednesday, **5:30–6:50 PM** (80 minutes), at a location confirmed before attendance.
-- **Group memberships:** 12-month $65/month; 6-month $75/month; month-to-month $85/month.
-- **Drop-in class:** $20; **four-class pass:** $70, expires after 60 days.
-- **Additional household member discount:** $10/month off the corresponding group membership while both are active.
+- **Group memberships:** 12-month $75/month; 6-month $85/month; month-to-month $95/month.
+- **Drop-in class:** $30; **four-class pass:** $100, expires after 60 days.
+- **Additional household member discount:** Up to $10/month on qualifying group memberships, subject to a $75/month minimum.
 - **Private 1:1 lessons, 60 minutes:** $40 single; four lessons $150; eight $290; twelve $420 (as low as $35 per lesson).
-- **Semi-private two-person lessons, 60 minutes:** $50 single; four $190; eight $360; twelve $510 (total for both people).
-- **Small group, 60 minutes:** three people $65; four people $80 (total per session).
+- **Semi-private two-person lessons, 60 minutes:** $65 single; four $250; eight $490; twelve $720 (total for both people).
+- **Small group, 60 minutes:** three people $90; four people $115 (total per session).
 - **Personal training, 60 minutes:** $35 single; four $140; eight $280; twelve $420.
 - **Live video, 60 minutes:** $25 per session.
 - **Workshops, seminars and corporate retreats:** contact for pricing and availability.
 
 Fees for noncash payments and applicable taxes are additional. Group memberships do not include private lessons. Written membership terms govern cancellation and renewals. Class dates and appointment availability must always be confirmed.
 
-## Direct contact form — initial activation required
+## Contact form and delivery verification
 
-The contact page sends form submissions to `info@fourpillarscombatives.com` through **FormSubmit** (a third-party form processing service). This does not require a custom server. It uses the provider's default spam protection and a honeypot field. The page continues to offer phone and direct-email contact as alternatives.
+The live contact page uses **Formspree**, posting inquiries to the configured
+\`https://formspree.io/f/mljjagkr\` endpoint. The form also offers direct
+telephone and email alternatives. The site previously used a different form
+provider; older FormSubmit activation instructions do not apply.
 
-**After publishing, you must activate the form once:**
+**Delivery verification:** The form's presence in HTML does not prove that
+inquiries are reaching the inbox. The site owner or an authorized tester should
+submit a clearly labeled test inquiry, confirm delivery to the intended address
+in Formspree and the inbox, and review any relevant spam or notification settings.
+Do not send test submissions to real third parties without authorization.
 
-1. Open https://fourpillarscombatives.com/contact and submit a **test inquiry** with your own contact information.
-2. Check `info@fourpillarscombatives.com` (including Spam/Junk) for the **FormSubmit activation email** and select the confirmation link.
-3. Submit a second test inquiry. Verify that it reaches the inbox. **Until the form is activated and tested, do not assume it delivers inquiries.**
-
-FormSubmit processes and temporarily retains submitted contact details as a third party; review their terms and privacy policy before enabling on the live site. If you prefer not to use the third party, keep the current email-based form instead of uploading `contact.html` and `assets/site.js`, or configure your own Cloudflare Pages Function with a verified email service.
+Review the provider's privacy practices and any spam protection settings.
+Do not publish secret Formspree keys, private Supabase keys, or Stripe keys.
 
 ## Uploading website files
 
