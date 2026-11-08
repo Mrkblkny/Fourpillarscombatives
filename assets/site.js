@@ -315,7 +315,7 @@
     // Above-the-fold content remains immediately visible and interactive.
     if(bounds.top<window.innerHeight-25||bounds.height===0)continue;
     node.style.setProperty('--fpc-motion-delay',Math.min(index%4,3)*55+'ms');
-    node.classList.add('fpc-motion-pending');
+    node.classList.add('fpc-motion-target','fpc-motion-pending');
     observer.observe(node);
     node.addEventListener('focusin',()=>{
       node.classList.remove('fpc-motion-pending');
