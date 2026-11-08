@@ -43,7 +43,7 @@ for(const path of pages){
     assert.ok(text.includes('Free, admin-assigned Member, Founding, and VIP accounts') &&
       text.includes('Your account shows only the community features enabled for your membership'),
       'Live homepage must describe the current membership-based community access');
-    assert.match(text,/Founding Lifetime Membership pricing begins at \$199\.99/);
+    assert.match(text,/Founding and VIP prices increase by tier; check current options/);
   }
   console.log('OK',path);
 }

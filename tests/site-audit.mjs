@@ -188,7 +188,7 @@ assert.ok(!js.includes('Paid lifetime access opens after final checkout setup'),
   'Do not show obsolete checkout-setup promises after enrollment is live');
 assert.match(js,/if\(e\.key==='Escape'\).*?t\.setAttribute\('aria-label','Open menu'\)/,
   'Closing mobile menu with Escape must reset its accessible button label');
-assert.match(read('index.html'),/Founding Lifetime Membership pricing begins at \$199\.99/, 'Homepage must disclose new founding price');
+assert.match(read('index.html'),/Founding and VIP prices increase by tier; check current options/, 'Homepage should not show an outdated starting price when current tier is higher');
 assert.match(read('sitemap.xml'),/fourpillarscombatives\.com\/online-training\//,'Sitemap must include online training');
 const contact=read('contact.html');
 assert.match(contact,/<form[^>]+action="https:\/\/formspree\.io\/f\/mljjagkr"[^>]*id="inquiry-form"/i);
