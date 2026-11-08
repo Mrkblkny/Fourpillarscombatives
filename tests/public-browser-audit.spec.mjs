@@ -159,46 +159,65 @@ test.describe('public assistant backend',()=>{
 });
 
 
-test.describe('Accessible marketing motion',()=>{
-  test.use({viewport:viewports.mobile,colorScheme:'dark'});
-  test('Scroll reveals do not block links or create mobile overflow',async({page})=>{
-    await page.goto(base+'/',{waitUntil:'domcontentloaded'});
-    const card=page.locator('.growth-service-card').first();
-    await card.scrollIntoViewIfNeeded();
-    await expect(card).toBeVisible();
-    await expect(card).not.toHaveClass(/fpc-motion-pending/,{timeout:4000});
-    await checkResponsive(page,'scroll reveal on phone');
-  });
-});
-test.describe('Reduced motion accessibility',()=>{
-  test.use({viewport:viewports.mobile,colorScheme:'dark',reducedMotion:'reduce'});
-  test('Main website disables animation while retaining visible content',async({page})=>{
-    await page.emulateMedia({reducedMotion:'reduce'});
-    await page.goto(base+'/',{waitUntil:'domcontentloaded'});
-    await expect(page.locator('.hero h1')).toBeVisible();
-    const details=await page.evaluate(()=>{
-      const target=document.querySelector('.hero .hero-wrap');
-      const style=getComputedStyle(target);
-      return {animation:style.animationName,reduced:matchMedia('(prefers-reduced-motion: reduce)').matches};
+// Check the actual reported failure: at substantial scroll depth, opening
+// the menu must not modify page scroll position or hide the sticky header.
+for(const [label,viewport] of [
+  ['phone after scroll',{width:390,height:844}],
+  ['tablet after scroll',{width:768,height:1024}],
+  ['wide navigation after scroll',{width:1200,height:800}]
+]){
+  test.describe(label,()=>{
+    test.use({viewport,colorScheme:'dark'});
+    test('hamburger works midway down the homepage and closes predictably',async({page})=>{
+      await page.goto(base+'/',{waitUntil:'domcontentloaded'});
+      await page.evaluate(()=>window.scrollTo(0,Math.floor(document.body.scrollHeight*0.55)));
+      await expect.poll(()=>page.evaluate(()=>window.scrollY)).toBeGreaterThan(300);
+      const previousY=await page.evaluate(()=>window.scrollY);
+      const toggle=page.locator('.menu-toggle');
+      await expect(toggle).toBeVisible();
+      await toggle.click();
+      await expect(toggle).toHaveAttribute('aria-expanded','true');
+      await expect(page.locator('.nav-links')).toHaveClass(/open/);
+      const layout=await page.evaluate(()=>{
+        const header=document.querySelector('.site-header').getBoundingClientRect();
+        const menu=document.querySelector('.nav-links').getBoundingClientRect();
+        return {headerTop:header.top,menuTop:menu.top,menuBottom:menu.bottom,y:window.scrollY};
+      });
+      expect(layout.headerTop).toBeGreaterThanOrEqual(-3);
+      expect(layout.menuTop).toBeGreaterThanOrEqual(0);
+      expect(layout.menuBottom).toBeGreaterThan(layout.menuTop);
+      expect(Math.abs(layout.y-previousY)).toBeLessThan(6);
+      const training=page.locator('.nav-dropdown summary');
+      await training.click();
+      await expect(page.locator('.nav-dropdown')).toHaveAttribute('open','');
+      await page.keyboard.press('Escape');
+      await expect(page.locator('.nav-links')).not.toHaveClass(/open/);
+      await expect(toggle).toHaveAttribute('aria-expanded','false');
+      await checkResponsive(page,label);
     });
-    expect(details.reduced).toBe(true);
-    expect(details.animation).toBe('none');
+  });
+}
+test.describe('Static website, no scroll-reveal animations',()=>{
+  test.use({viewport:viewports.mobile,colorScheme:'dark'});
+  test('headings and cards remain visible without JS reveal states',async({page})=>{
+    await page.goto(base+'/',{waitUntil:'domcontentloaded'});
     const card=page.locator('.growth-service-card').first();
     await card.scrollIntoViewIfNeeded();
     await expect(card).toBeVisible();
     await expect(card).not.toHaveClass(/fpc-motion-pending/);
-    await checkResponsive(page,'reduced motion');
-  });
-  test('Online Training disables public hero animation',async({page})=>{
-    await page.emulateMedia({reducedMotion:'reduce'});
-    await page.goto(base+'/online-training/',{waitUntil:'domcontentloaded'});
-    const animation=await page.locator('#publicView .hero-copy').evaluate(el=>getComputedStyle(el).animationName);
-    expect(animation).toBe('none');
-    await checkResponsive(page,'training reduced motion');
+    const state=await page.evaluate(()=>{
+      const card=document.querySelector('.growth-service-card');
+      return {
+        animation:getComputedStyle(card).animationName,
+        transition:getComputedStyle(card).transitionDuration,
+        scrolling:getComputedStyle(document.documentElement).scrollBehavior
+      };
+    });
+    expect(state.animation).toBe('none');
+    expect(state.transition).toBe('0s');
+    expect(state.scrolling).toBe('auto');
   });
 });
-
-
 test.describe('Visitor assistant auto-minimization',()=>{
   test.use({viewport:viewports.mobile,colorScheme:'dark'});
   test('Minimizes after idle time, keeps conversation and preserves unfinished drafts',async({page})=>{
@@ -214,14 +233,14 @@ test.describe('Visitor assistant auto-minimization',()=>{
       const code=await response.text();
       return {
         status:response.status,
-        hasIdleTimer:code.includes('IDLE_MINIMIZE_MS=60_000'),
-        hasCompactLauncher:code.includes('COMPACT_LAUNCH_MS=15_000')
+        hasIdleTimer:code.includes('IDLE_MINIMIZE_MS=40_000'),
+        hasCompactLauncher:code.includes('COMPACT_LAUNCH_MS=10_000')
       };
     });
     expect(loadedCode.status).toBe(200);
     expect(loadedCode.hasIdleTimer).toBe(true);
     expect(loadedCode.hasCompactLauncher).toBe(true);
-    await page.clock.runFor(61_000);
+    await page.clock.runFor(41_000);
     await expect(panel).toBeHidden();
     await expect(launcher).toHaveAttribute('aria-expanded','false');
     await launcher.click();
@@ -229,13 +248,13 @@ test.describe('Visitor assistant auto-minimization',()=>{
     await expect(page.locator('#fpc-chat-history')).toContainText('Welcome! Ask about classes');
     const draft=page.locator('#fpc-chat-question');
     await draft.fill('I would like to ask about');
-    await page.clock.runFor(61_000);
+    await page.clock.runFor(41_000);
     await expect(panel).toBeHidden();
     await launcher.click();
     await expect(panel).toBeVisible();
     await expect(draft).toHaveValue('I would like to ask about');
     await draft.fill('');
-    await page.clock.runFor(61_000);
+    await page.clock.runFor(41_000);
     await expect(panel).toBeHidden();
     await checkResponsive(page,'auto-minimized training assistant');
   });
@@ -250,14 +269,14 @@ test.describe('Visitor assistant stays unobtrusive on mobile',()=>{
     const launcher=page.locator('#fpc-chat-launch');
     const panel=page.locator('#fpc-chat-panel');
     await expect(launcher).toBeVisible({timeout:30000});
-    await page.clock.runFor(16_000);
+    await page.clock.runFor(11_000);
     await expect(launcher).toHaveClass(/is-compact/);
     await expect(launcher).toHaveAttribute('aria-label','Open Four Pillars training assistant');
     await launcher.click();
     await expect(panel).toBeVisible();
     const draft=page.locator('#fpc-chat-question');
     await draft.fill('Can I arrange a private lesson?');
-    await page.clock.runFor(61_000);
+    await page.clock.runFor(41_000);
     await expect(panel).toBeHidden();
     await expect(launcher).toHaveClass(/is-compact/);
     await launcher.click();
