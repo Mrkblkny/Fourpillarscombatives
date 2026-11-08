@@ -70,6 +70,10 @@ assert.match(trainingHtml,/id="memberUnifiedProfile"/,'My Account must contain a
 assert.match(trainingHtml,/id="memberProfileForm"/,'Profile editor must live in My Account');
 assert.match(trainingHtml,/id="memberHeroInitials"/,'Member home must have initials');
 assert.match(trainingHtml,/id="memberAccountInitials"/,'Account must have initials');
+assert.match(trainingHtml,/id="memberProfileSaveButton"[^>]*>Save Changes<\/button>/,
+  'One coordinated Account Save Changes must remain available');
+assert.match(trainingHtml,/New lessons and PDF handouts are being added during public beta/,
+  'Beta curriculum must not claim published lessons are still coming soon');
 assert.doesNotMatch(trainingHtml,/id="memberProfilePhotoPanel"|id="memberProfilePhotoUpload"|id="memberProfilePhotoFile"/,
   'Profile photo upload controls must not return after initials-only rollout');
 const {text:communityHtml}=await get('/online-training/community/');
@@ -80,6 +84,8 @@ assert.match(communityHtml,/href="\.\.\/\?tab=account" target="_top"/,
   'Community must point to one Member Dashboard profile editor');
 assert.doesNotMatch(communityHtml,/id="profileForm"|id="avatarFile"|id="uploadAvatar"/,
   'Community must not expose a second profile editor or photo upload');
+assert.doesNotMatch(communityHtml,/>ADMINISTRATION<\/p>|id="adminNav"|data-screen="admin"/,
+  'Member Community must never display a moderator/admin navigation entry');
 const {text:adminHtml}=await get('/online-training/admin/');
 assert.match(adminHtml,/id="tab-preview"/);
 assert.match(adminHtml,/id="adminPreviewTier"/);
@@ -88,11 +94,17 @@ assert.match(adminHtml,/id="memberGrantEditor"/,
   'Admin dashboard must retain per-member access editor');
 assert.match(adminHtml,/id="memberFeatureMatrix"/,
   'Admin dashboard must retain membership feature matrix');
+assert.match(adminHtml,/id="openCommunityModerationPanel"/,
+  'Community moderation must be available inside the protected Admin Dashboard');
+assert.match(adminHtml,/id="adminNeedsAttention"/,
+  'Owner Needs Attention queue must include reports, student requests and video feedback');
 assert.match(adminHtml,/name="robots" content="noindex,nofollow"/);
 for(const path of ['/online-training/api/updates',
   '/online-training/api/admin/lessons',
   '/online-training/api/admin/updates',
-  '/online-training/api/admin/access']){
+  '/online-training/api/admin/access',
+  '/online-training/api/student-requests',
+  '/online-training/api/admin/attention']){
   const response=await fetch(root+path,{cache:'no-store',signal:AbortSignal.timeout(15000)});
   assert.equal(response.status,401,path+' must deny unsigned anonymous requests');
 }
