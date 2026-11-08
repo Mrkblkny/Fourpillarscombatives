@@ -226,3 +226,29 @@ test.describe('Visitor assistant auto-minimization',()=>{
     await checkResponsive(page,'auto-minimized training assistant');
   });
 });
+
+
+test.describe('Visitor assistant stays unobtrusive on mobile',()=>{
+  test.use({viewport:viewports.mobile,colorScheme:'dark'});
+  test('shrinks when idle, auto-minimizes a draft and restores it on reopen',async({page})=>{
+    await page.clock.install();
+    await page.goto(base+'/',{waitUntil:'domcontentloaded'});
+    const launcher=page.locator('#fpc-chat-launch');
+    const panel=page.locator('#fpc-chat-panel');
+    await expect(launcher).toBeVisible({timeout:30000});
+    await page.clock.fastForward(16_000);
+    await expect(launcher).toHaveClass(/is-compact/);
+    await expect(launcher).toHaveAttribute('aria-label','Open Four Pillars training assistant');
+    await launcher.click();
+    await expect(panel).toBeVisible();
+    const draft=page.locator('#fpc-chat-question');
+    await draft.fill('Can I arrange a private lesson?');
+    await page.clock.fastForward(61_000);
+    await expect(panel).toBeHidden();
+    await expect(launcher).toHaveClass(/is-compact/);
+    await launcher.click();
+    await expect(panel).toBeVisible();
+    await expect(draft).toHaveValue('Can I arrange a private lesson?');
+    await checkResponsive(page,'compact assistant with saved draft');
+  });
+});
