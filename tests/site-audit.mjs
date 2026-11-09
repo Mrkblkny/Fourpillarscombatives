@@ -169,6 +169,13 @@ assert.match(homepage,/07 \/ LIVE VIDEO PRIVATE LESSONS/,'Live video lessons mus
 assert.match(read('programs.html'),/07 \/ LIVE VIDEO PRIVATE LESSONS/,'Programs must show live video lessons');
 assert.match(allPrices,/id="live-video"/,'Pricing must include live video lesson anchor');
 assert.match(allPrices,/id="online-memberships"/,'Pricing must include the separate online training memberships');
+assert.match(allPrices,/id="online-memberships-heading">ONLINE <span class="red">TRAINING\.<\/span>/,'Pricing should use the approved short Online Training name');
+assert.match(allPrices,/id="foundingCurrentPrice"/,'Founding price should be shown from live public config');
+assert.match(allPrices,/id="vipCurrentPrice"/,'VIP price should be shown from live public config');
+assert.match(allPrices,/Events &amp; Seminars, Private Messaging, and Find Training Partners/,'Free pricing card should list all three Community benefits');
+assert.match(read('assets/site.js'),/updatePublicPrice\('foundingCurrentPrice'/,'Founding price should use the public config response');
+assert.match(read('assets/site.js'),/updatePublicPrice\('vipCurrentPrice'/,'VIP price should use the public config response');
+assert.match(read('assets/marketing.css'),/\.online-pricing-card \.btn/,'Pricing card buttons should have dedicated mobile-safe layout');
 assert.match(allPrices,/\$25/,'Pricing must include published video lesson rate');
 assert.match(read('sitemap.xml'),/fourpillarscombatives\.com\/pricing/,'Sitemap must include pricing page');
 assert.match(homepage,/Programs, services &amp; training formats/,

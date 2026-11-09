@@ -26,6 +26,16 @@
       const vipOpen=Boolean(data.vip?.enrollmentOpen);
       const foundingPrice=typeof data.offer?.price==='string'?data.offer.price:null;
       const vipPrice=typeof data.vip?.price==='string'?data.vip.price:null;
+      // Pricing page: the public API is the only source for current tier prices.
+      // Show a safe fallback when sales are paused or an offer is unavailable.
+      const updatePublicPrice=(id,open,price,soldOut)=>{
+        const element=document.getElementById(id);
+        if(!element)return;
+        const valid=typeof price==='string'&&/^\$\d[\d,]*\.\d{2}$/.test(price);
+        element.textContent=open?(valid?price:'See live price'):(soldOut?'Sold out':'Enrollment not open');
+      };
+      updatePublicPrice('foundingCurrentPrice',isOpen,foundingPrice,Boolean(data.lifetimeSoldOut));
+      updatePublicPrice('vipCurrentPrice',vipOpen,vipPrice,Boolean(data.vip?.soldOut));
       const choices=[
         isOpen?'Founding '+(foundingPrice||'membership')+' one time':null,
         vipOpen?'VIP '+(vipPrice||'membership')+' one time':null
