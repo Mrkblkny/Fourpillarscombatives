@@ -1,0 +1,78 @@
+name: Deploy main Four Pillars website (existing Cloudflare Worker)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '*.html'
+      - 'assets/**'
+      - 'worker/**'
+      - 'wrangler.toml'
+      - '.github/workflows/deploy-main-site.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fpc-production-main-website
+  cancel-in-progress: false
+
+jobs:
+  deploy-main:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      WRANGLER_SEND_METRICS: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify website, navigation, and safe visitor assistant
+        run: |
+          node --check assets/site.js
+          node --check assets/assistant.js
+          node --check worker/index.js
+          node tests/site-audit.mjs
+          node tests/assistant-audit.mjs
+      - name: Require private Cloudflare deployment credentials
+        shell: bash
+        run: |
+          if [[ -z "$CLOUDFLARE_API_TOKEN" || -z "$CLOUDFLARE_ACCOUNT_ID" ]]; then
+            echo "::error title=Deployment blocked::Configure repository Actions secrets CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID. No deployment was attempted."
+            exit 1
+          fi
+      - name: Deploy only the existing fourpillarscombatives Worker
+        run: npx --yes wrangler@4.158.0 deploy --config wrangler.toml
+      - name: Verify fresh mobile menu, motion-free CSS, assistant, and hero links live
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          const base='https://fourpillarscombatives.com/';
+          const checks=[
+            ['index.html',body=>body.includes('20261109-ux-audit')&&body.includes('Explore Online Training')],
+            ['assets/styles.css',body=>body.includes('animation:none!important')&&body.includes('body.menu-open{overflow:visible}')],
+            ['assets/site.js',body=>body.includes('20261109-ux-audit')&&body.includes('setMenuOpen')],
+            ['assets/assistant.js',body=>body.includes('IDLE_MINIMIZE_MS=40_000')&&body.includes('COMPACT_LAUNCH_MS=10_000')]
+          ];
+          for(let attempt=1;attempt<=12;attempt++){
+            const results=await Promise.all(checks.map(async ([path,assertContent])=>{
+              try {
+                const response=await fetch(base+path+'?audit='+Date.now()+'&attempt='+attempt,
+                  {cache:'no-store',signal:AbortSignal.timeout(12000)});
+                return response.ok&&assertContent(await response.text());
+              }catch{return false;}
+            }));
+            if(results.every(Boolean)){
+              console.log('Live Cloudflare main-site assets verified after deploy.');
+              process.exit(0);
+            }
+            console.log('Deploy propagation',attempt,'/12',checks.filter((_,i)=>!results[i]).map(x=>x[0]).join(', '));
+            if(attempt!==12)await new Promise(resolve=>setTimeout(resolve,5000));
+          }
+          assert.fail('The main site still serves old assets or could not be verified. Check Cloudflare Worker route and cache.');
+          NODE
