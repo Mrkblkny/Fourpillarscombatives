@@ -29,7 +29,7 @@ export const assistantTopics=Object.freeze([
   {
     id:'women',title:"Women's self-defense",
     keywords:['women','woman','female','girls','womens self defense','ladies','self defense workshop for women'],
-    answer:"Women's self-defense is a dedicated offering, not a separate martial-arts training style or a standing women-only weekly class. We offer individual sessions, self-organized small-group lessons and custom workshops focused on awareness, boundaries, escape and practical safety. Women are also welcome in regular self-defense classes.",
+    answer:"Women's self-defense is available only through seminars, workshops, and private lessons by request—not a separate martial-arts training style, weekly women-only class, or independent small-group program. It covers awareness, boundaries, escape, and personal safety. Women are also welcome in regular self-defense classes.",
     href:'/womens-self-defense',linkText:"Explore women's self-defense"
   },
   {
