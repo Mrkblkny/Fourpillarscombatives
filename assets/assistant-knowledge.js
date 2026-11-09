@@ -70,8 +70,8 @@ export const assistantTopics=Object.freeze([
   },
   {
     id:'fitness',title:'Personal training and fitness',
-    keywords:['fitness','personal trainer','weight training','strength','conditioning','mobility','exercise','get in shape','trainer'],
-    answer:'Personal training and fitness/conditioning instruction are available by appointment. We can help you discuss strength, endurance, mobility and practical fitness goals and choose a suitable session format.',
+    keywords:['fitness','personal trainer','weight training','strength','conditioning','mobility','exercise','get in shape','trainer','cardio kickboxing','kickboxing fitness','boot camp','bootcamp','fitness camp'],
+    answer:'Personal training, cardio kickboxing and boot camp fitness are available by request. Cardio kickboxing is non-contact, fitness-focused training—not MMA or sparring. Boot camps feature conditioning and strength circuits. One-on-one personal training is $35 per 60-minute session; ask us for cardio kickboxing, group boot camp schedules and prices, which are arranged separately.',
     href:'/personal-training',linkText:'Explore personal training'
   },
   {

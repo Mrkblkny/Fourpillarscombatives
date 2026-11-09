@@ -163,6 +163,17 @@ for(const name of pages){
   assert.ok(!header.includes('/online-training/admin/'),name+': admin link belongs in footer only');
 }
 const homepage=read('index.html');
+const personalFitness=read('personal-training.html');
+assert.match(personalFitness,/id="cardio-kickboxing"/,'Personal Training must offer Cardio Kickboxing');
+assert.match(personalFitness,/id="boot-camps"/,'Personal Training must offer Boot Camps');
+assert.match(personalFitness,/non-contact boxing and kicking-inspired fitness combinations/,'Cardio Kickboxing must be described as fitness');
+assert.match(personalFitness,/group fitness and specialty session pricing is quoted separately/,'Boot camp pricing must not be presumed to match individual coaching');
+assert.match(homepage,/cardio kickboxing and boot camps by request/i,'Homepage must show fitness additions');
+assert.match(read('programs.html'),/cardio kickboxing and boot camp fitness by request/i,'Programs must show fitness additions');
+assert.match(read('pricing.html'),/Cardio kickboxing and boot camps are also available by request/,'Pricing must distinguish additional fitness services');
+assert.match(read('contact.html'),/value="Cardio Kickboxing"/,'Inquiries must include cardio kickboxing');
+assert.match(read('contact.html'),/value="Boot Camp"/,'Inquiries must include boot camps');
+assert.match(read('assets/assistant-knowledge.js'),/cardio kickboxing and boot camp fitness are available by request/i,'Assistant must know both fitness services');
 const allPrices=read('pricing.html');
 assert.match(homepage,/06 \/ ONLINE TRAINING · PUBLIC BETA/,'Online Training must appear in What We Offer');
 assert.match(homepage,/07 \/ LIVE VIDEO PRIVATE LESSONS/,'Live video lessons must appear in What We Offer');
