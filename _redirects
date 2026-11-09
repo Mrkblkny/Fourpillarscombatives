@@ -27,3 +27,15 @@
 
 # The former /m/account, /m/create and /m/reset account endpoints are not
 # equivalents of the new training platform's account system. Do not redirect.
+
+# Former website routes in Search Console 404 examples 11–20 (2026-11-09).
+/four-pillars-combatives-1 / 301
+/four-pillars-combatives / 301
+/page/Programs /programs 301
+/full-list-of-our-programs /programs 301
+/blog/f/scenario-training-key-to-real-world-self-defense /training#curriculum-skills 301
+
+# Deliberately not redirected: retired /shop, /terms-and-conditions,
+# and the 100-rep challenge have no equivalent published pages.
+# Two truncated 'combat-and-self-defense-first...' example URLs require
+# their full source addresses before exact redirects are added.
