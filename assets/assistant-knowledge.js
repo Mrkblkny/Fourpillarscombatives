@@ -18,7 +18,7 @@ export const assistantTopics=Object.freeze([
     id:'group-pricing',title:'Group membership and pricing',
     keywords:['membership cost','monthly','group price','membership price','price for class','class cost','group membership','$75','contract'],
     answer:'Group self-defense memberships start at $75 per month. The website explains available terms and what the membership covers. Private lessons, personal training and workshops are booked separately. Confirm current terms and space with us before enrolling.',
-    href:'/lessons',linkText:'See group membership details'
+    href:'/pricing',linkText:'See group membership details'
   },
   {
     id:'private',title:'Private lessons',
@@ -37,6 +37,12 @@ export const assistantTopics=Object.freeze([
     keywords:['seminar','workshop','corporate','business','church','organization','retreat','host','travel','out of town','law enforcement','military'],
     answer:'We offer custom local and traveling seminars or workshops for individuals, martial arts schools, businesses, churches, community groups and professionals. Topics and duration are built around the group. Contact us with the location, group size and training goals for a proposal.',
     href:'/seminars',linkText:'Explore seminars and workshops'
+  },
+  {
+    id:'video-coaching',title:'Live Video Private Lessons',
+    keywords:['live video','video private','zoom lesson','live online lesson','virtual private lesson','video coaching','online private','remote coaching'],
+    answer:'Live one-on-one video private lessons cost $25 per 60-minute session, by appointment. This is personal instruction and is separate from the Online Training lesson library.',
+    href:'/pricing#live-video',linkText:'Live video lesson prices'
   },
   {
     id:'online',title:'Online Training and free registration',

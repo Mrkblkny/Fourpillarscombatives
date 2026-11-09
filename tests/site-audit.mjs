@@ -5,7 +5,7 @@ import { resolve } from 'node:path';
 import assert from 'node:assert/strict';
 
 const root=resolve('.');
-const pages=['index','lessons','womens-self-defense','private-lessons',
+const pages=['index','lessons','pricing','womens-self-defense','private-lessons',
   'personal-training','programs','training','seminars','about','contact'];
 const routes=new Map(pages.map(p=>['/'+(p==='index'?'':p), p+'.html']));
 routes.set('/', 'index.html');
@@ -163,6 +163,14 @@ for(const name of pages){
   assert.ok(!header.includes('/online-training/admin/'),name+': admin link belongs in footer only');
 }
 const homepage=read('index.html');
+const allPrices=read('pricing.html');
+assert.match(homepage,/06 \/ ONLINE TRAINING · PUBLIC BETA/,'Online Training must appear in What We Offer');
+assert.match(homepage,/07 \/ LIVE VIDEO PRIVATE LESSONS/,'Live video lessons must appear in What We Offer');
+assert.match(read('programs.html'),/07 \/ LIVE VIDEO PRIVATE LESSONS/,'Programs must show live video lessons');
+assert.match(allPrices,/id="live-video"/,'Pricing must include live video lesson anchor');
+assert.match(allPrices,/id="online-memberships"/,'Pricing must include the separate online training memberships');
+assert.match(allPrices,/\$25/,'Pricing must include published video lesson rate');
+assert.match(read('sitemap.xml'),/fourpillarscombatives\.com\/pricing/,'Sitemap must include pricing page');
 assert.match(homepage,/Programs, services &amp; training formats/,
   'Homepage must distinguish offerings from training formats');
 assert.match(homepage,/Women’s self-defense is available by request/,
