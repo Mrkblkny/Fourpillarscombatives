@@ -60,7 +60,10 @@ jobs:
             ['index.html',body=>body.includes('20261109-ux-audit')&&body.includes('Explore Online Training')],
             ['assets/styles.css',body=>body.includes('animation:none!important')&&body.includes('body.menu-open{overflow:visible}')],
             ['assets/site.js',body=>body.includes('20261109-ux-audit')&&body.includes('setMenuOpen')],
-            ['assets/assistant.js',body=>body.includes('IDLE_MINIMIZE_MS=40_000')&&body.includes('COMPACT_LAUNCH_MS=10_000')]
+            ['assets/assistant.js',body=>body.includes('IDLE_MINIMIZE_MS=40_000')&&body.includes('COMPACT_LAUNCH_MS=10_000')],
+            ['pricing',body=>body.includes('id="online-memberships-heading">ONLINE <span class="red">TRAINING.')&&body.includes('id="foundingCurrentPrice"')&&body.includes('id="vipCurrentPrice"')&&body.includes('20261109-pricing-refresh')],
+            ['assets/marketing.css',body=>body.includes('.online-pricing-card .btn')],
+            ['assets/site.js',body=>body.includes("updatePublicPrice('foundingCurrentPrice'")&&body.includes("updatePublicPrice('vipCurrentPrice'")]
           ];
           for(let attempt=1;attempt<=12;attempt++){
             const results=await Promise.all(checks.map(async ([path,assertContent])=>{
