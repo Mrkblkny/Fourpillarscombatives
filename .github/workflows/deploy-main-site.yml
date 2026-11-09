@@ -8,6 +8,7 @@ on:
       - 'assets/**'
       - 'worker/**'
       - 'wrangler.toml'
+      - '_redirects'
       - 'tests/site-audit.mjs'
       - 'tests/assistant-audit.mjs'
       - '.github/workflows/deploy-main-site.yml'
@@ -77,4 +78,42 @@ jobs:
             if(attempt!==12)await new Promise(resolve=>setTimeout(resolve,5000));
           }
           assert.fail('The main site still serves old assets or could not be verified. Check Cloudflare Worker route and cache.');
+          NODE
+
+      - name: Verify seven retired blog articles redirect to matching live content
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          const base='https://fourpillarscombatives.com';
+          const redirects=[
+            ['/blog/f/why-choose-eskrima-for-real-world-defense','/private-lessons#eskrima-private-lessons'],
+            ['/blog/f/skill-fades-without-use-train-consistently','/training#skill-is-perishable'],
+            ['/blog/f/eskrima-vs-bjj-why-weapons-training-wins','/training#combat-sports-vs-self-defense'],
+            ['/f/why-train-for-self-defense','/training'],
+            ['/blog/f/why-you-must-train-for-everything-in-self-defense','/training#curriculum-skills'],
+            ['/blog/f/training-for-self-defense-why-it-has-to-be-different','/training#combat-sports-vs-self-defense'],
+            ['/blog/f/is-weapon-defense-useless-why-you-should-train','/training#close-range-and-firearms']
+          ];
+          for(let attempt=1;attempt<=10;attempt++){
+            const results=await Promise.all(redirects.map(async ([from,to])=>{
+              try{
+                const response=await fetch(base+from+'?audit='+Date.now()+'&try='+attempt,{
+                  redirect:'manual',cache:'no-store',signal:AbortSignal.timeout(12000)
+                });
+                const location=response.headers.get('location');
+                const actual=location&&new URL(location,base);
+                const wanted=new URL(to,base);
+                return response.status===301&&actual&&
+                  actual.pathname===wanted.pathname&&actual.hash===wanted.hash;
+              }catch{return false;}
+            }));
+            if(results.every(Boolean)){
+              console.log('PASS: all seven legacy blog URLs return expected 301 destinations.');
+              process.exit(0);
+            }
+            console.log('Legacy redirect propagation:',attempt+'/10',results.filter(x=>!x).length+' outstanding');
+            if(attempt<10)await new Promise(done=>setTimeout(done,5000));
+          }
+          assert.fail('Not all known legacy article redirects are live. Recheck Cloudflare assets redirects.');
           NODE
