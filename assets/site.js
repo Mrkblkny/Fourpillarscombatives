@@ -306,9 +306,9 @@
 (() => {
   if(location.pathname.startsWith('/online-training/'))return;
   const css=document.createElement('link');
-  css.rel='stylesheet';css.href='/assets/assistant.css?v=20261108-static-menu';
+  css.rel='stylesheet';css.href='/assets/assistant.css?v=20261109-ux-audit';
   document.head.appendChild(css);
-  import('/assets/assistant.js?v=20261108-static-menu')
+  import('/assets/assistant.js?v=20261109-ux-audit')
     .then(module=>module.mountVisitorAssistant())
     .catch(()=>{ /* A loading error must never interfere with site navigation. */ });
 })();
