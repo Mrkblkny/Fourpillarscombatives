@@ -101,21 +101,26 @@ const legacyRedirects=new Map([
   ['/f/why-train-for-self-defense','/training'],
   ['/blog/f/why-you-must-train-for-everything-in-self-defense','/training#curriculum-skills'],
   ['/blog/f/training-for-self-defense-why-it-has-to-be-different','/training#combat-sports-vs-self-defense'],
-  ['/blog/f/is-weapon-defense-useless-why-you-should-train','/training#close-range-and-firearms']
+  ['/blog/f/is-weapon-defense-useless-why-you-should-train','/training#close-range-and-firearms'],
+  ['/four-pillars-combatives-1','/'],
+  ['/four-pillars-combatives','/'],
+  ['/page/Programs','/programs'],
+  ['/full-list-of-our-programs','/programs'],
+  ['/blog/f/scenario-training-key-to-real-world-self-defense','/training#curriculum-skills']
 ]);
 const redirects=read('_redirects');
 for(const [source,target] of legacyRedirects){
   assert.ok(redirects.split('\n').some(line=>line===source+' '+target+' 301'),
     'Missing specific 301 redirect for '+source);
   const [destination,hash]=target.split('#');
-  const page=destination.slice(1)+'.html';
+  const page=destination==='/'?'index.html':destination.slice(1)+'.html';
   assert.ok(existsSync(resolve(root,page)),'Missing new destination '+destination);
   if(hash) assert.ok(idsFor.get(page)?.has(hash),
     'Legacy blog redirects must point to an existing current section: '+target);
 }
 assert.doesNotMatch(redirects,/^\/m\/(?:account|create|reset)\s/m,
   'Legacy account URLs must not be redirected to unrelated new membership accounts');
-console.log('PASS: 7 retired blog links map to relevant current content; old account routes unchanged.');
+console.log('PASS: 12 retired URLs map to relevant current pages; old account routes unchanged.');
 
 const programs=read('programs.html');
 assert.match(programs,/Programs &amp; services · Pearl, Jackson Metro &amp; online/,'Program directory must distinguish offered programs and training formats');
