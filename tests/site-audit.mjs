@@ -90,6 +90,33 @@ assert.match(siteJs,/nav\.classList\.remove\('open'\)/,
   'Outside-click close must collapse the mobile menu');
 
 
+
+ 
+// Old blog links reported in Google Search Console (Nov 7) should lead to
+// matching current material, not a generic homepage or a new account login.
+const legacyRedirects=new Map([
+  ['/blog/f/why-choose-eskrima-for-real-world-defense','/private-lessons#eskrima-private-lessons'],
+  ['/blog/f/skill-fades-without-use-train-consistently','/training#skill-is-perishable'],
+  ['/blog/f/eskrima-vs-bjj-why-weapons-training-wins','/training#combat-sports-vs-self-defense'],
+  ['/f/why-train-for-self-defense','/training'],
+  ['/blog/f/why-you-must-train-for-everything-in-self-defense','/training#curriculum-skills'],
+  ['/blog/f/training-for-self-defense-why-it-has-to-be-different','/training#combat-sports-vs-self-defense'],
+  ['/blog/f/is-weapon-defense-useless-why-you-should-train','/training#close-range-and-firearms']
+]);
+const redirects=read('_redirects');
+for(const [source,target] of legacyRedirects){
+  assert.ok(redirects.split('\\n').some(line=>line===source+' '+target+' 301'),
+    'Missing specific 301 redirect for '+source);
+  const [destination,hash]=target.split('#');
+  const page=destination.slice(1)+'.html';
+  assert.ok(existsSync(resolve(root,page)),'Missing new destination '+destination);
+  if(hash) assert.ok(idsFor.get(page)?.has(hash),
+    'Legacy blog redirects must point to an existing current section: '+target);
+}
+assert.doesNotMatch(redirects,/^\\/m\\/(?:account|create|reset)\\s/m,
+  'Legacy account URLs must not be redirected to unrelated new membership accounts');
+console.log('PASS: 7 retired blog links map to relevant current content; old account routes unchanged.');
+
 const programs=read('programs.html');
 assert.match(programs,/Programs &amp; services · Pearl, Jackson Metro &amp; online/,'Program directory must distinguish offered programs and training formats');
 assert.match(programs,/06 \/ ONLINE TRAINING · PUBLIC BETA/,'Online Training should be a sixth program');
