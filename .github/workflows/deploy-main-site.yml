@@ -8,6 +8,8 @@ on:
       - 'assets/**'
       - 'worker/**'
       - 'wrangler.toml'
+      - 'tests/site-audit.mjs'
+      - 'tests/assistant-audit.mjs'
       - '.github/workflows/deploy-main-site.yml'
   workflow_dispatch:
 
