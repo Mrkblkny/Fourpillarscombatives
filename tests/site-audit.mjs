@@ -76,8 +76,10 @@ assert.ok(!siteJs.includes('Online Member Login & Dashboard'),
 assert.match(home,/class="fpc-online-start" aria-label="How online training works"/,
   'Homepage must explain joining, using video/PDF lessons, and authorized community access');
 assert.match(home,/Free account|free account/i,'Homepage must mention free registration');
-assert.match(home,/Community features depend on your membership permissions/,
-  'Homepage must explain feature permissions without promising universal access');
+assert.match(home,/Free Community Hub access:/,
+  'Homepage must clearly advertise free community access');
+assert.match(home,/Events &amp; Seminars, Private Messaging, and Find Training Partners/,
+  'Homepage must name the three free Community Hub features');
 assert.match(siteJs,/document\.addEventListener\('pointerdown'/,
   'Mobile navigation should dismiss when someone taps outside the open menu');
 assert.match(siteJs,/const closeSubmenus=\(\)=>\{/,
@@ -205,15 +207,15 @@ assert.match(homepage,/Recognize danger\. Avoid unnecessary confrontation\. Defe
 assert.match(homepage,/<li><span>02<\/span>Empty-Hand Fighting in a Weapons Environment<\/li>/,
   'Online Training preview on homepage must show Section 2 full title');
 assert.ok(homepage.includes('id="online-member-community"'), 'Homepage must describe community features');
-for(const term of ['Community discussions','Training partners &amp; activities',
+for(const term of ['Paid-member discussions','Included with free registration',
   'Membership-based access','Free, admin-assigned Member, Founding, and VIP accounts',
   'One paid membership is enough']){
   assert.ok(homepage.includes(term), 'Homepage missing essential community explanation '+term);
 }
-assert.match(homepage,/Your account shows only the community features enabled for your membership/,
+assert.match(homepage,/Your signed-in account shows only the features available to you/,
   'Homepage must describe permission-controlled community navigation');
-assert.match(homepage,/Opt into the member directory/,
-  'Homepage must describe optional directory and partner privacy');
+assert.match(homepage,/opted-in training partners by general area/,
+  'Homepage must describe opt-in partner privacy and general-area discovery');
 assert.match(read('programs.html'),/a permanent verified VIP Founding Member badge/,
   'Programs should explain the permanent verified VIP badge');
 assert.ok(homepage.indexOf('Programs, services &amp; training formats')<homepage.indexOf('id="online-training"'),
