@@ -105,7 +105,7 @@ const legacyRedirects=new Map([
 ]);
 const redirects=read('_redirects');
 for(const [source,target] of legacyRedirects){
-  assert.ok(redirects.split('\\n').some(line=>line===source+' '+target+' 301'),
+  assert.ok(redirects.split('\n').some(line=>line===source+' '+target+' 301'),
     'Missing specific 301 redirect for '+source);
   const [destination,hash]=target.split('#');
   const page=destination.slice(1)+'.html';
@@ -113,7 +113,7 @@ for(const [source,target] of legacyRedirects){
   if(hash) assert.ok(idsFor.get(page)?.has(hash),
     'Legacy blog redirects must point to an existing current section: '+target);
 }
-assert.doesNotMatch(redirects,/^\\/m\\/(?:account|create|reset)\\s/m,
+assert.doesNotMatch(redirects,/^\/m\/(?:account|create|reset)\s/m,
   'Legacy account URLs must not be redirected to unrelated new membership accounts');
 console.log('PASS: 7 retired blog links map to relevant current content; old account routes unchanged.');
 
