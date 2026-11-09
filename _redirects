@@ -15,3 +15,15 @@
 /contact-us /contact 301
 /personal-trainer /personal-training 301
 /workshops /seminars 301
+
+# Legacy blog posts consolidated into relevant current curriculum or services.
+/blog/f/why-choose-eskrima-for-real-world-defense /private-lessons#eskrima-private-lessons 301
+/blog/f/skill-fades-without-use-train-consistently /training#skill-is-perishable 301
+/blog/f/eskrima-vs-bjj-why-weapons-training-wins /training#combat-sports-vs-self-defense 301
+/f/why-train-for-self-defense /training 301
+/blog/f/why-you-must-train-for-everything-in-self-defense /training#curriculum-skills 301
+/blog/f/training-for-self-defense-why-it-has-to-be-different /training#combat-sports-vs-self-defense 301
+/blog/f/is-weapon-defense-useless-why-you-should-train /training#close-range-and-firearms 301
+
+# The former /m/account, /m/create and /m/reset account endpoints are not
+# equivalents of the new training platform's account system. Do not redirect.
