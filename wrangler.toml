@@ -14,11 +14,10 @@ run_worker_first = ["/api/visitor-assistant"]
 [ai]
 binding = "AI"
 
-# Stores only anonymous question categories such as "classes" and "women".
-# No question text, emails, IP addresses or account data are stored.
-[[analytics_engine_datasets]]
-binding = "VISITOR_ASSISTANT_INSIGHTS"
-dataset = "fpc_visitor_questions"
+# Optional category-only visitor insights are currently disabled because this
+# Cloudflare account has not enabled Workers Analytics Engine (error 10089).
+# The Worker checks the binding before writing, so the guided assistant still
+# operates without analytics. Re-enable only after account-level approval.
 
 # An approximate rate limit protects the public assistant and AI usage.
 [[ratelimits]]
