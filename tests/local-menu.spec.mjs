@@ -25,15 +25,31 @@ for(const viewport of sizes){
       expect(header.y).toBeLessThan(6);
       await toggle.click();
       await expect(page.locator('.nav-links')).toHaveClass(/open/);
+      // Regression: tapping the menu partway down a long page must not
+      // cause the entire top bar to vanish or jump out of the viewport.
+      const afterHeader=await page.locator('.site-header').boundingBox();
+      expect(afterHeader).not.toBeNull();
+      expect(afterHeader.y).toBeGreaterThanOrEqual(2);
+      expect(afterHeader.y).toBeLessThanOrEqual(6);
+      expect(afterHeader.height).toBeGreaterThanOrEqual(viewport.width<=890?77:93);
+      await expect(toggle).toBeVisible();
+      await expect(toggle).toHaveAttribute('aria-expanded','true');
       const after=await page.evaluate(()=>scrollY);
       expect(Math.abs(after-before)).toBeLessThan(5);
       const nav=page.locator('.nav-links');
       await expect(nav).toBeVisible();
+      const menuBox=await nav.boundingBox();
+      expect(menuBox.y).toBeGreaterThanOrEqual(afterHeader.y+afterHeader.height-2);
+      expect(menuBox.y).toBeLessThan(viewport.height);
       await nav.locator('summary').click();
       await expect(nav.locator('.nav-dropdown')).toHaveAttribute('open','');
       await page.keyboard.press('Escape');
       await expect(nav).not.toHaveClass(/open/);
       await expect(toggle).toHaveAttribute('aria-expanded','false');
+      await expect(toggle).toBeVisible();
+      const closedHeader=await page.locator('.site-header').boundingBox();
+      expect(closedHeader.y).toBeGreaterThanOrEqual(2);
+      expect(closedHeader.y).toBeLessThanOrEqual(6);
       expect(errors).toEqual([]);
     });
   });
