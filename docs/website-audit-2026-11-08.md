@@ -35,3 +35,28 @@ No database migrations, live payments, membership purchases, prices, tax setting
 First complete read-only authenticated mobile journeys for every membership level and admin, then exercise Account saves, privacy opt-ins, support requests, video feedback and moderation with explicitly authorized **TEST** accounts. Test any charge/refund/webhook only in Stripe Sandbox. Review the Supabase leaked-password protection setting and verify real contact form delivery with a carefully labeled test inquiry.
 
 **Relevant merged changes:** Training [#71](https://github.com/Mrkblkny/Four-Pillars-Online-Training-/pull/71); Main-site QA [#14](https://github.com/Mrkblkny/Fourpillarscombatives/pull/14) and runner compatibility [#15](https://github.com/Mrkblkny/Fourpillarscombatives/pull/15).
+
+
+## Follow-up implementation — November 8, 2026 (main website and member UX)
+
+### Main website implementation
+- Updated homepage primary choices to **Request a Free Intro Lesson** and **Explore Online Training**. Seminar booking still appears in main navigation and its own service page.
+- Updated asset-version query strings for all ten marketing HTML pages and visitor assistant imports to `20261109-ux-audit`. This prevents old cached menu and assistant JS/CSS from persisting after the main Worker is actually deployed.
+- Added `.github/workflows/deploy-main-site.yml`, a source-validated Wrangler deployment of the **existing** `fourpillarscombatives` Worker only. This does not edit the separate `/online-training/*` routing Worker or its Pages deployment.
+- **Unresolved production blocker:** the first deploy workflow run [42538950588](https://github.com/Mrkblkny/Fourpillarscombatives/actions/runs/42538950588) failed at the *private Cloudflare credentials* step, **before deployment**. One or both required GitHub Actions secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` must be configured in the repository settings. Use a token scoped to the existing Worker. Do not paste either secret into a chat or commit them in source code.
+- As a result the main website's latest live [browser audit run 42538950603](https://github.com/Mrkblkny/Fourpillarscombatives/actions/runs/42538950603) remains failing due to stale deployed menu/assistant assets. Source checks pass. **Do not claim the live menu or idle assistant are fixed until deployment succeeds and the browser audit passes**.
+
+### Portal, Community Hub, and Admin Dashboard implementation
+- Member Dashboard: **Continue Training / next lesson appears first** in the page and mobile reading order, with the profile overview second. The loading banner and repeating mobile logo were previously compacted.
+- Member Dashboard: independent Community permission information, instructor updates, and support-request history now load concurrently. Server-side entitlement checks and individual error handling remain in place.
+- Community Hub: Home shortcuts lead with **Browse discussions**, then **Explore groups** when enabled. My Account stays available; disabled features are never offered.
+- Admin Dashboard: **Manage students** is the first overview shortcut, ahead of lesson organization, member preview, and announcements. It retains the existing per-student access summaries and safe edit flow.
+- Added/updated unit and browser regression checks for the member layout, Community shortcuts and concurrent member loading. Production-readiness now verifies the `data-layout="next-lesson-first"` marker and the Admin `Manage students` label in deployed HTML.
+- No changes were made to any customer's membership, permissions, purchases, payments, lesson progress, database tables, or Stripe settings.
+
+### Remaining verification
+1. Configure private Cloudflare CI credentials and run the main Worker deployment workflow; rerun the public mobile/desktop browser audit to confirm all six previously failing checks pass.
+2. Confirm the training portal's **latest** build tests and Cloudflare readiness run after its final code changes, rather than relying on earlier commit checks.
+3. Use authorized **TEST** student and admin accounts for signed-in browser journeys (Free, Member, Founding, VIP, Admin). No five-account live authenticated run has been completed.
+4. Verify real contact-form email delivery separately, without generating unsolicited messages.
+5. Review Supabase leaked-password protection in Auth settings. Production health advisor reports no findings; intentional server-only RLS/no-policy informational lints should not be fixed by granting broad browser access.
