@@ -128,8 +128,8 @@ const programs=read('programs.html');
 assert.match(programs,/Programs &amp; services · Pearl, Jackson Metro &amp; online/,'Program directory must distinguish offered programs and training formats');
 assert.match(programs,/06 \/ ONLINE TRAINING · PUBLIC BETA/,'Online Training should be a sixth program');
 assert.match(programs,/Founding lifetime prices rise by tier/,'Program link must explain pricing progression');
-assert.match(programs,/Women’s self-defense is a specialized program we offer/,
-  'Women’s self-defense must be described as an offered program, not a training format');
+assert.match(programs,/Women’s self-defense is available by request through private lessons, small-group lessons, seminars, and workshops/,
+  'Programs must list all four women’s self-defense booking formats');
 assert.match(programs,/02 \/ WOMEN’S SELF-DEFENSE PROGRAM/,
   'Women’s self-defense program card must be labeled correctly');
 assert.ok(!programs.includes('Six ways to train')&&!programs.includes('Explore six training options'),
@@ -182,6 +182,19 @@ assert.match(homepage,/Programs, services &amp; training formats/,
   'Homepage must distinguish offerings from training formats');
 assert.match(homepage,/Women’s self-defense is available by request/,
   'Homepage must explain how the women’s self-defense program is offered');
+for(const [path,pattern] of [
+  ['index.html',/By request · Private lessons · Small groups · Seminars · Workshops/],
+  ['programs.html',/By request · Private lessons · Small groups · Seminars · Workshops/],
+  ['womens-self-defense.html',/private lessons, small-group lessons, seminars, and workshops/],
+  ['contact.html',/Women’s Self-Defense is available by request through private lessons, small-group lessons, seminars, and workshops/],
+  ['about.html',/by request through private lessons, small-group lessons, seminars, and workshops/],
+  ['assets/assistant-knowledge.js',/available by request through private lessons, small-group lessons, seminars, and workshops/]
+]){
+  assert.match(read(path),pattern,path+' must list all four women’s self-defense options');
+}
+assert.match(read('womens-self-defense.html'),/FOUR WAYS <span class="red">TO BOOK/, 'Women’s page must show four formats');
+assert.match(read('contact.html'),/value="Women's Self-Defense Small Group"/,'Contact form must include small-group women’s lessons');
+assert.ok(!read('womens-self-defense.html').includes('independent small-group program'), 'Do not falsely exclude small groups');
 assert.match(homepage,/02 \/ WOMEN’S SELF-DEFENSE PROGRAM/,
   'Homepage must label women’s self-defense as a specialized program');
 assert.ok(!homepage.includes('<span class="eyebrow">Ways to train</span>'),
