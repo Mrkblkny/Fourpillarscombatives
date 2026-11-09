@@ -84,3 +84,34 @@ body{background:#090c0d}
   .site-header,.site-header .header-inner,.site-header .nav-links{max-width:100%}
   .site-header .nav-links{overflow-x:clip}
 }
+
+/* The compact menu uses a viewport-fixed header rather than a sticky header.
+   Some mobile browsers drop sticky header layers when their scrollable,
+   absolutely positioned menu is expanded partway down a long page.
+   Keep the 4px mission stripe and reserve the exact header height in the
+   document so opening the menu never moves the page content or scroll Y. */
+@media(max-width:1380px){
+  body{padding-top:98px}
+  .topline{position:fixed;inset:0 0 auto;height:4px;z-index:2001;pointer-events:none}
+  .site-header{
+    position:fixed;
+    top:4px;left:0;right:0;width:100%;
+    z-index:2000;
+    -webkit-backdrop-filter:none;
+    backdrop-filter:none;
+  }
+  .site-header .nav-links{
+    top:100%;
+    min-height:0;
+    max-height:calc(100vh - 98px);
+    max-height:calc(100dvh - 98px);
+  }
+}
+@media(max-width:890px){
+  body{padding-top:82px}
+  .site-header .nav-links{
+    top:100%;
+    max-height:calc(100vh - 82px);
+    max-height:calc(100dvh - 82px);
+  }
+}
