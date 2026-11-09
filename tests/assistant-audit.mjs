@@ -110,7 +110,10 @@ assert.match(ui,/launcher\.setAttribute\('aria-label'/);
 assert.match(wrangler,/main = "worker\/index\.js"/);
 assert.match(wrangler,/run_worker_first = \["\/api\/visitor-assistant"\]/);
 assert.match(wrangler,/VISITOR_ASSISTANT_LIMITER/);
-assert.match(wrangler,/VISITOR_ASSISTANT_INSIGHTS/);
+assert.doesNotMatch(wrangler,/^\s*\[\[analytics_engine_datasets\]\]/m,
+  'Visitor insights remain optional until Analytics Engine is enabled in Cloudflare');
+assert.match(server,/VISITOR_ASSISTANT_INSIGHTS\?\.writeDataPoint/,
+  'Visitor assistant must safely work without optional analytics');
 assert.match(server,/ASSISTANT_AI_ENABLED/);
 assert.ok(!server.includes('console.log(question)'));
 console.log('PASS: reviewed answers, no-cost default, AI activation, request validation, rate limits, analytics privacy and public FAQ.');
