@@ -80,7 +80,7 @@ jobs:
           assert.fail('The main site still serves old assets or could not be verified. Check Cloudflare Worker route and cache.');
           NODE
 
-      - name: Verify seven retired blog articles redirect to matching live content
+      - name: Verify twelve retired legacy URLs redirect to matching live content
         shell: bash
         run: |
           node --input-type=module <<'NODE'
@@ -93,7 +93,12 @@ jobs:
             ['/f/why-train-for-self-defense','/training'],
             ['/blog/f/why-you-must-train-for-everything-in-self-defense','/training#curriculum-skills'],
             ['/blog/f/training-for-self-defense-why-it-has-to-be-different','/training#combat-sports-vs-self-defense'],
-            ['/blog/f/is-weapon-defense-useless-why-you-should-train','/training#close-range-and-firearms']
+            ['/blog/f/is-weapon-defense-useless-why-you-should-train','/training#close-range-and-firearms'],
+            ['/four-pillars-combatives-1','/'],
+            ['/four-pillars-combatives','/'],
+            ['/page/Programs','/programs'],
+            ['/full-list-of-our-programs','/programs'],
+            ['/blog/f/scenario-training-key-to-real-world-self-defense','/training#curriculum-skills']
           ];
           for(let attempt=1;attempt<=10;attempt++){
             const results=await Promise.all(redirects.map(async ([from,to])=>{
@@ -109,11 +114,11 @@ jobs:
               }catch{return false;}
             }));
             if(results.every(Boolean)){
-              console.log('PASS: all seven legacy blog URLs return expected 301 destinations.');
+              console.log('PASS: all twelve legacy URLs return expected 301 destinations.');
               process.exit(0);
             }
             console.log('Legacy redirect propagation:',attempt+'/10',results.filter(x=>!x).length+' outstanding');
             if(attempt<10)await new Promise(done=>setTimeout(done,5000));
           }
-          assert.fail('Not all known legacy article redirects are live. Recheck Cloudflare assets redirects.');
+          assert.fail('Not all known legacy site redirects are live. Recheck Cloudflare assets redirects.');
           NODE
