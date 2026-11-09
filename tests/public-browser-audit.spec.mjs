@@ -3,7 +3,7 @@
 import {test,expect} from '@playwright/test';
 
 const base='https://fourpillarscombatives.com';
-const pages=['/','/about','/lessons','/programs','/training',
+const pages=['/','/about','/lessons','/pricing','/programs','/training',
   '/private-lessons','/womens-self-defense','/seminars',
   '/personal-training','/contact'];
 const portalPages=['/online-training/','/online-training/community/',
@@ -72,6 +72,31 @@ for(const [viewportName,viewport] of Object.entries(viewports)){
 
 test.describe('mobile public menus',()=>{
   test.use({viewport:viewports.mobile,colorScheme:'dark'});
+  test('Online Training pricing cards keep text above usable buttons on mobile',async({page})=>{
+    await page.goto(base+'/pricing',{waitUntil:'load'});
+    await expect(page.locator('#online-memberships-heading')).toContainText('ONLINE');
+    const cards=page.locator('#online-memberships .online-pricing-card');
+    await expect(cards).toHaveCount(3);
+    for(const card of await cards.all()){
+      const positions=await card.evaluate(node=>{
+        const description=node.querySelector('p')?.getBoundingClientRect();
+        const action=node.querySelector('a.btn')?.getBoundingClientRect();
+        const container=node.getBoundingClientRect();
+        return description&&action?{
+          spacing:action.top-description.bottom,
+          actionWithin:action.bottom<=container.bottom+2,
+          actionWidth:action.width,
+          cardWidth:container.width
+        }:null;
+      });
+      expect(positions).not.toBeNull();
+      expect(positions.spacing,'Text must not overlap CTA').toBeGreaterThanOrEqual(8);
+      expect(positions.actionWithin,'CTA must stay inside its card').toBe(true);
+      expect(positions.actionWidth,'CTA needs a usable width').toBeGreaterThan(160);
+      expect(positions.actionWidth,'CTA should not exceed card width').toBeLessThanOrEqual(positions.cardWidth+2);
+    }
+    await checkResponsive(page,'mobile Online Training pricing');
+  });
   test('main website hamburger opens and closes with Escape',async({page})=>{
     await page.goto(base+'/',{waitUntil:'domcontentloaded'});
     const toggle=page.locator('.menu-toggle');
