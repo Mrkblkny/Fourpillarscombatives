@@ -307,4 +307,17 @@ for (const name of pages) {
     if(selected)assert.ok(services.includes(selected),name+': inquiry service not in form: '+selected);
   }
 }
+// New visitor clarity requirements: show real training choices immediately,
+// keep paid Free/Founding/VIP details in the authorized online portal.
+const fourPaths=[...homepage.matchAll(/class="start-path-card(?: start-path-online)?"/g)];
+assert.equal(fourPaths.length,4,'Homepage must show four clear training options');
+assert.ok(homepage.indexOf('id="start-paths-title"')<homepage.indexOf('id="online-training"'),
+  'Visitors should discover their training path without scrolling into long program copy');
+for(const label of ['Group Classes','Private Lessons','Host a Seminar','Online Training'])
+  assert.ok(homepage.includes('<h3>'+label+'</h3>'),label+' training option must be easy to find');
+for(const p of pages){
+  const html=read(p+'.html');
+  assert.match(html,/styles\.css\?v=20261110-clear-training-choices/,p+': updated legible styles must not be cached indefinitely');
+  assert.match(html,/tactical\.css\?v=20261110-clear-training-choices/,p+': updated layout must not be cached indefinitely');
+}
 console.log('PASS: '+pages.length+' pages, '+checked+' internal URLs/assets, fragments, metadata, Facebook icons, training link, and inquiry routing.');
