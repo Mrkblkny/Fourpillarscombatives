@@ -140,6 +140,29 @@ test.describe('mobile public menus',()=>{
 });
 
 
+// Verify the entire real visitor conversion path after both Cloudflare
+// deployments. No account is submitted and no purchase is attempted.
+test.describe('Live free registration entry',()=>{
+  test.use({viewport:viewports.mobile,colorScheme:'dark'});
+  test('main website free account CTA reaches the signup form without another sales page',async({page})=>{
+    const errors=[];
+    page.on('pageerror',error=>errors.push(error.message));
+    await page.goto(base+'/',{waitUntil:'domcontentloaded'});
+    const cta=page.locator('#online-training .fpc-online-actions a.btn');
+    await expect(cta).toHaveAttribute('href','/online-training/?register=1');
+    await expect(page.locator('#online-training .fpc-online-compare'))
+      .toHaveAttribute('href','/online-training/#membership');
+    await cta.click();
+    await expect(page).toHaveURL(base+'/online-training/?register=1');
+    await expect(page.locator('#accountView')).toBeVisible({timeout:30000});
+    await expect(page.locator('#signupNameField')).toBeVisible();
+    await expect(page.locator('#signupNoCardNotice')).toBeVisible();
+    await expect(page.locator('#authSubmit')).toHaveText('Create account');
+    await checkResponsive(page,'free registration');
+    expect(errors).toEqual([]);
+  });
+});
+
 // The assistant is supplementary. It must not cover the page with an
 // uncloseable modal, overflow narrow phones or send payment/member actions.
 for(const [name,viewport] of [['phone',viewports.mobile],['desktop',viewports.desktop]]){
