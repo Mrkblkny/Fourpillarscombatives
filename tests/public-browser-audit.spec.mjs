@@ -157,7 +157,18 @@ test.describe('Live free registration entry',()=>{
     await expect(page.locator('#accountView')).toBeVisible({timeout:30000});
     await expect(page.locator('#signupNameField')).toBeVisible();
     await expect(page.locator('#signupNoCardNotice')).toBeVisible();
+    await expect(page.locator('#signupSourceField')).toBeVisible();
+    await expect(page.locator('#signupSource')).toHaveValue('unknown');
     await expect(page.locator('#authSubmit')).toHaveText('Create account');
+    // A rejected event cannot change analytics totals. The route must exist
+    // and enforce input validation, and private reports require admin login.
+    const rejected=await page.request.post(base+'/online-training/api/marketing-visit',{
+      headers:{origin:new URL(base).origin},
+      data:{step:'checkout',source:'facebook'}
+    });
+    expect(rejected.status()).toBe(400);
+    const privateReport=await page.request.get(base+'/online-training/api/admin/marketing-funnel');
+    expect(privateReport.status()).toBe(401);
     await checkResponsive(page,'free registration');
     expect(errors).toEqual([]);
   });
