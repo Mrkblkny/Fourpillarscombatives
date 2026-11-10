@@ -283,6 +283,13 @@ assert.match(js,/toggle\.setAttribute\('aria-label',open\?'Close menu':'Open men
   'Mobile menu must update its accessible button label when opening or closing');
 assert.doesNotMatch(js,/document\.body\.classList\.toggle\('menu-open'/,
   'Opening navigation must never lock body overflow and break sticky navigation');
+// Keep the primary homepage logo proportional and comfortably sized on phones.
+assert.match(homepage,/body \.hero \.hero-emblem\s*\{[\s\S]*?width:min\(100%,340px\)/,
+  'Homepage hero logo should have a modest desktop maximum width');
+assert.match(homepage,/body \.hero \.hero-emblem\{width:clamp\(175px,48vw,235px\)\}/,
+  'Homepage logo must scale down on mobile without distortion');
+assert.match(homepage,/object-fit:contain;/,
+  'Homepage image must preserve the original logo proportions');
 const css=read('assets/styles.css');
 assert.match(css,/body\.menu-open\{overflow:visible\}/,
   'Body overflow must remain stable when the mobile menu opens');
