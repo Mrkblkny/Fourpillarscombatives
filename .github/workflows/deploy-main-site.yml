@@ -9,6 +9,7 @@ on:
       - 'worker/**'
       - 'wrangler.toml'
       - '_redirects'
+      - '_headers'
       - 'tests/site-audit.mjs'
       - 'tests/assistant-audit.mjs'
       - '.github/workflows/deploy-main-site.yml'
