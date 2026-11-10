@@ -1,0 +1,12 @@
+# Cloudflare Workers static assets security headers.
+# Applied to the public website's static assets only, not Worker-generated responses.
+# The Online Training Pages app maintains its own headers under its private repo.
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Content-Security-Policy: frame-ancestors 'self'
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Strict-Transport-Security: max-age=86400
+  X-DNS-Prefetch-Control: off
+  X-Permitted-Cross-Domain-Policies: none
