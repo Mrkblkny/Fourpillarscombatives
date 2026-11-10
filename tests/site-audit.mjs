@@ -78,6 +78,12 @@ assert.match(home,/class="fpc-online-start" aria-label="How online training work
 assert.match(home,/Free account|free account/i,'Homepage must mention free registration');
 assert.match(home,/Free Community Hub access:/,
   'Homepage must clearly advertise free community access');
+assert.match(home,/href="\/online-training\/\?register=1">Create Your Free Student Account/,
+  'Homepage free-registration CTA should open the actual signup form');
+assert.match(home,/href="\/online-training\/#membership">Compare Founding &amp; VIP Memberships/,
+  'Paid membership comparison should remain a separate optional path');
+assert.match(siteJs,/if\(link\)link\.textContent='Create Your Free Student Account/,
+  'Refreshing live pricing should not change the free-registration CTA into a paid purchase pitch');
 assert.match(home,/Events &amp; Seminars, Private Messaging, and Find Training Partners/,
   'Homepage must name the three free Community Hub features');
 assert.match(siteJs,/document\.addEventListener\('pointerdown'/,
