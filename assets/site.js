@@ -1,3 +1,22 @@
+// Preserve a broad marketing source for this browser tab while visitors move
+// from the public site to Online Training. Nothing is sent to analytics here:
+// no cookies, profiles, identifiers, full referral URLs or browsing history.
+(()=>{
+  try{
+    if(navigator.globalPrivacyControl===true||navigator.doNotTrack==='1')return;
+    const utm=new URLSearchParams(location.search).get('utm_source')||'';
+    const text=utm.toLowerCase();
+    let source=/facebook|fb|instagram|meta/.test(text)?'facebook':
+      /google|bing|search/.test(text)?'google':null;
+    if(!source && document.referrer){
+      const host=new URL(document.referrer).hostname.toLowerCase();
+      if(/(^|\.)(facebook|fb|instagram|l\.facebook)\.com$/.test(host))source='facebook';
+      else if(/(^|\.)(google|bing)\.[a-z.]+$/.test(host))source='google';
+    }
+    if(source)sessionStorage.setItem('fpc_marketing_source',source);
+  }catch{/* Analytics never blocks the public site. */}
+})();
+
 // Keep an unobtrusive admin sign-in link in the public footer on every page.
 // This is navigation only; all administrator APIs independently require authorization.
 (() => {
