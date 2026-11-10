@@ -28,8 +28,8 @@ for (const name of pages) {
     file+': missing keyboard skip navigation');
   assert.match(html,/<main id="main">/i,file+': keyboard skip target missing');
   assert.match(html,/facebook-header-link/,file+': missing header Facebook icon');
-  assert.ok(html.includes('href="/assets/tactical.css?v=20261109-fixed-header"'),
-    file+': header fix stylesheet must have a fresh asset URL');
+  assert.match(html,/href="\/assets\/tactical\.css\?v=20261110-clear-training-choices"/,
+    file+': the fixed-header and new readable layout must use a fresh asset URL');
   assert.match(html,/class="nav-online" href="\/online-training\/"/,file+': online training must be visible in navigation');
   assert.match(html,/Online Training — Free Registration/,file+': online training must be available in footer');
   if(name!=='index')assert.match(html,/online-site-ribbon/,file+': online training announcement must be present');
