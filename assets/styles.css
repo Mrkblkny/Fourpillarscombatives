@@ -236,3 +236,15 @@ body.menu-open{overflow:visible}
     min-height:0;
   }
 }
+
+/* Global reading clarity — keep the tactical look without tiny body copy. */
+:root{--muted:#bbc5cc}
+body{font-size:16px;line-height:1.7}
+.service-card p:not(.service-meta),.feature p,.step p,.price-card p,
+.event-choice p,.travel-card p,.site-footer p{font-size:.94rem;line-height:1.7}
+.service-meta{font-size:.92rem!important;line-height:1.55!important}
+.faq details p,.feature ul,.bullets li{font-size:.96rem;line-height:1.72}
+.service-card .btn-text,.btn-text{font-size:.83rem;line-height:1.5}
+.contact-link small,.footer-links a{font-size:.92rem}
+p,li{overflow-wrap:break-word}
+h1,h2,h3,h4{overflow-wrap:break-word}
