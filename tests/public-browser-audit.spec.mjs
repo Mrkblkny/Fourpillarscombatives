@@ -153,7 +153,7 @@ test.describe('Live free registration entry',()=>{
     await expect(page.locator('#online-training .fpc-online-compare'))
       .toHaveAttribute('href','/online-training/#membership');
     await cta.click();
-    await expect(page).toHaveURL(/\\/online-training\\/\\?register=1$/);
+    await expect(page).toHaveURL(base+'/online-training/?register=1');
     await expect(page.locator('#accountView')).toBeVisible({timeout:30000});
     await expect(page.locator('#signupNameField')).toBeVisible();
     await expect(page.locator('#signupNoCardNotice')).toBeVisible();
