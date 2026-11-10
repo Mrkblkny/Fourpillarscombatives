@@ -67,6 +67,10 @@ const home=read('index.html');
 assert.doesNotMatch(home,/fpc-member-login/,
   'Homepage must not duplicate Member Login outside the navigation');
 const siteJs=read('assets/site.js');
+assert.match(siteJs,/sessionStorage\.setItem\('fpc_marketing_source',source\)/,
+  'The public website should pass broad referral attribution to Online Training in the same browser session');
+assert.doesNotMatch(siteJs,/localStorage\.setItem\('fpc_marketing_source'/,
+  'Referral attribution should not create a permanent marketing identifier');
 assert.match(siteJs,/member\.textContent = 'Member Login'/,
   'Main navigation should use exactly one Member Login');
 assert.match(siteJs,/member\.href = '\/online-training\/\?login=1'/,
