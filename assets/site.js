@@ -59,7 +59,9 @@
       if(note)note.textContent=enrollmentOpen
         ?'Choose one paid membership—not both. '+offerText+'. Prices increase by tier. The training library remains in beta as lessons are added.'
         :'Create a free student account now. Review Founding and VIP options and current enrollment status in the portal. New lessons and PDFs are added during beta.';
-      if(link)link.textContent=enrollmentOpen?'View Online Training & Enroll ↗':'Explore Online Training & Register Free ↗';
+      // Free registration is always the primary action; paid offers remain
+      // discoverable through the separate comparison link.
+      if(link)link.textContent='Create Your Free Student Account ↗';
     })
     .catch(()=>{ /* Stay with static safe pre-launch copy if unavailable. */ });
 })();
