@@ -194,11 +194,24 @@ for(const [label,viewport] of [
   test.describe(label,()=>{
     test.use({viewport,colorScheme:'dark'});
     test('hamburger works midway down the homepage and closes predictably',async({page})=>{
-      await page.goto(base+'/',{waitUntil:'domcontentloaded'});
+      // Wait for layout-affecting assets before testing scroll stability.
+      // A late font/image load can adjust scroll anchoring by hundreds of pixels,
+      // which is unrelated to opening the navigation menu.
+      await page.goto(base+'/',{waitUntil:'load'});
+      await page.evaluate(async()=>{
+        await document.fonts?.ready;
+        await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+      });
       await page.evaluate(()=>window.scrollTo(0,Math.floor(document.body.scrollHeight*0.55)));
       await expect.poll(()=>page.evaluate(()=>window.scrollY)).toBeGreaterThan(300);
       const previousY=await page.evaluate(()=>window.scrollY);
       const toggle=page.locator('.menu-toggle');
+      // Confirm the header is already onscreen, avoiding Playwright's own
+      // scroll-to-click behavior from being mistaken for a site menu jump.
+      const headerBefore=await page.locator('.site-header').boundingBox();
+      expect(headerBefore).not.toBeNull();
+      expect(headerBefore.y).toBeGreaterThanOrEqual(-3);
+      expect(headerBefore.y).toBeLessThan(6);
       await expect(toggle).toBeVisible();
       await toggle.click();
       await expect(toggle).toHaveAttribute('aria-expanded','true');
