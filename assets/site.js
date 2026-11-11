@@ -182,9 +182,25 @@
   const recordConfirmedInquiry = () => {
     if (navigator.globalPrivacyControl === true || navigator.doNotTrack === '1') return;
     try {
-      if (typeof window.gtag === 'function') {
-        window.gtag('event', 'generate_lead', { method: 'website_contact_form' });
+      // This property is the verified, connected GA4 web stream. Initialize
+      // only after an inquiry succeeds; do not add duplicate pageviews or
+      // include form answers, names, email addresses, or visitor identifiers.
+      const gaId = 'G-BPV2CXLZ8F';
+      if (typeof window.gtag !== 'function') {
+        const layer = window.dataLayer = window.dataLayer || [];
+        window.gtag = function () { layer.push(arguments); };
+        window.gtag('js', new Date());
+        window.gtag('config', gaId, { send_page_view: false });
+        if (!Array.from(document.scripts).some(s => /googletagmanager\\.com\\/gtag\\/js/.test(s.src))) {
+          const script = document.createElement('script');
+          script.async = true;
+          script.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(gaId);
+          document.head.appendChild(script);
+        }
       }
+      window.gtag('event', 'generate_lead', {
+        send_to: gaId, method: 'website_contact_form'
+      });
     } catch { /* Tracking must never affect the confirmation message. */ }
   };
   let isSending = false;
