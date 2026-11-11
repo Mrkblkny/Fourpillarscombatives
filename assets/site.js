@@ -175,6 +175,18 @@
 
   // Only this handler submits the inquiry via JavaScript. Do not also initialize @formspree/ajax.
   const submitButton = form.querySelector('button[type="submit"]');
+  // Only a confirmed Formspree HTTP success is a completed inquiry.
+  // If Google Analytics is configured on the page, record a standard
+  // generate_lead event without names, contact details, message text, or URLs.
+  // Tracking is optional and must never affect form delivery.
+  const recordConfirmedInquiry = () => {
+    if (navigator.globalPrivacyControl === true || navigator.doNotTrack === '1') return;
+    try {
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'generate_lead', { method: 'website_contact_form' });
+      }
+    } catch { /* Tracking must never affect the confirmation message. */ }
+  };
   let isSending = false;
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -191,6 +203,7 @@
       });
       // The HTTP status is authoritative. Never treat an optional JSON parse failure as failed delivery.
       if (response.ok) {
+        recordConfirmedInquiry();
         showStatus('Your inquiry was submitted successfully. Thank you! We will contact you soon.');
         form.reset();
       } else if (response.status >= 400 && response.status < 500) {
