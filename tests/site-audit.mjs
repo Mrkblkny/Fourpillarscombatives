@@ -327,4 +327,32 @@ for(const p of pages){
   assert.match(html,/styles\.css\?v=20261110-clear-training-choices/,p+': updated legible styles must not be cached indefinitely');
   assert.match(html,/tactical\.css\?v=20261110-clear-training-choices/,p+': updated layout must not be cached indefinitely');
 }
+// Search indexing guards: keep the public sitemap aligned with canonical pages.
+// The members/admin APIs are intentionally excluded from search indexing.
+const sitemapXml=read('sitemap.xml');
+const sitemapUrls=[...sitemapXml.matchAll(/<loc>(https:\/\/[^<]+)<\/loc>/g)].map(hit=>hit[1]);
+assert.equal(new Set(sitemapUrls).size,sitemapUrls.length,'Sitemap must not list duplicate URLs');
+assert.match(read('robots.txt'),/Sitemap: https:\/\/fourpillarscombatives\.com\/sitemap\.xml/,
+  'Robots.txt must point to the public sitemap');
+for(const page of pages){
+  const path=page==='index'?'/':'/'+page;
+  const canonical='https://fourpillarscombatives.com'+path;
+  assert.ok(sitemapUrls.includes(canonical),'Sitemap missing canonical public page '+path);
+  assert.ok(read(page+'.html').includes('href="'+canonical+'" rel="canonical"'),
+    'Sitemap and canonical disagree for '+page);
+}
+assert.ok(sitemapUrls.includes('https://fourpillarscombatives.com/online-training/'),
+  'Public Online Training needs its own canonical URL in the sitemap');
+assert.ok(!sitemapUrls.some(url=>/\/online-training\/(?:admin|community|api|dashboard)/.test(url)),
+  'Do not list private student/admin URLs in the public sitemap');
+// Contact submissions carry only a broad source category, never browsing history.
+assert.match(contact,/id="inq-marketing-source" name="marketing_source" type="hidden"/,
+  'Contact inquiries must include a source category field');
+assert.match(js,/marketingField\.value = \['facebook', 'google', 'friend', 'other'\]/,
+  'Broad referral attribution should be attached to Formspree inquiries');
+assert.match(js,/navigator\.globalPrivacyControl !== true && navigator\.doNotTrack !== '1'/,
+  'Contact attribution must honor Global Privacy Control / Do Not Track');
+assert.match(contact,/assets\/site\.js\?v=20261111-lead-source/,
+  'Contact page must refresh the updated lead attribution script');
+
 console.log('PASS: '+pages.length+' pages, '+checked+' internal URLs/assets, fragments, metadata, Facebook icons, training link, and inquiry routing.');
