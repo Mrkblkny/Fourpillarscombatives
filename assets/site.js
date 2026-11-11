@@ -191,7 +191,7 @@
         window.gtag = function () { layer.push(arguments); };
         window.gtag('js', new Date());
         window.gtag('config', gaId, { send_page_view: false });
-        if (!Array.from(document.scripts).some(s => /googletagmanager\\.com\\/gtag\\/js/.test(s.src))) {
+        if (!Array.from(document.scripts).some(s => s.src.includes('googletagmanager.com/gtag/js'))) {
           const script = document.createElement('script');
           script.async = true;
           script.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(gaId);
