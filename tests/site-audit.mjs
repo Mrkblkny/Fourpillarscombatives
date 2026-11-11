@@ -356,10 +356,15 @@ assert.match(js,/const recordConfirmedInquiry = \(\) =>/,
   'Contact inquiry success must have a dedicated GA4 event handler');
 assert.match(js,/if \(response\.ok\) \{\s*recordConfirmedInquiry\(\)/,
   'Track a lead only when Formspree confirms success');
-assert.match(js,/window\.gtag\('event', 'generate_lead', \{ method: 'website_contact_form' \}\)/,
-  'Track the recommended generate_lead event without personal information');
-
-assert.match(contact,/assets\/site\.js\?v=20261111-confirmed-leads/,
+assert.match(js,/const gaId = 'G-BPV2CXLZ8F'/,
+  'Verified GA4 measurement ID should be used for successful inquiries');
+assert.match(js,/window\.gtag\('config', gaId, \{ send_page_view: false \}\)/,
+  'Event-only GA4 tag must not send a duplicate page view');
+assert.match(js,/window\.gtag\('event', 'generate_lead', \{\s*send_to: gaId, method: 'website_contact_form'/,
+  'Track only confirmed website inquiry leads without personal data');
+assert.match(js,/document\.head\.appendChild\(script\)/,
+  'Lazy load the analytics tag after a confirmed inquiry when needed');
+assert.match(contact,/assets\/site\.js\?v=20261111-ga4-leads/,
   'Contact page must refresh the updated lead attribution script');
 
 console.log('PASS: '+pages.length+' pages, '+checked+' internal URLs/assets, fragments, metadata, Facebook icons, training link, and inquiry routing.');
