@@ -89,3 +89,42 @@ test.describe('Locally built website: motion-free assistant',()=>{
     expect(state.panelHeight).toBeLessThan(460);
   });
 });
+
+test.describe('Contact inquiry conversion tracking (mocked, no real submissions)',()=>{
+  test.use({viewport:{width:390,height:844},colorScheme:'dark'});
+  test('confirmed lead uses a lazy GA4 event without double pageviews',async({page})=>{
+    let formspreeSuccess=false;
+    await page.route('https://formspree.io/f/mljjagkr',route=>
+      route.fulfill({
+        status:formspreeSuccess?200:422,
+        contentType:'application/json',
+        body:formspreeSuccess?'{}':'{"error":"invalid"}'
+      }));
+    // Never contact Google Analytics while running this local test.
+    await page.route('https://www.googletagmanager.com/**',route=>
+      route.fulfill({status:200,contentType:'application/javascript',body:'// mocked'}));
+    await page.goto(base+'/contact.html',{waitUntil:'load'});
+    await page.locator('#inq-service').selectOption('Private Lessons');
+    await page.locator('#inq-name').fill('Example Student');
+    await page.locator('#inq-email').fill('test@example.invalid');
+    await page.locator('.form-submit').click();
+    await expect(page.locator('#form-status')).toContainText('could not accept');
+    expect(await page.evaluate(()=>typeof window.gtag)).not.toBe('function');
+    formspreeSuccess=true;
+    await page.locator('.form-submit').click();
+    await expect(page.locator('#form-status')).toContainText('submitted successfully');
+    const analytics=await page.evaluate(()=>{
+      const calls=Array.from(window.dataLayer||[],entry=>Array.from(entry));
+      const events=calls.filter(args=>args[0]==='event'&&args[1]==='generate_lead');
+      const configs=calls.filter(args=>args[0]==='config');
+      return {events,configs};
+    });
+    expect(analytics.events).toHaveLength(1);
+    expect(analytics.events[0][2]).toEqual({
+      send_to:'G-BPV2CXLZ8F',method:'website_contact_form'
+    });
+    expect(analytics.configs[0][2].send_page_view).toBe(false);
+    expect(JSON.stringify(analytics)).not.toContain('test@example.invalid');
+    expect(JSON.stringify(analytics)).not.toContain('Example Student');
+  });
+});
