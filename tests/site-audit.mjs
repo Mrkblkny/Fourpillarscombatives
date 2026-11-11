@@ -352,7 +352,14 @@ assert.match(js,/marketingField\.value = \['facebook', 'google', 'friend', 'othe
   'Broad referral attribution should be attached to Formspree inquiries');
 assert.match(js,/navigator\.globalPrivacyControl !== true && navigator\.doNotTrack !== '1'/,
   'Contact attribution must honor Global Privacy Control / Do Not Track');
-assert.match(contact,/assets\/site\.js\?v=20261111-lead-source/,
+assert.match(js,/const recordConfirmedInquiry = \\(\\) =>/,
+  'Contact inquiry success must have a dedicated GA4 event handler');
+assert.match(js,/if \\(response\\.ok\\) \\{\\s*recordConfirmedInquiry\\(\\)/,
+  'Track a lead only when Formspree confirms success');
+assert.match(js,/window\\.gtag\\('event', 'generate_lead', \\{ method: 'website_contact_form' \\}\\)/,
+  'Track the recommended generate_lead event without personal information');
+
+assert.match(contact,/assets\/site\.js\?v=20261111-confirmed-leads/,
   'Contact page must refresh the updated lead attribution script');
 
 console.log('PASS: '+pages.length+' pages, '+checked+' internal URLs/assets, fragments, metadata, Facebook icons, training link, and inquiry routing.');
