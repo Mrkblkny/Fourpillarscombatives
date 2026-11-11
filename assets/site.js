@@ -144,6 +144,16 @@
 (() => {
   const form = document.getElementById('inquiry-form');
   if (!form) return;
+  // Attach a coarse, voluntary referral label to successful Formspree inquiries.
+  // Do not send IPs, full referral URLs, device IDs, or browsing history.
+  const marketingField = document.getElementById('inq-marketing-source');
+  if (marketingField && navigator.globalPrivacyControl !== true && navigator.doNotTrack !== '1') {
+    try {
+      const stored = sessionStorage.getItem('fpc_marketing_source');
+      marketingField.value = ['facebook', 'google', 'friend', 'other'].includes(stored)
+        ? stored : (document.referrer ? 'other' : 'direct');
+    } catch { marketingField.value = 'unknown'; }
+  }
   const serviceField = document.getElementById('inq-service');
   const messageField = document.getElementById('inq-message');
   const status = document.getElementById('form-status');
