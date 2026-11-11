@@ -150,8 +150,13 @@
   if (marketingField && navigator.globalPrivacyControl !== true && navigator.doNotTrack !== '1') {
     try {
       const stored = sessionStorage.getItem('fpc_marketing_source');
+      let refSource = 'direct';
+      if (document.referrer) {
+        const refHost = new URL(document.referrer).hostname;
+        refSource = refHost === location.hostname ? 'direct' : 'other';
+      }
       marketingField.value = ['facebook', 'google', 'friend', 'other'].includes(stored)
-        ? stored : (document.referrer ? 'other' : 'direct');
+        ? stored : refSource;
     } catch { marketingField.value = 'unknown'; }
   }
   const serviceField = document.getElementById('inq-service');
