@@ -1,0 +1,40 @@
+/* Four Pillars Combatives | 2026-11-22 marketing clarity refresh.
+   Additive CSS only. Keep prior navigation, forms and beta platform styling intact. */
+.home-trust{background:linear-gradient(145deg,#131a1a,#0a0e10);border-top:1px solid #46504a;border-bottom:1px solid #343e3a}
+.home-trust-layout{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(300px,.75fr);gap:clamp(26px,5vw,72px);align-items:center}
+.home-trust h2{margin:12px 0 18px}
+.home-trust p{max-width:720px}
+.home-trust .trust-byline{color:#eff1ed;font-size:1.07rem;font-weight:750}
+.home-trust .trust-facts{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 26px;padding:0;list-style:none}
+.home-trust .trust-facts li{border:1px solid #63726c;background:#202a27;color:#e8eeea;padding:9px 12px;font-size:.77rem;line-height:1.5;font-weight:800}
+.home-trust .trust-actions{display:flex;gap:12px;flex-wrap:wrap}
+.home-trust-visual{border:1px solid #56605c;background:radial-gradient(circle at 50% 24%,#303537,#12171a 75%);padding:30px 22px;min-height:370px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;position:relative}
+.home-trust-visual:before{content:'';position:absolute;inset:12px;border:1px solid #6b777149;pointer-events:none}
+.home-trust-visual img{width:min(240px,70%);height:auto;object-fit:contain;filter:drop-shadow(0 12px 24px #0009)}
+.home-trust-visual strong{font:800 clamp(1.9rem,3vw,2.4rem)/1 'Barlow Condensed',Impact,sans-serif;text-transform:uppercase;color:#f3f5f1}
+.home-trust-visual span{font-size:.74rem;font-weight:800;letter-spacing:.1em;color:#d1d9d3;text-transform:uppercase}
+.home-curriculum{background:#111716}
+.home-curriculum .home-five-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:22px 0 28px;padding:0;list-style:none}
+.home-curriculum .home-five-grid li{padding:22px 16px;min-height:138px;background:#1a2220;border:1px solid #46544b}
+.home-curriculum .home-five-grid b{display:block;color:#ef5762;font:800 1.55rem/1 'Barlow Condensed',Impact,sans-serif;margin-bottom:13px}
+.home-curriculum .home-five-grid span{display:block;color:#e9edea;font:750 1.07rem/1.2 'Barlow Condensed',Impact,sans-serif;text-transform:uppercase;letter-spacing:.02em}
+.home-feedback{background:#0d1215;border-top:1px solid #323d40}
+.home-feedback .feedback-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.8fr);gap:40px;align-items:center}
+.home-feedback h2{margin:12px 0 18px}
+.home-feedback .feedback-card{background:#1c2425;border:1px solid #54615d;padding:28px;border-left:4px solid #e53640}
+.home-feedback .feedback-card h3{margin:0 0 14px}
+.home-feedback .feedback-card p{margin-bottom:18px}
+.contact-entry{border:1px solid #4a5752;background:#19211f;padding:21px;margin:22px 0}
+.contact-entry h3{font-size:1.7rem;margin:0 0 12px}
+.contact-entry-links{display:flex;gap:9px;flex-wrap:wrap}
+.contact-entry-links a{display:inline-flex;align-items:center;border:1px solid #68756b;color:#fff;font-size:.78rem;line-height:1.35;font-weight:800;text-transform:uppercase;padding:11px 14px;min-height:44px}
+.contact-entry-links a:hover,.contact-entry-links a:focus-visible{background:#293630;border-color:#e53640}
+.contact-steps-box{background:#19221e;border-left:3px solid #e53640;padding:18px 21px;margin:20px 0}
+.contact-steps-box strong{color:#f3f5f1}
+.contact-steps-box ol{padding-left:22px;margin:10px 0 0;color:#d0dad2}
+.contact-steps-box li{padding:3px 0}
+.about-credentials{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:22px 0 28px;padding:0;list-style:none}
+.about-credentials li{padding:12px;background:#1d2623;border-left:3px solid #e53640;color:#eaf0eb;font-size:.85rem;line-height:1.5;font-weight:750}
+@media(max-width:1000px){.home-curriculum .home-five-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:800px){.home-trust-layout,.home-feedback .feedback-layout{grid-template-columns:1fr}.home-trust-visual{min-height:260px;padding:23px}.home-trust-visual img{width:150px}.home-curriculum .home-five-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.home-trust .trust-actions{flex-direction:column}.home-trust .trust-actions .btn{width:100%}.home-trust .trust-facts li{width:100%}.home-trust-visual{min-height:270px}.home-curriculum .home-five-grid li{padding:16px 13px;min-height:116px}.home-feedback .feedback-card{padding:20px}.contact-entry{padding:17px}.contact-entry-links{flex-direction:column}.contact-entry-links a{width:100%;justify-content:center}.about-credentials{grid-template-columns:1fr}}
