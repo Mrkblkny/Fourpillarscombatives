@@ -38,3 +38,12 @@
 @media(max-width:1000px){.home-curriculum .home-five-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:800px){.home-trust-layout,.home-feedback .feedback-layout{grid-template-columns:1fr}.home-trust-visual{min-height:260px;padding:23px}.home-trust-visual img{width:150px}.home-curriculum .home-five-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.home-trust .trust-actions{flex-direction:column}.home-trust .trust-actions .btn{width:100%}.home-trust .trust-facts li{width:100%}.home-trust-visual{min-height:270px}.home-curriculum .home-five-grid li{padding:16px 13px;min-height:116px}.home-feedback .feedback-card{padding:20px}.contact-entry{padding:17px}.contact-entry-links{flex-direction:column}.contact-entry-links a{width:100%;justify-content:center}.about-credentials{grid-template-columns:1fr}}
+.home-curriculum-details{border:1px solid #4b5c54;background:#17201b;margin:0 0 26px}
+.home-curriculum-details summary{list-style:none;cursor:pointer;padding:17px 21px;color:#f3f5f1;font-weight:800;display:flex;justify-content:space-between;align-items:center;gap:15px}
+.home-curriculum-details summary::-webkit-details-marker{display:none}
+.home-curriculum-details summary span{color:#e53640;font-size:1.55rem}
+.home-curriculum-details[open] summary span{transform:rotate(45deg)}
+.home-curriculum-expand{padding:0 20px 20px}
+.home-curriculum-expand .training-steps-five{grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr))}
+.home-curriculum-expand .growth-subnote{color:#c6d2ce}
+@media(max-width:600px){.home-curriculum-expand .training-steps-five{grid-template-columns:1fr}}
