@@ -47,3 +47,14 @@
 .home-curriculum-expand .training-steps-five{grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr))}
 .home-curriculum-expand .growth-subnote{color:#c6d2ce}
 @media(max-width:600px){.home-curriculum-expand .training-steps-five{grid-template-columns:1fr}}
+
+/* Public, attributed Google review excerpts; no invented names or ratings. */
+.google-review-rating{display:flex;align-items:center;gap:10px 13px;flex-wrap:wrap;color:#f0f2ef;margin:0 0 18px}
+.google-review-rating span{color:#f3bd4b;letter-spacing:.1em;font-size:1.14rem;white-space:nowrap}
+.google-review-rating strong{color:#f8f8f6;font-size:1.1rem}
+.google-review-rating small{flex-basis:100%;color:#bbc8c0;font-size:.76rem}
+.google-review-quotes{display:grid;gap:13px;margin:0 0 19px}
+.google-review-quotes figure{margin:0;padding:18px;background:#121b1a;border-left:2px solid #d33b46}
+.google-review-quotes blockquote{margin:0;color:#f0f2ed;font-size:.95rem;line-height:1.6}
+.google-review-quotes figcaption{color:#adbdb5;font-size:.75rem;margin-top:8px}
+.google-review-disclaimer{font-size:.71rem;margin:14px 0 0;color:#a9b7ae;line-height:1.5}
